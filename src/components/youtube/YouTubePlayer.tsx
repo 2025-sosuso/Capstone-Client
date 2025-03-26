@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import {useRef} from "react";
 import {YouTubeProps} from "react-youtube";
-import Timeline from "@/components/Timeline";
+import Timeline from "@/components/youtube/Timeline";
 
 const YouTube = dynamic(() => import("react-youtube"), { ssr: false });
 const timelines = ["30:00", "00:39", "00:21"];
