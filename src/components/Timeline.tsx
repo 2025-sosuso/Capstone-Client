@@ -1,9 +1,9 @@
 interface TimelineProps {
     timeline: string;
+    seekToTime: (seconds:number) => void;
 }
 
-export default function Timeline({ timeline }: TimelineProps) {
-
+export default function Timeline({ timeline, seekToTime }: TimelineProps) {
     const timeToSecond = (timeline: string) => {
         const times = timeline.split(":").map(Number).reverse();
 
@@ -17,7 +17,7 @@ export default function Timeline({ timeline }: TimelineProps) {
     return (
         <button
             className="bg-amber-200 p-2"
-            onClick={() => timeToSecond(timeline)}
+            onClick={() => seekToTime(timeToSecond(timeline))}
         >
             {timeline}
         </button>

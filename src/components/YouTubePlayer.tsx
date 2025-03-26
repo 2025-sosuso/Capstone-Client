@@ -6,6 +6,7 @@ import {YouTubeProps} from "react-youtube";
 import Timeline from "@/components/Timeline";
 
 const YouTube = dynamic(() => import("react-youtube"), { ssr: false });
+const timelines = ["30:00", "00:39", "00:21"];
 
 export default function YouTubePlayer() {
     const playerRef = useRef<any>(null);
@@ -15,9 +16,8 @@ export default function YouTubePlayer() {
     };
 
     const seekToTime = (seconds: number) => {
-        if (playerRef.current) {
+        if (playerRef.current)
             playerRef.current.seekTo(seconds, true);
-        }
     };
 
     const opts: YouTubeProps["opts"] = {
@@ -30,13 +30,12 @@ export default function YouTubePlayer() {
 
     return (
         <div>
-            <YouTube videoId="_lH2UgHzL7Y" opts={opts} onReady={onPlayerReady} />
-            <div className="mt-4 flex gap-2">
-                <button onClick={() => seekToTime(30)}>▶️ 30초로 이동</button>
-                <button onClick={() => seekToTime(60)}>▶️ 1분으로 이동</button>
-                <button onClick={() => seekToTime(1300)}>▶️ 2분으로 이동</button>
+            <YouTube videoId="_lH2UgHzL7Y" opts={opts} onReady={onPlayerReady}/>
+            <div className="m-2 flex gap-2">
+                {timelines.map((timeline, i) => (
+                    <Timeline key={i} timeline={timeline} seekToTime={seekToTime}/>))
+                }
             </div>
-            <Timeline timeline='02:00' />
         </div>
     );
 }
