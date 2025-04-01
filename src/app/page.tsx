@@ -2,6 +2,7 @@ export default function Home() {
     return (
         <main>
             <h1 className="bold">윤갱갱 놀이터</h1>
+
             {/*<YouTubePlayer />*/}
         </main>
     );
