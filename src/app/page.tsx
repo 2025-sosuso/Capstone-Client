@@ -1,9 +1,12 @@
+import Profile from "@/components/study/Profile";
+import Counter from "@/components/study/Counter";
+
 export default function Home() {
     return (
         <main>
-            <h1 className="bold">윤갱갱 놀이터</h1>
-
             {/*<YouTubePlayer />*/}
+            <Profile name="얍" job="호잇" />
+            <Counter />
         </main>
     );
 }

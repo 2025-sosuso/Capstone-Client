@@ -1,4 +1,3 @@
-
 interface Props {
     name: string;
     job: string;
