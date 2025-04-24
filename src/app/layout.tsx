@@ -1,18 +1,15 @@
 import "./globals.css";
-import Header from "@/components/Header/Header";
-import Footer from "@/components/Footer";
+import LayoutShell from "@/components/layout/LayoutShell";
 
 export default function RootLayout({
-   children,
-   }: {
-    children: React.ReactNode
+                                       children,
+                                   }: {
+    children: React.ReactNode;
 }) {
     return (
         <html lang="en">
-        <body className="flex flex-col">
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        <body>
+        <LayoutShell>{children}</LayoutShell>
         </body>
         </html>
     );
