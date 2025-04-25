@@ -1,13 +1,9 @@
-export default function Home() {
+import LikeChannel from "@components/Channel/LikeChannel";
+
+export default function Page() {
     return (
         <main>
-            <div
-                className="flex flex-1 overflow-hidden
-                w-full h-screen overflow-y-scroll
-                bg-amber-50"
-                >
-                zz
-            </div>
+            <LikeChannel />
         </main>
     );
 }

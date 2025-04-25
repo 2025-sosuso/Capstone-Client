@@ -1,5 +1,5 @@
-import "./globals.css";
-import LayoutShell from "@/components/layout/LayoutShell";
+import "@styles/globals.css";
+import LayoutShell from "@components/RootLayout/LayoutShell";
 
 export default function RootLayout({
                                        children,
