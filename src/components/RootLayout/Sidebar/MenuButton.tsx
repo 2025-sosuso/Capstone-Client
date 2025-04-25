@@ -1,4 +1,4 @@
-import MenuItem from "@components/layout/SideBar/MenuItem";
+import MenuItem from "@components/RootLayout/Sidebar/MenuItem";
 
 interface ItemProps {
     icon: React.ReactNode;

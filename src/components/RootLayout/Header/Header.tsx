@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import HeaderSearch from "@/components/layout/Header/HeaderSearch";
+import HeaderSearch from "@components/RootLayout/Header/HeaderSearch";
 
 export default function Header({ toggle }: { toggle: () => void }) {
     return (

@@ -1,5 +1,5 @@
-import MenuButton from "@components/layout/SideBar/MenuButton";
-import MenuLink from "@components/layout/SideBar/MenuLink";
+import MenuButton from "@components/RootLayout/Sidebar/MenuButton";
+import MenuLink from "@components/RootLayout/Sidebar/MenuLink";
 import {UserCircleIcon} from '@heroicons/react/24/solid';
 import {ArrowRightStartOnRectangleIcon} from "@heroicons/react/24/outline";
 
