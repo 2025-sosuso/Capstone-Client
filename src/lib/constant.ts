@@ -4,8 +4,8 @@ import {ArrowRightStartOnRectangleIcon} from "@heroicons/react/24/outline";
 
 interface SideBarItemType {
     name: string;
-    emoji?: string;  // emoji는 optional
-    icon?: React.ComponentType<{ className?: string }>;  // icon도 optional
+    emoji?: string;
+    icon?: React.ComponentType<{ className?: string }>;
     href?: string;
     action?: () => void;
 }
