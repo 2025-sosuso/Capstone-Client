@@ -10,6 +10,10 @@ const channels = [
     { img: profileImg1, name: '강옐옐' },
     { img: profileImg1, name: '주헤헤' },
     { img: profileImg1, name: '소밍밍' },
+    { img: profileImg1, name: 'ㅎㅎㅎ' },
+    { img: profileImg1, name: '고민카이' },
+    { img: profileImg1, name: '함수티비' },
+    { img: profileImg1, name: '효진방의롤토체스' },
 ];
 
 interface ChannelProps {
