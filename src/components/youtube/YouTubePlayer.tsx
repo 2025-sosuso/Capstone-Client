@@ -1,38 +1,77 @@
-"use client";
+import Link from "next/link";
+import React, {useRef} from "react";
+import YouTube, {YouTubeProps} from "react-youtube";
 
-import dynamic from "next/dynamic";
-import {useRef} from "react";
-import {YouTubeProps} from "react-youtube";
-import Timeline from "@/components/youtube/Timeline";
 
-const YouTube = dynamic(() => import("react-youtube"), { ssr: false });
-const timelines = ["30:00", "00:39", "00:21"];
+// test
+interface VideoInfo {
+    title: string;
+    channel: string;
+    viewCount: number;
+    published: string;
+    thumbnailUrl: string;
+}
 
-export default function YouTubePlayer() {
+export const info = {
+    title: "🇨🇭찰승헌스위스🇨🇭여행 브이로그!!!",
+    channel: "찰스엔터",
+    viewCount: 525971,
+    published: "23시간 전",
+    thumbnailUrl: ""
+};
+//
+
+interface YouTubePlayerRef {
+    seekToTime: (seconds: number) => void;
+}
+
+interface YouTubePlayerProps {
+    videoId: string;
+    onReadyRef?: (ref: YouTubePlayerRef) => void;
+}
+
+const YouTubePlayer: React.FC<YouTubePlayerProps> = ({ videoId, onReadyRef }) => {
     const playerRef = useRef<any>(null);
 
     const onPlayerReady: YouTubeProps["onReady"] = (event) => {
         playerRef.current = event.target;
-    };
 
-    const seekToTime = (seconds: number) => {
-        if (playerRef.current)
-            playerRef.current.seekTo(seconds, true);
+        if (onReadyRef) {
+            onReadyRef({
+                seekToTime: (seconds: number) => {
+                    playerRef.current?.seekTo(seconds, true);
+                },
+            });
+        }
     };
 
     const opts: YouTubeProps["opts"] = {
-        height: "390",
-        width: "640",
+        width: "100%",
+        height: "210",
+        playerVars: {
+            autoplay: 0,
+            controls: 1,
+            modestbranding: 1,
+            rel: 0,
+        },
     };
 
     return (
-        <div>
-            <YouTube videoId="_lH2UgHzL7Y" opts={opts} onReady={onPlayerReady}/>
-            <div className="m-2 flex gap-2">
-                {timelines.map((timeline, i) => (
-                    <Timeline key={i} timeline={timeline} seekToTime={seekToTime}/>))
-                }
+        <>
+            <div className="w-full max-w-sm rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+                <YouTube videoId={videoId} opts={opts} onReady={onPlayerReady}/>
+
             </div>
-        </div>
-    );
-}
+            <div className="max-w-md w-full overflow-hidden">
+                <Link href='/anal' className="cursor-pointer">
+                    <h3 className="text-lg font-semibold">{info.title}</h3>
+                    <p className="text-sm text-gray-600">{info.channel} | 조회수 {info.viewCount}회</p>
+                    <p className="text-sm text-gray-500">{info.published}</p>
+                </Link>
+            </div>
+        </>
+    )
+        ;
+};
+
+export default YouTubePlayer;
