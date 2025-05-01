@@ -13,6 +13,11 @@ const channels = [
     { img: profileImg1, name: 'ㅎㅎㅎ' },
     { img: profileImg1, name: '고민카이' },
     { img: profileImg1, name: '함수티비' },
+    { img: profileImg1, name: '함수티비' },
+    { img: profileImg1, name: '함수티비' },
+    { img: profileImg1, name: '함수티비' },
+    { img: profileImg1, name: '함수티비' },
+    { img: profileImg1, name: '함수티비' },
     { img: profileImg1, name: '효진방의롤토체스' },
 ];
 
@@ -23,23 +28,23 @@ interface ChannelProps {
 }
 
 const ChannelItem = ({ img, name, edit }: ChannelProps) => {
-    const HandleClick = () => {
+    const handleClick = () => {
         console.log(name);
     };
 
     return (
-        <div className="flex flex-col items-center justify-center cursor-pointer" onClick={HandleClick}>
+        <div className="flex flex-col items-center justify-center cursor-pointer w-16 shrink-0" onClick={handleClick}>
             <div className="relative flex items-center justify-center">
                 {edit && (
                     <MinusIcon className="absolute z-10 size-10 text-gray-50 stroke-2" />
                 )}
                 <Image
-                    className={`size-15 rounded-full transition duration-200 ${edit ? 'brightness-60' : 'brightness-100'}`}
+                    className={`size-16 rounded-full transition duration-200 ${edit ? 'brightness-60' : 'brightness-100'}`}
                     src={img}
                     alt="channel-profile"
                 />
             </div>
-            <span>{name}</span>
+            <span className="w-full truncate text-center text-sm">{name}</span>
         </div>
     );
 };
@@ -53,8 +58,8 @@ const Channel = () => {
     };
 
     return (
-        <div className="flex items-start justify-between">
-            <div className="flex gap-3">
+        <div className="flex items-start justify-between gap-4">
+            <div className="flex gap-4 overflow-x-auto">
                 {channels.map((channel, i) => (
                     <ChannelItem img={channel.img} name={channel.name} edit={edit} key={i} />
                 ))}

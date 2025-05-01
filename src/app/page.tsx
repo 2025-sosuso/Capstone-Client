@@ -1,9 +1,9 @@
-import LikeChannel from "@components/Channel/LikeChannel";
+import Index from "@components/Channel";
 
 export default function Page() {
     return (
         <main>
-            <LikeChannel />
+            <Index />
         </main>
     );
 }
