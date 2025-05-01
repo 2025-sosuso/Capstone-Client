@@ -1,5 +1,5 @@
 import SideBarItem from "@components/RootLayout/Sidebar/SideBarItem";
-import {SideBarItems} from "@lib/constant";
+import {SideBarItems} from "@components/RootLayout/Sidebar/SideBarConfig";
 
 interface SideBarProps {
     isOpen: boolean;
