@@ -12,7 +12,7 @@ interface VideoInfo {
     thumbnailUrl: string;
 }
 
-export const info = {
+export const info: VideoInfo = {
     title: "🇨🇭찰승헌스위스🇨🇭여행 브이로그!!!",
     channel: "찰스엔터",
     viewCount: 525971,
