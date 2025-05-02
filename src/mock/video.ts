@@ -3,10 +3,10 @@ import { VideoData } from '@/types/video';
 export const mockVideoData: VideoData = {
     id: 'IbxI43fHWnk',
     title: '📌 찰승현스위스 🇨🇭 여행 브이로그!!!',
-/*   thumbnailUrl: '/thumbnails/video-001.png', */
+    thumbnailUrl: '/thumbnails/video-001.png',
     channel: {
         name: '찰스엔터',
-/*      profileImageUrl: '/profiles/charles.png',*/
+        profileImageUrl: '/profiles/charles.png',
         subscriberCount: '65.2만 명',
     },
     stats: {
