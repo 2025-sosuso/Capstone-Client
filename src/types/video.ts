@@ -15,7 +15,6 @@ export interface VideoData {
     };
     aiSummary: {
         summaryText: string;
-        likeCount: number;
     };
     emotionRatio: {     // % 단위
         positive: number;
