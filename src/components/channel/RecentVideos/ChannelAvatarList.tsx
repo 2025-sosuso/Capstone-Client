@@ -27,7 +27,7 @@ interface ChannelProps {
     edit: boolean;
 }
 
-const ChannelItem = ({ img, name, edit }: ChannelProps) => {
+const ChannelAvatar = ({ img, name, edit }: ChannelProps) => {
     const handleClick = () => {
         console.log(name);
     };
@@ -49,7 +49,7 @@ const ChannelItem = ({ img, name, edit }: ChannelProps) => {
     );
 };
 
-const Channel = () => {
+const ChannelAvatarList = () => {
     const [edit, setEdit] = useState(false);
 
     const handleEdit = () => {
@@ -61,7 +61,7 @@ const Channel = () => {
         <div className="flex items-start justify-between gap-4">
             <div className="flex gap-4 overflow-x-auto">
                 {channels.map((channel, i) => (
-                    <ChannelItem img={channel.img} name={channel.name} edit={edit} key={i} />
+                    <ChannelAvatar img={channel.img} name={channel.name} edit={edit} key={i} />
                 ))}
             </div>
             <button className="cursor-pointer" onClick={handleEdit}>
@@ -71,4 +71,4 @@ const Channel = () => {
     );
 };
 
-export default Channel;
+export default ChannelAvatarList;
