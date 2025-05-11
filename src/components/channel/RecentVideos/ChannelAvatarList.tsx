@@ -1,28 +1,13 @@
 'use client';
 
-import Image, {StaticImageData} from 'next/image';
-import profileImg1 from '@assets/profile1.png';
+import Image from 'next/image';
 import { AdjustmentsVerticalIcon, MinusIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
+import { mockVideoData} from "@mock/video";
 
-const channels = [
-    { img: profileImg1, name: '쵱갱갱' },
-    { img: profileImg1, name: '강옐옐' },
-    { img: profileImg1, name: '주헤헤' },
-    { img: profileImg1, name: '소밍밍' },
-    { img: profileImg1, name: 'ㅎㅎㅎ' },
-    { img: profileImg1, name: '고민카이' },
-    { img: profileImg1, name: '함수티비' },
-    { img: profileImg1, name: '함수티비' },
-    { img: profileImg1, name: '함수티비' },
-    { img: profileImg1, name: '함수티비' },
-    { img: profileImg1, name: '함수티비' },
-    { img: profileImg1, name: '함수티비' },
-    { img: profileImg1, name: '효진방의롤토체스' },
-];
 
 interface ChannelProps {
-    img: StaticImageData;
+    img?: string;
     name: string;
     edit: boolean;
 }
@@ -40,8 +25,11 @@ const ChannelAvatar = ({ img, name, edit }: ChannelProps) => {
                 )}
                 <Image
                     className={`size-16 rounded-full transition duration-200 ${edit ? 'brightness-60' : 'brightness-100'}`}
-                    src={img}
+                    src={img ?? ''} // 디폴트 이미지 넣어야 함
                     alt="channel-profile"
+                    width={64}
+                    height={64}
+                    unoptimized
                 />
             </div>
             <span className="w-full truncate text-center text-sm">{name}</span>
@@ -54,14 +42,18 @@ const ChannelAvatarList = () => {
 
     const handleEdit = () => {
         setEdit(!edit);
-        console.log(edit);
     };
 
     return (
         <div className="flex items-start justify-between gap-4">
             <div className="flex gap-4 overflow-x-auto">
-                {channels.map((channel, i) => (
-                    <ChannelAvatar img={channel.img} name={channel.name} edit={edit} key={i} />
+                {mockVideoData.map((video, i) => (
+                    <ChannelAvatar
+                        key={i}
+                        img={video.channel.profileImageUrl ?? '/default-profile.png'}
+                        name={video.channel.name}
+                        edit={edit}
+                    />
                 ))}
             </div>
             <button className="cursor-pointer" onClick={handleEdit}>
@@ -70,5 +62,6 @@ const ChannelAvatarList = () => {
         </div>
     );
 };
+
 
 export default ChannelAvatarList;
