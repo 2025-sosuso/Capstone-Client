@@ -1,9 +1,9 @@
-import RecentVideo from "@components/channel/RecentVideos";
+import SubscribedChannels from "src/components/home/subscribed-channels";
 
 export default function Page() {
     return (
         <main>
-            <RecentVideo />
+            <SubscribedChannels />
         </main>
     );
 }
