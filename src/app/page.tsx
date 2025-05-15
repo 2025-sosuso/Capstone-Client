@@ -1,9 +1,9 @@
-import SubscribedChannels from "src/components/home/subscribed-channels";
+import Home from "@components/home";
 
 export default function Page() {
     return (
         <main>
-            <SubscribedChannels />
+            <Home />
         </main>
     );
 }
