@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import Header from "@components/RootLayout/Header/Header";
-import SideBar from "@components/RootLayout/Sidebar/SideBar";
+import Header from "@components/layout/Header/Header";
+import SideBar from "@components/layout/Sidebar/SideBar";
 
-export default function LayoutShell({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
     const [isOpen, setIsOpen] = useState(true);
 
     return (
