@@ -1,5 +1,5 @@
-import SideBarItem from "@components/layout/Sidebar/SideBarItem";
-import {SideBarItems} from "@components/layout/Sidebar/SideBarConfig";
+import SideBarItem from "@components/layout/sidebar/SideBarItem";
+import {SideBarItems} from "@components/layout/sidebar/side-bar-config";
 
 interface SideBarProps {
     isOpen: boolean;
