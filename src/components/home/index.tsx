@@ -1,5 +1,5 @@
 import SubscribedChannels from "@components/home/subscribed-channels";
-import TrendSection from "@components/home/trend-section";
+import TrendSection from "src/components/home/list-section";
 
 export default function Home() {
     return (
