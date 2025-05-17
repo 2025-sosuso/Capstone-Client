@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React, {useRef} from "react";
 import YouTube, {YouTubeProps} from "react-youtube";
-import {VideoData} from "@/types/video";
+import {VideoData} from "@/types/before-video";
 
 interface VideoProps {
     video: VideoData;

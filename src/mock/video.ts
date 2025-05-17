@@ -1,4 +1,4 @@
-import { VideoData } from '@/types/video';
+import { VideoData } from '@/types/before-video';
 
 export const mockVideoData: VideoData[] = [
     {

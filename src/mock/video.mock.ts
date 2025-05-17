@@ -1,6 +1,6 @@
-import {SearchResponse} from "@/types/search-result";
+import {VideoData} from "@/types/video";
 
-export const mockSearchResponse: SearchResponse = {
+export const mockSearchResponse: VideoData = {
     videoInfo: {
         items: [
             {
@@ -89,3 +89,5 @@ mail: 0101oo1@naver.com
         ]
     }
 };
+
+
