@@ -1,6 +1,6 @@
 import {VideoData} from "@/types/video";
 
-export const mockSearchResponse: VideoData = {
+export const mockVideoResponse: VideoData = {
     videoInfo: {
         items: [
             {
