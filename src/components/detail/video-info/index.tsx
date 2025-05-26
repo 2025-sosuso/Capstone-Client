@@ -1,20 +1,22 @@
 "use client";
 
 import YouTubePlayer from "./YoutubePlayer";
-import {mockVideoResponse} from "@mock/video.mock";
-import {HeartIcon} from "@heroicons/react/24/solid";
-import {useState} from "react";
+import { HeartIcon } from "@heroicons/react/24/solid";
+import { useState } from "react";
+import type { VideoData } from "@/types/video";
 
-export default function VideoInfoSection() {
+type Props = {
+    item: VideoData["videoInfo"]["items"][0];
+};
+
+export default function VideoInfoSection({ item }: Props) {
     const [isLike, setIsLike] = useState(false);
     const [isScrap, setIsScrap] = useState(false);
-    const item = mockVideoResponse.videoInfo.items[0];
 
     return (
-        <div
-            className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 w-full max-w-screen-xl mx-auto">
-            <div className="md:min-w-[500px] md:max-w-[800px] ">
-                <YouTubePlayer videoId={item.id}/>
+        <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 w-full max-w-screen-xl mx-auto">
+            <div className="md:min-w-[500px] md:max-w-[800px]">
+                <YouTubePlayer videoId={item.id} />
             </div>
 
             <div className="flex flex-col min-w-[100px] gap-3">
@@ -42,8 +44,7 @@ export default function VideoInfoSection() {
                         조회수 {Number(item.statistics.viewCount).toLocaleString()}회 | ?? 시간 전
                     </p>
                     <p className="text-sm text-gray-500 font-light">
-                        좋아요 {Number(item.statistics.viewCount).toLocaleString()}개 | 댓글{" "}
-                        {item.statistics.commentCount}개
+                        좋아요 {Number(item.statistics.likeCount).toLocaleString()}개 | 댓글 {item.statistics.commentCount}개
                     </p>
                 </div>
             </div>
