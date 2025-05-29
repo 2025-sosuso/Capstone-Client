@@ -92,7 +92,7 @@ export default function CommentTimeChart({ data }: Props) {
     };
 
     return (
-        <div className="w-full max-w-sm min-w-[16rem] h-[250px] mx-auto p-1">
+        <div className="w-full min-w-[16rem] h-[250px]">
             <Line data={chartData} options={options} />
         </div>
     );

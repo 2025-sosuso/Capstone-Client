@@ -7,7 +7,7 @@ type Props = {
 
 export default function CommentList({ comments }: Props) {
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
             {comments.map((comment, index) => (
                 <Comment key={index} {...comment} />
             ))}

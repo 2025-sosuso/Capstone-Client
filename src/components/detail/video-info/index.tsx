@@ -29,9 +29,9 @@ export default function VideoInfoSection(props: Props) {
     }, []);
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 w-full max-w-screen-xl mx-auto">
-            <div className="md:min-w-[500px] md:max-w-[800px]">
-                <YouTubePlayer videoId={item.id} />
+        <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 w-full h-fit mx-auto items-start">
+            <div ref={leftRef} className="md:min-w-[450px] md:max-w-[800px]">
+                <YouTubePlayer videoId={data.id} />
             </div>
 
             <div className="flex flex-col gap-3 min-w-[100px]" style={{ minHeight: videoHeight }}>
