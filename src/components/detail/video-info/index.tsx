@@ -6,10 +6,11 @@ import { useState } from "react";
 import type { VideoData } from "@/types/video";
 
 type Props = {
-    item: VideoData["videoInfo"]["items"][0];
+    data: Video;
 };
 
-export default function VideoInfoSection({ item }: Props) {
+export default function VideoInfoSection(props: Props) {
+    const { data } = props;
     const [isLike, setIsLike] = useState(false);
     const [isScrap, setIsScrap] = useState(false);
 

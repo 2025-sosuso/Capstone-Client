@@ -1,12 +1,8 @@
 import { HandThumbUpIcon } from "@heroicons/react/24/outline";
 import {formatDate} from "@/utils/date";
 
-type CommentProps = {
-    authorName: string;
-    commentText: string;
-    likeCount: number;
-    publishedAt: string;
-};
+export default function Comment(props: CommentType) {
+    const { authorName, commentText, likeCount, publishedAt } = props;
 
 export default function Comment({
                                     authorName,
