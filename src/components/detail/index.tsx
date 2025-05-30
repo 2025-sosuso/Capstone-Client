@@ -25,7 +25,7 @@ export default function Detail() {
             <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-10">
                 <div className="col-auto flex flex-col gap-10">
                     <SectionLayout header="AI 전체 요약">
-                        <AISummary summary={aiSummary} />
+                        <AISummary summary={aiSummary}/>
                     </SectionLayout>
                     <SectionLayout header="좋아요 Top 5">
                         <CommentList comments={commentsTop5}/>
@@ -46,8 +46,8 @@ export default function Detail() {
                         <CommentTimeChart data={commentTimes}/>
                     </SectionLayout>
                     <SectionLayout header="키워드 분석">
-                        <TagList tags={keywordTags} />
-                        <CommentList comments={commentsAll} />
+                        <TagList tags={keywordTags}/>
+                        <CommentList comments={commentsAll}/>
                     </SectionLayout>
                 </div>
             </div>
