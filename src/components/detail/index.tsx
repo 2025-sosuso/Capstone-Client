@@ -6,6 +6,7 @@ import CommentTimeChart from "@components/detail/CommentTimeChart";
 import TagList from "@components/detail/TagList";
 import AISummary from "@components/detail/AISummary";
 import {mockVideoData} from "@mock/new-video-mock";
+import EmotionBar from "@components/detail/EmotionBar";
 
 export default function Detail() {
     // mock data
@@ -17,6 +18,7 @@ export default function Detail() {
     const commentTimes = mockData.video.analysis.commentTimes;
     const popularTimeTags = mockData.video.analysis.popularTimeTags;
     const keywordTags = mockData.video.analysis.keywordTags;
+    const emotionRatio = {positive: 61, negative: 34, etc: 5}
 
     return (
         <div className="flex flex-col w-full items-center max-w-[1000px] m-auto gap-10">
@@ -30,7 +32,8 @@ export default function Detail() {
                     <SectionLayout header="좋아요 Top 5">
                         <CommentList comments={commentsTop5}/>
                     </SectionLayout>
-                    <SectionLayout header="전체 댓글 확인하기">
+                    <SectionLayout header="전체 댓글 확인하기" type="search-comment">
+                        <EmotionBar data={emotionRatio}/>
                         <CommentList comments={commentsAll}/>
                     </SectionLayout>
                 </div>
