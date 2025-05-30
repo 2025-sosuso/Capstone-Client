@@ -19,7 +19,7 @@ export default function YouTubePlayer({ videoId }: Props) {
     };
 
     return (
-        <div className="relative w-full aspect-[16/9] overflow-hidden rounded-2xl">
+        <div className="relative w-full h-fit aspect-[16/9] overflow-hidden rounded-2xl">
             <YouTube
                 className="absolute top-0 left-0 w-full h-full rounded-2xl"
                 videoId={videoId}

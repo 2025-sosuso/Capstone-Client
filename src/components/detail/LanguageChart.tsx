@@ -16,11 +16,13 @@ const COLORS = [
     '#FF6384', '#FF9F40', '#FFCD56', '#4BC0C0', '#36A2EB',
 ];
 
+interface LanguageRatioItem {
+    language: string;
+    value: number;
+}
+
 interface LanguageChartProps {
-    data: {
-        labels: string[];
-        values: number[];
-    };
+    data: LanguageRatioItem[];
 }
 
 export default function LanguageChart({ data }: LanguageChartProps) {
@@ -37,12 +39,12 @@ export default function LanguageChart({ data }: LanguageChartProps) {
     }, []);
 
     const chartData = useMemo(() => ({
-        labels: data.labels,
+        labels: data.map((d) => d.language),
         datasets: [
             {
                 label: '언어 비율',
-                data: data.values,
-                backgroundColor: data.values.map((_, i) => COLORS[i % COLORS.length]),
+                data: data.map((d) => d.value),
+                backgroundColor: data.map((_, i) => COLORS[i % COLORS.length]),
                 borderWidth: 1,
             },
         ],
