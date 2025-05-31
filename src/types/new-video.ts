@@ -1,9 +1,13 @@
-import Video from "@components/Video/Video";
-
 export interface VideoApiResponse {
     timeStamp: string;
     message: string;
-    data: { video: Video };
+    data: Video;
+}
+
+export interface VideoSummaryListResponse {
+    timeStamp: string;
+    message: string;
+    data: VideoSummary[];
 }
 
 export interface Video {
@@ -18,7 +22,18 @@ export interface Video {
     commentCount: number,
     comments: Comment[],
     analysis: Analysis,
-    data?: Video
+}
+
+export interface VideoSummary {
+    id: string,
+    publishedAt: string,
+    title: string,
+    thumbnailUrl: string,
+    channel: Channel,
+    viewCount: number,
+    likeCount: number,
+    commentCount: number,
+    analysis: SummaryAnalysis,
 }
 
 export interface Channel {
@@ -26,18 +41,20 @@ export interface Channel {
     title: string;
     thumbnailUrl: string;
     subscribeCount: number;
-
 }
 
 export interface Analysis {
     aiSummary: string;
     commentsTop5: Comment[];
     languageRatio: Language[];
+    emotionRatio: Emotion;
     popularTimeTags: string[];
     commentTimes: commentTime[];
     keywordTags: string[];
-
 }
+
+export type SummaryAnalysis = Pick<Analysis, 'aiSummary' | 'emotionRatio' | 'keywordTags'>;
+
 
 export interface Comment {
     authorName: string;
@@ -51,6 +68,11 @@ export interface Language {
     value: number;
 }
 
+export interface Emotion {
+    positive: number,
+    negative: number,
+    etc: number,
+}
 
 export interface commentTime {
     time: string;
