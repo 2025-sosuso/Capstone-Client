@@ -3,26 +3,26 @@ import SectionLayout from "@components/detail/SectionLayout";
 import CommentList from "@components/detail/CommentList";
 import LanguageChart from "@components/detail/LanguageChart";
 import CommentTimeChart from "@components/detail/CommentTimeChart";
-import TagList from "@components/detail/TagList";
-import AISummary from "@components/detail/AISummary";
+import TagList from "@components/common/Tag/TagList";
+import AISummary from "@components/common/AISummary";
 import {mockVideoData} from "@mock/new-video-mock";
-import EmotionBar from "@components/detail/EmotionBar";
+import EmotionBar from "@components/common/EmotionBar/EmotionBar";
 
 export default function Detail() {
     // mock data
     const mockData = mockVideoData.data
-    const aiSummary = mockData.video.analysis.aiSummary;
-    const commentsAll = mockData.video.comments;
-    const commentsTop5 = mockData.video.analysis.commentsTop5;
-    const languageRatio = mockData.video.analysis.languageRatio;
-    const commentTimes = mockData.video.analysis.commentTimes;
-    const popularTimeTags = mockData.video.analysis.popularTimeTags;
-    const keywordTags = mockData.video.analysis.keywordTags;
-    const emotionRatio = {positive: 61, negative: 34, etc: 5}
+    const aiSummary = mockData.analysis.aiSummary;
+    const commentsAll = mockData.comments;
+    const commentsTop5 = mockData.analysis.commentsTop5;
+    const languageRatio = mockData.analysis.languageRatio;
+    const commentTimes = mockData.analysis.commentTimes;
+    const popularTimeTags = mockData.analysis.popularTimeTags;
+    const keywordTags = mockData.analysis.keywordTags;
+    const emotionRatio = mockData.analysis.emotionRatio;
 
     return (
         <div className="flex flex-col w-full items-center max-w-[1000px] m-auto gap-10">
-            <VideoInfo data={mockData.video}/>
+            <VideoInfo data={mockData}/>
 
             <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-10">
                 <div className="col-auto flex flex-col gap-10">
@@ -33,7 +33,7 @@ export default function Detail() {
                         <CommentList comments={commentsTop5}/>
                     </SectionLayout>
                     <SectionLayout header="전체 댓글 확인하기" type="search-comment">
-                        <EmotionBar data={emotionRatio}/>
+                        <EmotionBar ratio={emotionRatio}/>
                         <CommentList comments={commentsAll}/>
                     </SectionLayout>
                 </div>

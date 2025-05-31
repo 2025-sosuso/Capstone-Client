@@ -1,4 +1,4 @@
-import Comment from "./Comment";
+import Comment from "../common/Comment";
 import type { Comment as CommentType } from "@/types/new-video";
 
 type Props = {
