@@ -4,7 +4,7 @@ import EmotionBar from "@components/common/EmotionBar/EmotionBar";
 import AISummary from "@components/common/AISummary";
 import {Channel, SummaryAnalysis} from "@/types/new-video";
 import {FaceSmileIcon, HashtagIcon, SparklesIcon} from "@heroicons/react/24/outline";
-import SummarySection from "@components/home/list-section/SummarySection";
+import SummarySection from "@components/common/VideoSummary/SummarySection";
 import TagList from "@components/common/Tag/TagList";
 
 type TrendVideoItemProps = {
