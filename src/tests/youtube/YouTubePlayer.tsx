@@ -1,4 +1,3 @@
-import Link from "next/link";
 import React, {useRef} from "react";
 import YouTube, {YouTubeProps} from "react-youtube";
 
@@ -63,11 +62,11 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({ videoId, onReadyRef }) =>
 
             </div>
             <div className="max-w-md w-full overflow-hidden">
-                <Link href='/anal' className="cursor-pointer">
+               {/* <Link href='/anal' className="cursor-pointer">
                     <h3 className="text-lg font-semibold">{info.title}</h3>
                     <p className="text-sm text-gray-600">{info.channel} | 조회수 {info.viewCount}회</p>
                     <p className="text-sm text-gray-500">{info.published}</p>
-                </Link>
+                </Link>*/}
             </div>
         </>
     )
