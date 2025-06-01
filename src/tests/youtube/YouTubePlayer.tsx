@@ -31,7 +31,7 @@ interface YouTubePlayerProps {
 }
 
 const YouTubePlayer: React.FC<YouTubePlayerProps> = ({ videoId, onReadyRef }) => {
-    const playerRef = useRef<any>(null);
+    const playerRef = useRef<YT.Player | null>(null);
 
     const onPlayerReady: YouTubeProps["onReady"] = (event) => {
         playerRef.current = event.target;
