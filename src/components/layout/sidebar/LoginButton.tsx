@@ -1,4 +1,5 @@
 import { UserCircleIcon } from "@heroicons/react/24/solid";
+import Image from "next/image";
 
 interface Props {
     isOpen: boolean;
@@ -14,7 +15,7 @@ const LoginButton = ({ isOpen, isLoggedIn, userName, userProfileImage, onClick }
         className="flex items-center gap-2 p-3 rounded-lg hover:bg-gray-100 w-full text-left transition-all duration-300"
     >
         {isLoggedIn && userProfileImage ? (
-            <img src={userProfileImage} className="size-10 rounded-full mr-1.5" />
+            <Image src={userProfileImage} alt="프로필" className="size-10 rounded-full mr-1.5" />
         ) : (
             <UserCircleIcon className="size-8 text-gray-600" />
         )}
