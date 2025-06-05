@@ -1,3 +1,4 @@
+'use client'
 
 import VideoItem from './VideoItem';
 import {VideoSummary} from "@/types/new-video";

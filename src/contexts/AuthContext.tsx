@@ -15,19 +15,28 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider = ({children}: { children: React.ReactNode }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [user, setUser] = useState<UserInfo | null>(null);
+    const [mounted, setMounted] = useState(false);
 
     const handleLogin = () => {
         window.location.href = 'http://knu-sosuso.com:8080/oauth2/authorization/google';
     };
 
     const handleLogout = () => {
-        localStorage.clear();
+        if (typeof window !== 'undefined') {
+            localStorage.clear();
+        }
         setIsLoggedIn(false);
         setUser(null);
     };
 
     useEffect(() => {
-        const token = localStorage.getItem('accessToken');
+        setMounted(true);
+    }, []);
+
+    useEffect(() => {
+        if (!mounted) return;
+
+        const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
         if (!token) return;
 
         const verifyToken = async () => {
@@ -44,14 +53,16 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
                 setUser(user);
             } catch (err) {
                 console.warn('토큰 만료/실패:', err);
-                localStorage.clear();
+                if (typeof window !== 'undefined') {
+                    localStorage.clear();
+                }
                 setIsLoggedIn(false);
                 setUser(null);
             }
         };
 
         verifyToken();
-    }, []);
+    }, [mounted]);
 
     return (
         <AuthContext.Provider value={{isLoggedIn, user, handleLogin, handleLogout}}>
