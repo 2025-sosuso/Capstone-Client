@@ -2,46 +2,43 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import {useAuth} from "@/contexts/AuthContext";
 
 export default function LoginSuccessPage() {
     const router = useRouter();
+    const { setUserData } = useAuth();
 
     useEffect(() => {
         const login = async () => {
-            console.log("/login/success: 로그인 처리 시작");
-
             try {
-                const res = await fetch("http://knu-sosuso.com:8080/api/userinfo", {
-                    method: "GET",
-                    credentials: "include",
+                const res = await fetch('http://knu-sosuso.com:8080/api/auth/login', {
+                    credentials: 'include',
                 });
 
                 if (!res.ok) {
-                    console.warn("유저 정보 요청 실패:", res.status);
-                    return router.push("/login?error=unauthorized");
+                    console.warn('유저 정보 요청 실패:', res.status);
+                    return router.push('/?error=unauthorized');
                 }
 
-                const token = res.headers.get("Authorization")?.replace("Bearer ", "");
-                const user = await res.json();
+                const response = await res.json();
+                console.log('로그인 응답:', response);
+                const userData = response?.data?.body;
 
-                if (!token || !user?.userName) {
-                    console.warn("응답 데이터 누락:", { token, user });
-                    return router.push("/login?error=invalid");
+                if (!userData?.userName) {
+                    console.warn('유저 정보 누락:', userData);
+                    return router.push('/?error=invalid');
                 }
 
-                localStorage.setItem("accessToken", token);
-                localStorage.setItem("userInfo", JSON.stringify(user));
-
-                console.log("로그인 성공:", user.userName);
-                router.push("/");
+                setUserData(userData);
+                router.push('/');
             } catch (error) {
-                console.error("로그인 예외 발생:", error);
-                router.push("/login?error=fail");
+                console.error('로그인 처리 중 예외:', error);
+                router.push('/?error=login-fail');
             }
         };
 
         login();
-    }, [router]);
+    }, [router, setUserData]);
 
     return (
         <div className="flex flex-col items-center justify-center h-screen text-center">
