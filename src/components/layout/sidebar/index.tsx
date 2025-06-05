@@ -1,4 +1,4 @@
-import LoginButton from "./LoginButton";
+import LoginButton from "../../common/LoginButton";
 import LogoutButton from "./LogoutButton";
 import MenuItem from "./MenuItem";
 import { MenuItems } from "./side-bar-config";
@@ -28,7 +28,7 @@ const SideBar = ({
         <div className="flex flex-col h-full p-5 justify-between whitespace-nowrap">
             <div className="flex flex-col gap-3">
                 <LoginButton
-                    isOpen={isOpen}
+                    role="sidebar"
                     isLoggedIn={isLoggedIn}
                     userName={userName}
                     userProfileImage={userProfileImage}

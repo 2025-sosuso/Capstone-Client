@@ -17,7 +17,7 @@ export default function ListSection({ type, data }: VideoListProps) {
                 </h1>
                 <ChevronRightIcon className="size-6" />
             </Link>
-            <VideoList data={data} />
+            <VideoList data={data} type={type}/>
         </div>
     );
 }
