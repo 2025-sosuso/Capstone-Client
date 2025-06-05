@@ -2,9 +2,9 @@
 
 import Home from "@components/home";
 import { useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 
-export default function Page() {
+function ErrorHandler() {
     const searchParams = useSearchParams();
     const error = searchParams.get('error');
 
@@ -15,8 +15,15 @@ export default function Page() {
         }
     }, [error]);
 
+    return null;
+}
+
+export default function Page() {
     return (
         <main>
+            <Suspense fallback={null}>
+                <ErrorHandler />
+            </Suspense>
             <Home />
         </main>
     );
