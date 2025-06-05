@@ -1,8 +1,9 @@
 'use client';
 
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function LoginFallbackPage() {
+function LoginFallbackContent() {
     const params = useSearchParams();
     const error = params.get("error");
 
@@ -22,5 +23,13 @@ export default function LoginFallbackPage() {
                 홈으로 돌아가기
             </button>
         </div>
+    );
+}
+
+export default function LoginFallbackPage() {
+    return (
+        <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading...</div>}>
+            <LoginFallbackContent />
+        </Suspense>
     );
 }
