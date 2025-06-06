@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const handleLogin = () => {
-        window.location.href = 'https://knu-sosuso.com:8080/oauth2/authorization/google';
+        window.location.href = 'https://knu-sosuso.com/oauth2/authorization/google';
     };
 
     const handleLogout = () => {
