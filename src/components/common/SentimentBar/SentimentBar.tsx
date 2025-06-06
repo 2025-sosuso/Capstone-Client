@@ -1,14 +1,11 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import EmotionSegment from './EmotionSegment';
+import SentimentItem from './SentimentItem';
+import { SentimentRatio } from '@/types/video';
 
 interface EmotionBarProps {
-    ratio: {
-        positive: number;
-        negative: number;
-        etc: number;
-    };
+    ratio: SentimentRatio;
     size?: 'sm' | 'md';
 }
 
@@ -25,7 +22,7 @@ const COLORS = {
         hoverBg: 'hover:bg-red-100/70',
         label: '부정',
     },
-    etc: {
+    other: {
         text: 'text-gray-500',
         bg: 'bg-gray-50',
         hoverBg: 'hover:bg-gray-200/70',
@@ -35,7 +32,7 @@ const COLORS = {
 
 const clampPercent = (value: number) => Math.max(0, Math.min(100, value));
 
-export default function EmotionBar({ ratio, size = 'md' }: EmotionBarProps) {
+export default function SentimentBar({ ratio, size = 'md' }: EmotionBarProps) {
     const [hoveredKey, setHoveredKey] = useState<string | null>(null);
 
     const handleClick = useCallback((label: string, percent: number) => {
@@ -48,10 +45,14 @@ export default function EmotionBar({ ratio, size = 'md' }: EmotionBarProps) {
                 {Object.entries(ratio).map(([key, value]) => {
                     const percent = clampPercent(value);
                     const isHovered = hoveredKey === key;
-                    const { text, bg, hoverBg, label } = COLORS[key as keyof typeof COLORS];
+                    const colorSet = COLORS[key as keyof typeof COLORS];
+
+                    if (!colorSet) return null;
+
+                    const { text, bg, hoverBg, label } = colorSet;
 
                     return (
-                        <EmotionSegment
+                        <SentimentItem
                             key={key}
                             keyName={key}
                             label={label}

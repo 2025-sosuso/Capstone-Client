@@ -12,7 +12,7 @@ export default function LoginSuccessPage() {
         const login = async () => {
             try {
                 const res = await fetch('https://knu-sosuso.com/api/auth/login', {
-                    credentials: 'include',  /**/
+                    credentials: 'include',
                 });
 
                 if (!res.ok) {

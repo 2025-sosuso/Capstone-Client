@@ -1,3 +1,4 @@
+/*
 interface TimelineProps {
     timeline: string;
     seekToTime: (seconds:number) => void;
@@ -24,4 +25,4 @@ const Timeline = ({ timeline, seekToTime }: TimelineProps) => {
     );
 }
 
-export default Timeline;
+export default Timeline;*/
