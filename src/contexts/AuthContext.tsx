@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect } from 'react';
 import { UserInfo } from '@/types/user';
+import {router} from "next/client";
 
 interface AuthContextType {
     isLoggedIn: boolean;
@@ -33,8 +34,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         window.location.href = 'https://knu-sosuso.com/oauth2/authorization/google';
     };
 
-    const handleLogout = () => {
-        setUserData(null);
+    const handleLogout = async () => {
+        try {
+            await fetch("https://knu-sosuso.com/api/auth/logout", {
+                method: "POST",
+                credentials: "include",
+            });
+        } catch (error) {
+            console.error("로그아웃 실패", error);
+        } finally {
+            setUserData(null);
+            router.push("/");
+        }
     };
 
     useEffect(() => {
