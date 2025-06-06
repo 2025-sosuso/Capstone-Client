@@ -11,7 +11,7 @@ export default function LoginSuccessPage() {
     useEffect(() => {
         const login = async () => {
             try {
-                const res = await fetch('http://knu-sosuso.com:8080/api/auth/login', {
+                const res = await fetch('https://knu-sosuso.com:8080/api/auth/login', {
                     credentials: 'include',  /**/
                 });
 
