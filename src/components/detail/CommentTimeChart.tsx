@@ -15,6 +15,7 @@ import {
 import { Line } from 'react-chartjs-2';
 import { useMemo } from 'react';
 import {calculateYAxis} from "@/utils/calculateYAxis";
+import {HourlyCommentCount} from "@/types/video";
 
 ChartJS.register(
     CategoryScale,
@@ -27,13 +28,8 @@ ChartJS.register(
     Filler
 );
 
-interface CommentTimeData {
-    time: string;
-    count: number;
-}
-
 interface Props {
-    data: CommentTimeData[];
+    data: HourlyCommentCount[];
 }
 
 export default function CommentTimeChart({ data }: Props) {
@@ -42,7 +38,7 @@ export default function CommentTimeChart({ data }: Props) {
 
     const chartData = useMemo(() => {
         return {
-            labels: data.map((d) => d.time),
+            labels: data.map((d) => d.hour),
             datasets: [
                 {
                     label: '댓글 수',

@@ -18,7 +18,7 @@ const COLORS = [
 
 interface LanguageRatioItem {
     language: string;
-    value: number;
+    ratio: number;
 }
 
 interface LanguageChartProps {
@@ -43,7 +43,7 @@ export default function LanguageChart({ data }: LanguageChartProps) {
         datasets: [
             {
                 label: '언어 비율',
-                data: data.map((d) => d.value),
+                data: data.map((d) => d.ratio),
                 backgroundColor: data.map((_, i) => COLORS[i % COLORS.length]),
                 borderWidth: 1,
             },

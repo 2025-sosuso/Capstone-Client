@@ -1,7 +1,9 @@
 'use client';
 
-import { useState } from "react";
+import {useState} from "react";
 import CategoryBar from "@components/trending/CategoryBar";
+import VideoSummaryList from "@components/common/VideoSummary/VideoSummaryList";
+import {mockVideoSummaryList} from "@mock/video-summary-mock";
 
 type CategoryType = 'latest' | 'music' | 'game';
 
@@ -13,6 +15,7 @@ const categories: { label: string; value: CategoryType }[] = [
 
 export default function Trending() {
     const [isSelected, setIsSelected] = useState<CategoryType>("latest");
+    const mockData = mockVideoSummaryList;
 
     /*const regionCode = "KR";
     const maxResults = 30;
@@ -36,22 +39,28 @@ export default function Trending() {
     }, [isSelected]);*/
 
     return (
-        <div className="p-4">
-            <div className="flex items-center gap-2 mb-4">
-                <span className="text-3xl">🔥</span>
-                <h1 className="text-2xl font-semibold text-gray-900">인기 급상승</h1>
-            </div>
+        <div className="w-full flex justify-center px-4 py-5">
+            <div className="w-full max-w-screen-xl flex flex-col gap-10">
 
-            <div className="flex border-b border-gray-200 mb-6">
-                {categories.map(({ label, value }) => (
-                    <CategoryBar
-                        key={value}
-                        category={label}
-                        selected={value === isSelected}
-                        onClick={() => setIsSelected(value)}
-                    />
-                ))}
+                <div className="flex items-center gap-2">
+                    <span className="text-3xl">🔥</span>
+                    <h1 className="text-2xl font-semibold text-gray-900">인기 급상승</h1>
+                </div>
+
+                <div className="flex border-b border-gray-200">
+                    {categories.map(({ label, value }) => (
+                        <CategoryBar
+                            key={value}
+                            category={label}
+                            selected={value === isSelected}
+                            onClick={() => setIsSelected(value)}
+                        />
+                    ))}
+                </div>
+
+                <VideoSummaryList data={mockData} />
             </div>
         </div>
+
     );
 }

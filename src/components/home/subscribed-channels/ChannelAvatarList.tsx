@@ -1,67 +1,31 @@
 'use client';
 
-import Image from 'next/image';
-import { AdjustmentsVerticalIcon, MinusIcon } from '@heroicons/react/24/outline';
+import { AdjustmentsVerticalIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
-import { mockVideoData} from "@mock/video";
+import ChannelAvatar from './ChannelAvatar';
+import { mockChannelSearchResponse } from '@/mock/channel-mock';
 
-
-interface ChannelProps {
-    img?: string;
-    name: string;
-    edit: boolean;
-}
-
-const ChannelAvatar = ({ img, name, edit }: ChannelProps) => {
-    const handleClick = () => {
-        console.log(name);
-    };
-
-    return (
-        <div className="flex flex-col items-center justify-center cursor-pointer w-16 shrink-0" onClick={handleClick}>
-            <div className="relative flex items-center justify-center">
-                {edit && (
-                    <MinusIcon className="absolute z-10 size-10 text-gray-50 stroke-2" />
-                )}
-                <Image
-                    className={`size-16 rounded-full transition duration-200 ${edit ? 'brightness-60' : 'brightness-100'}`}
-                    src={img ?? ''} // 디폴트 이미지 넣어야 함
-                    alt="channel-profile"
-                    width={64}
-                    height={64}
-                    unoptimized
-                />
-            </div>
-            <span className="w-full truncate text-center text-sm">{name}</span>
-        </div>
-    );
-};
-
-const ChannelAvatarList = () => {
+export default function ChannelAvatarList() {
     const [edit, setEdit] = useState(false);
 
-    const handleEdit = () => {
-        setEdit(!edit);
-    };
+    const toggleEdit = () => setEdit(prev => !prev);
 
     return (
         <div className="flex items-start justify-between gap-4">
             <div className="flex gap-4 overflow-x-auto">
-                {mockVideoData.map((video, i) => (
+                {mockChannelSearchResponse.data.results.map((channel) => (
                     <ChannelAvatar
-                        key={i}
-                        img={video.channel.profileImageUrl ?? '/default-profile.png'}
-                        name={video.channel.name}
+                        key={channel.id}
+                        thumbnailUrl={channel.thumbnailUrl}
+                        title={channel.title}
                         edit={edit}
+                        onClick={() => console.log(channel.title)}
                     />
                 ))}
             </div>
-            <button className="cursor-pointer" onClick={handleEdit}>
+            <button className="cursor-pointer" onClick={toggleEdit}>
                 <AdjustmentsVerticalIcon className="size-6 text-gray-500" />
             </button>
         </div>
     );
-};
-
-
-export default ChannelAvatarList;
+}

@@ -17,9 +17,9 @@ const LoginButton = ({role="other", isLoggedIn, userName, userProfileImage, onCl
 
     >
         {isLoggedIn && userProfileImage ? (
-            <Image src={userProfileImage} alt="프로필" className="size-10 rounded-full mr-1.5"/>
+            <Image src={userProfileImage} width={10} height={10} alt="프로필" className="size-10 rounded-full mr-1.5"/>
         ) : (
-            <UserCircleIcon className="size-8 text-gray-600"/>
+            <UserCircleIcon className="size-8 text-gray-500"/>
         )}
         {isLoggedIn ? userName : "로그인"}
     </button>

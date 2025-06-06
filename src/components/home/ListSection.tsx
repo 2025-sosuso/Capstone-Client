@@ -1,14 +1,14 @@
 import Link from "next/link";
-import {VideoSummary} from "@/types/new-video";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
-import VideoList from "@components/common/VideoSummary/VideoList";
+import VideoSummaryList from "@components/common/VideoSummary/VideoSummaryList";
+import {VideoSummaryResponse} from "@/types/video-summary";
 
-interface VideoListProps {
-    type: "trending" | "scrap";
-    data: VideoSummary[];
+interface Props {
+    type: "trending" | "scraps";
+    data: VideoSummaryResponse[];
 }
 
-export default function ListSection({ type, data }: VideoListProps) {
+export default function ListSection({ type, data }: Props) {
     return (
         <div className="flex flex-col w-full gap-5">
             <Link href={`/${type}`} className="flex justify-between w-full">
@@ -17,7 +17,7 @@ export default function ListSection({ type, data }: VideoListProps) {
                 </h1>
                 <ChevronRightIcon className="size-6" />
             </Link>
-            <VideoList data={data} type={type}/>
+            <VideoSummaryList data={data} type={type}/>
         </div>
     );
 }
