@@ -22,7 +22,7 @@ export default function LoginSuccessPage() {
 
                 const response = await res.json();
                 console.log('로그인 응답:', response);
-                const userData = response?.data?.body;
+                const userData = response?.data;
 
                 if (!userData?.userName) {
                     console.warn('유저 정보 누락:', userData);
