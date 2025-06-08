@@ -50,7 +50,7 @@ export default function CommentTimeChart({ data }: Props) {
                 tension: 0.4,
             },
         ],
-    }), [data]);
+    }), [data, hasValidData]);
 
     const options = {
         maintainAspectRatio: false,
