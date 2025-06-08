@@ -1,3 +1,6 @@
+"use client";
+
+import { useRef } from "react";
 import VideoInfo from "@components/detail/video-info";
 import SectionLayout from "@components/detail/SectionLayout";
 import CommentList from "@components/common/Comment/CommentList";
@@ -8,10 +11,11 @@ import AISummary from "@components/common/AISummary";
 import SentimentBar from "@components/common/SentimentBar/SentimentBar";
 import { mockVideoResponse } from "@mock/video-mock";
 import type { VideoResult } from "@/types/video";
+import type { YouTubePlayerRef } from "@components/detail/video-info/YoutubePlayer";
+import WarningBanner from "@components/detail/WarningBanner";
 
 export default function Detail() {
     const data: VideoResult = mockVideoResponse.data.results[0];
-
     const { analysis, comments } = data;
     const {
         summary,
@@ -23,11 +27,19 @@ export default function Detail() {
         keywords,
     } = analysis;
 
-    return (
-        <div className="flex flex-col w-full items-center max-w-[1000px] m-auto gap-10">
-            <VideoInfo data={data} />
+    const playerRef = useRef<YouTubePlayerRef | null>(null);
 
-            <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-10">
+    const handleSeek = (timeString: string) => {
+        const parts = timeString.split(":").map(Number);
+        const seconds = parts.reduce((acc, val, idx) => acc + val * Math.pow(60, parts.length - idx - 1), 0);
+        playerRef.current?.seekToTime(seconds);
+    };
+
+    return (
+        <div className="flex flex-col w-full items-center max-w-[1000px] m-auto gap-5 ">
+            {analysis.isWarning ?  <WarningBanner /> : null }
+            <VideoInfo data={data} onPlayerReady={(ref) => (playerRef.current = ref)} />
+            <div className="grid grid-cols-1 md:grid-cols-2 w-full mt-10 gap-10">
                 <div className="col-auto flex flex-col gap-10">
                     <SectionLayout header="AI 전체 요약">
                         <AISummary summary={summary} />
@@ -38,11 +50,7 @@ export default function Detail() {
                     </SectionLayout>
 
                     <SectionLayout header="전체 댓글 확인하기" type="search-comment">
-                        <SentimentBar ratio={{
-                            positive: sentimentDistribution.positive,
-                            negative: sentimentDistribution.negative,
-                            other: sentimentDistribution.other
-                        }} />
+                        <SentimentBar ratio={sentimentDistribution} />
                         <CommentList comments={comments} />
                     </SectionLayout>
                 </div>
@@ -53,7 +61,7 @@ export default function Detail() {
                     </SectionLayout>
 
                     <SectionLayout header="가장 많이 언급한 시간대">
-                        <TagList tags={popularTimestamps.map(t => t.time)} />
+                        <TagList tags={popularTimestamps.map(t => t.time)} onTagClick={handleSeek} />
                     </SectionLayout>
 
                     <SectionLayout header="댓글 작성 시간대">

@@ -22,7 +22,7 @@ const SideBar = ({
                  }: SideBarProps) => (
     <div
         className={`h-[calc(100vh-48px)] bg-white transition-all duration-300 overflow-hidden ${
-            isOpen ? 'w-64' : 'w-0'
+            isOpen ? 'w-60' : 'w-0'
         } shrink-0`}
     >
         <div className="flex flex-col h-full p-5 justify-between whitespace-nowrap">

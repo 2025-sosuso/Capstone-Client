@@ -1,11 +1,9 @@
-export interface VideoSearchResponse {
-    timeStamp: string;
-    message: string;
-    data: {
-        searchType: string; // URL or CHANNEL
-        results: VideoResult[];
-    };
-}
+import { BaseApiResponse } from "./common";
+
+export type VideoSearchResponse = BaseApiResponse<{
+    searchType: 'URL' | 'CHANNEL';
+    results: VideoResult[];
+}>;
 
 export interface VideoResult {
     video: VideoDetail;
@@ -51,13 +49,13 @@ export interface Comment {
     author: string;
     text: string;
     likeCount: number;
-    sentiment: 'POSITIVE' | 'NEGATIVE' | 'OTHER';
+    sentiment: 'positive' | 'negative' | 'other';
     publishedAt: string;
 }
 
 export interface LanguageRatio {
     language: string;
-    ratio: number; // ex) 0.82
+    ratio: number;
 }
 
 export interface SentimentRatio {
@@ -67,11 +65,11 @@ export interface SentimentRatio {
 }
 
 export interface TimestampMention {
-    time: string; // ex) "00:40"
+    time: string;
     mentionCount: number;
 }
 
 export interface HourlyCommentCount {
-    hour: string; // ex) "13"
+    hour: string;
     count: number;
 }

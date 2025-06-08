@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import type { Comment as CommentType } from "@/types/video";
 import CommentItem from "@components/common/Comment/CommentItem";
+import NoCommentItem from "@components/common/Comment/NoCommentItem";
 
 type Props = {
     comments: CommentType[];
@@ -23,9 +24,7 @@ export default function CommentSlider({ comments, intervalMs = 8000, color = "10
 
     if (!comments || comments.length === 0) {
         return (
-            <div className="text-sm text-gray-400 px-2 py-1">
-                댓글이 없습니다.
-            </div>
+            <NoCommentItem/>
         );
     }
 

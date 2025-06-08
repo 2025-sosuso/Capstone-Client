@@ -1,11 +1,9 @@
-export interface ChannelSearchResponse {
-    timestamp: string;
-    message: string;
-    data: {
-        searchType: string;
-        results: ChannelSearchResult[];
-    }
-}
+import { BaseApiResponse } from "./common";
+
+export type ChannelSearchResponse = BaseApiResponse<{
+    searchType: string;
+    results: ChannelSearchResult[];
+}>;
 
 export interface ChannelSearchResult {
     id: string;
