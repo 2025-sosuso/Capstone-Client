@@ -12,5 +12,5 @@ export interface ChannelSearchResult {
     description: string;
     thumbnailUrl: string;
     subscriberCount: number;
-    isFavorited: boolean;
+    favoriteChannelId?: number | null;
 }

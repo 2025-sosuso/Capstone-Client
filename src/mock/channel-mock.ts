@@ -14,7 +14,7 @@ export const mockChannelSearchResponse: ChannelSearchResponse = {
                     description: "아룡하세요~~ 허잇👋🏻 매번 다양하고 새로운 웃음을 찾아 떠나는 삼인조 유머 크리에이터 🏝보물섬🏝입니다😜",
                     thumbnailUrl: "https://yt3.ggpht.com/UJgYdxs2w6CgqOOZSEsdSHl9Hcxn-ntszg6o9Q4QNEx9BVn1SpFdwtfjFr_jUXR0ocjrorfP6xc=s240-c-k-c0x00ffffff-no-rj",
                     subscriberCount: 2010000,
-                    isFavorited: false,
+                    favoriteChannelId: null,
                 },
                 {
                     id: "UCRwMczVQ8Jr8_8Dd8o7hPnQ",
@@ -23,7 +23,7 @@ export const mockChannelSearchResponse: ChannelSearchResponse = {
                     description: "음주가무 좋아하는 대학생\n철원 3사단 22여단 백골 GOP 최전방 병장 만기전역",
                     thumbnailUrl: "https://yt3.ggpht.com/ytc/AIdro_k0uTbp2pAyLJ2j7onhUi-QAbBYEHLb_F6Oc_2yXxg-lSs=s240-c-k-c0x00ffffff-no-rj",
                     subscriberCount: 215000,
-                    isFavorited: false,
+                    favoriteChannelId: null,
                 },
                 {
                     id: "UCBVy3MYN-nT9gZ23tIH8BCA",
@@ -32,7 +32,7 @@ export const mockChannelSearchResponse: ChannelSearchResponse = {
                     description: "빈틈으로 가득 찬 허당아재 추억저장소",
                     thumbnailUrl: "https://yt3.ggpht.com/ytc/AIdro_mvDS6mSEkl8OTdo4IdVAfNlKTzSgGW2Y4V11MhDKH6IA=s240-c-k-c0x00ffffff-no-rj",
                     subscriberCount: 114000,
-                    isFavorited: false,
+                    favoriteChannelId: null,
                 },
                 {
                     id: "UCfi1rvJUWFkSJGaGC4rR0Dw",
@@ -41,7 +41,7 @@ export const mockChannelSearchResponse: ChannelSearchResponse = {
                     description: "제가 좋아하는 이것저것 뜯어보고 살펴보고 열어보는 채널입니다.",
                     thumbnailUrl: "https://yt3.ggpht.com/ytc/AIdro_lDGMLm8zHNk24H24kX8_FAskl_N9zP42YoVey-4K8pRBE=s240-c-k-c0x00ffffff-no-rj",
                     subscriberCount: 41400,
-                    isFavorited: false,
+                    favoriteChannelId: null,
                 },
                 {
                     id: "UCXiMz9LDqw7qDP1jvm6DuQg",
@@ -50,7 +50,7 @@ export const mockChannelSearchResponse: ChannelSearchResponse = {
                     description: "자연이 주는 것들을 찾아서 맛보고 즐기고 키워도 보는 자유로운 컨텐츠를 하고있습니다.",
                     thumbnailUrl: "https://yt3.ggpht.com/vRKxPGkuSVzLENusgNEzD3NEYOHKqaJw532Su40peTY73gZsP_ZXdOfdQcYtGsqnDP_Gx_4CQw=s240-c-k-c0x00ffffff-no-rj",
                     subscriberCount: 21100,
-                    isFavorited: false,
+                    favoriteChannelId: null,
                 },
                 {
                     id: "UC9ZLv1m7QDLv99f1X1-p50AA",
@@ -59,7 +59,7 @@ export const mockChannelSearchResponse: ChannelSearchResponse = {
                     description: "아룡하세요~~ 허잇👋🏻 매번 다양하고 새로운 웃음을 찾아 떠나는 삼인조 유머 크리에이터 🏝보물섬🏝입니다😜",
                     thumbnailUrl: "https://yt3.ggpht.com/UJgYdxs2w6CgqOOZSEsdSHl9Hcxn-ntszg6o9Q4QNEx9BVn1SpFdwtfjFr_jUXR0ocjrorfP6xc=s240-c-k-c0x00ffffff-no-rj",
                     subscriberCount: 2010000,
-                    isFavorited: false,
+                    favoriteChannelId: null,
                 },
                 {
                     id: "UCRwMczVQ8Jr8_8Dd8o7hPnQ1",
@@ -68,7 +68,7 @@ export const mockChannelSearchResponse: ChannelSearchResponse = {
                     description: "음주가무 좋아하는 대학생\n철원 3사단 22여단 백골 GOP 최전방 병장 만기전역",
                     thumbnailUrl: "https://yt3.ggpht.com/ytc/AIdro_k0uTbp2pAyLJ2j7onhUi-QAbBYEHLb_F6Oc_2yXxg-lSs=s240-c-k-c0x00ffffff-no-rj",
                     subscriberCount: 215000,
-                    isFavorited: false,
+                    favoriteChannelId: null,
                 },
                 {
                     id: "UCBVy3MYN-nT9gZ23tIH8BCA2",
@@ -77,7 +77,7 @@ export const mockChannelSearchResponse: ChannelSearchResponse = {
                     description: "빈틈으로 가득 찬 허당아재 추억저장소",
                     thumbnailUrl: "https://yt3.ggpht.com/ytc/AIdro_mvDS6mSEkl8OTdo4IdVAfNlKTzSgGW2Y4V11MhDKH6IA=s240-c-k-c0x00ffffff-no-rj",
                     subscriberCount: 114000,
-                    isFavorited: false,
+                    favoriteChannelId: null,
                 },
                 {
                     id: "UCfi1rvJUWFkSJGaGC4rR0Dw3",
@@ -86,7 +86,7 @@ export const mockChannelSearchResponse: ChannelSearchResponse = {
                     description: "제가 좋아하는 이것저것 뜯어보고 살펴보고 열어보는 채널입니다.",
                     thumbnailUrl: "https://yt3.ggpht.com/ytc/AIdro_lDGMLm8zHNk24H24kX8_FAskl_N9zP42YoVey-4K8pRBE=s240-c-k-c0x00ffffff-no-rj",
                     subscriberCount: 41400,
-                    isFavorited: false,
+                    favoriteChannelId: null,
                 },
                 {
                     id: "UCXiMz9LDqw7qDP1jvm6DuQg4",
@@ -95,7 +95,7 @@ export const mockChannelSearchResponse: ChannelSearchResponse = {
                     description: "자연이 주는 것들을 찾아서 맛보고 즐기고 키워도 보는 자유로운 컨텐츠를 하고있습니다.",
                     thumbnailUrl: "https://yt3.ggpht.com/vRKxPGkuSVzLENusgNEzD3NEYOHKqaJw532Su40peTY73gZsP_ZXdOfdQcYtGsqnDP_Gx_4CQw=s240-c-k-c0x00ffffff-no-rj",
                     subscriberCount: 21100,
-                    isFavorited: false,
+                    favoriteChannelId: null,
                 },
                 {
                     id: "UC9ZLv1m7QDLv991X1-p50AA5",
@@ -104,7 +104,7 @@ export const mockChannelSearchResponse: ChannelSearchResponse = {
                     description: "아룡하세요~~ 허잇👋🏻 매번 다양하고 새로운 웃음을 찾아 떠나는 삼인조 유머 크리에이터 🏝보물섬🏝입니다😜",
                     thumbnailUrl: "https://yt3.ggpht.com/UJgYdxs2w6CgqOOZSEsdSHl9Hcxn-ntszg6o9Q4QNEx9BVn1SpFdwtfjFr_jUXR0ocjrorfP6xc=s240-c-k-c0x00ffffff-no-rj",
                     subscriberCount: 2010000,
-                    isFavorited: false,
+                    favoriteChannelId: null,
                 },
                 {
                     id: "UCRwMczVQ8Jr8_8Dd8o7hPn6Q",
@@ -113,7 +113,7 @@ export const mockChannelSearchResponse: ChannelSearchResponse = {
                     description: "음주가무 좋아하는 대학생\n철원 3사단 22여단 백골 GOP 최전방 병장 만기전역",
                     thumbnailUrl: "https://yt3.ggpht.com/ytc/AIdro_k0uTbp2pAyLJ2j7onhUi-QAbBYEHLb_F6Oc_2yXxg-lSs=s240-c-k-c0x00ffffff-no-rj",
                     subscriberCount: 215000,
-                    isFavorited: false,
+                    favoriteChannelId: null,
                 },
                 {
                     id: "UCBVy3MYN-nT9gZ23t7IH8BCA",
@@ -122,7 +122,7 @@ export const mockChannelSearchResponse: ChannelSearchResponse = {
                     description: "빈틈으로 가득 찬 허당아재 추억저장소",
                     thumbnailUrl: "https://yt3.ggpht.com/ytc/AIdro_mvDS6mSEkl8OTdo4IdVAfNlKTzSgGW2Y4V11MhDKH6IA=s240-c-k-c0x00ffffff-no-rj",
                     subscriberCount: 114000,
-                    isFavorited: false,
+                    favoriteChannelId: null,
                 },
                 {
                     id: "UCfi1rvJUWFkSJGa8GC4rR0Dw",
@@ -131,7 +131,7 @@ export const mockChannelSearchResponse: ChannelSearchResponse = {
                     description: "제가 좋아하는 이것저것 뜯어보고 살펴보고 열어보는 채널입니다.",
                     thumbnailUrl: "https://yt3.ggpht.com/ytc/AIdro_lDGMLm8zHNk24H24kX8_FAskl_N9zP42YoVey-4K8pRBE=s240-c-k-c0x00ffffff-no-rj",
                     subscriberCount: 41400,
-                    isFavorited: false,
+                    favoriteChannelId: null,
                 },
                 {
                     id: "UCXiMz9LD9qw7qDP1jvm6DuQg",
@@ -140,7 +140,7 @@ export const mockChannelSearchResponse: ChannelSearchResponse = {
                     description: "자연이 주는 것들을 찾아서 맛보고 즐기고 키워도 보는 자유로운 컨텐츠를 하고있습니다.",
                     thumbnailUrl: "https://yt3.ggpht.com/vRKxPGkuSVzLENusgNEzD3NEYOHKqaJw532Su40peTY73gZsP_ZXdOfdQcYtGsqnDP_Gx_4CQw=s240-c-k-c0x00ffffff-no-rj",
                     subscriberCount: 21100,
-                    isFavorited: false,
+                    favoriteChannelId: null,
                 },
 
             ]

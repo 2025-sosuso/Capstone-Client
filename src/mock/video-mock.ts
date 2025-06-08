@@ -8,7 +8,7 @@ export const mockVideoResponse: VideoSearchResponse = {
         results: [
             {
                 video: {
-                    id: "iPgt1tDN_So",
+                    id: "EpWeu8C38NM",
                     title: "생후 20일차의 개꿀 빠는 일상",
                     description: `즐겁게 시청해주세요♥
 -
@@ -36,7 +36,6 @@ girlsplanet_@naver.com
                     viewCount: 1000602,
                     likeCount: 16824,
                     commentCount: 692,
-                    isScrapped: false,
                     scrapId: null
                 },
                 channel: {
@@ -44,7 +43,7 @@ girlsplanet_@naver.com
                     title: "소녀의행성 Girlsplanet",
                     thumbnailUrl: "",
                     subscriberCount: 1010000,
-                    isFavorite: false
+                    favoriteChannelId: null,
                 },
                 analysis: {
                     summary: "강아지 귀여워",

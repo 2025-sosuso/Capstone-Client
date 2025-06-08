@@ -21,7 +21,6 @@ export interface VideoDetail {
     viewCount: number;
     likeCount: number;
     commentCount: number;
-    isScrapped: boolean;
     scrapId?: number | null;
 }
 
@@ -30,7 +29,7 @@ export interface Channel {
     title: string;
     thumbnailUrl: string;
     subscriberCount: number;
-    isFavorite: boolean;
+    favoriteChannelId?: number | null;
 }
 
 export interface VideoAnalysis {

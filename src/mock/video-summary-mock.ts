@@ -14,14 +14,13 @@ export const mockVideoSummaryList: VideoSummaryResponse[] = [
                 viewCount: 1000602,
                 likeCount: 16824,
                 commentCount: 692,
-                isScrapped: false
+                scrapId: null
             },
             channel: {
                 id: "UC-IYpdOqjkER7B6cnChwlhA",
                 title: "소녀의행성 Girlsplanet",
                 thumbnailUrl: "",
                 subscriberCount: 1010000,
-                isFavorite: false
             },
             analysis: {
                 summary: "강아지 귀엽고 행복한 영상",
@@ -70,14 +69,13 @@ export const mockVideoSummaryList: VideoSummaryResponse[] = [
                 viewCount: 502301,
                 likeCount: 9521,
                 commentCount: 341,
-                isScrapped: false
+                scrapId: null
             },
             channel: {
                 id: "UC-CATVlogChannel",
                 title: "냥이네 브이로그",
                 thumbnailUrl: "",
                 subscriberCount: 512000,
-                isFavorite: false
             },
             analysis: {
                 summary: "고양이의 일상이 귀엽고 힐링된다",
@@ -99,14 +97,13 @@ export const mockVideoSummaryList: VideoSummaryResponse[] = [
                 viewCount: 845102,
                 likeCount: 13421,
                 commentCount: 562,
-                isScrapped: false
+                scrapId: null
             },
             channel: {
                 id: "UC-DogTraining",
                 title: "멍스타 훈련소",
                 thumbnailUrl: "",
                 subscriberCount: 874000,
-                isFavorite: false
             },
             analysis: {
                 summary: "도베르만의 강렬한 훈련 영상",
@@ -128,14 +125,13 @@ export const mockVideoSummaryList: VideoSummaryResponse[] = [
                 viewCount: 231401,
                 likeCount: 7341,
                 commentCount: 128,
-                isScrapped: false
+                scrapId: null
             },
             channel: {
                 id: "UC-ChihuahuaTime",
                 title: "찌와와의 시간",
                 thumbnailUrl: "",
                 subscriberCount: 302000,
-                isFavorite: false
             },
             analysis: {
                 summary: "치와와의 분노를 유쾌하게 표현한 영상",
@@ -157,14 +153,13 @@ export const mockVideoSummaryList: VideoSummaryResponse[] = [
                 viewCount: 1189233,
                 likeCount: 18234,
                 commentCount: 740,
-                isScrapped: false
+                scrapId: null
             },
             channel: {
                 id: "UC-GoldenDogDaily",
                 title: "골든데일리",
                 thumbnailUrl: "",
                 subscriberCount: 1320000,
-                isFavorite: false
             },
             analysis: {
                 summary: "골든 리트리버의 귀여운 장난감 놀이 영상",

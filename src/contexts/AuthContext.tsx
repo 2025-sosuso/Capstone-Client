@@ -44,6 +44,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } finally {
             setUserData(null);
             router.push("/");
+            console.log("로그아웃 완료");
         }
     };
 

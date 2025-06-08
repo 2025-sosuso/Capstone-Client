@@ -19,7 +19,7 @@ export default function VideoInfoSection({ data, onPlayerReady }: Props) {
     const { isLoggedIn, handleLogin } = useAuth();
 
     const [scrapId, setScrapId] = useState<number | null>(video.scrapId ?? null);
-    const [isFavorited, setIsFavorited] = useState(channel.isFavorite);
+    const [favoriteChannelId, setFavoriteChannelId] = useState<number | null>(channel.favoriteChannelId ?? null);
     const [isExpanded, setIsExpanded] = useState(false);
     const [videoHeight, setVideoHeight] = useState(0);
 
@@ -52,9 +52,9 @@ export default function VideoInfoSection({ data, onPlayerReady }: Props) {
                 console.log("스크랩 삭제 성공");
                 setScrapId(null);
             } else {
-                const newId = await createScrap(video.id);
-                console.log("스크랩 생성 성공, ID:", newId);
-                setScrapId(newId);
+                const newScrapId = await createScrap(video.id);
+                console.log("스크랩 생성 성공, ID:", newScrapId);
+                setScrapId(newScrapId);
             }
         } catch (err) {
             console.error("스크랩 요청 실패:", err);
@@ -66,21 +66,23 @@ export default function VideoInfoSection({ data, onPlayerReady }: Props) {
         if (requireLogin()) return;
 
         try {
-            if (isFavorited) {
-                console.log("관심 채널 삭제 요청:", channel.id);
-                await removeFavoriteChannel(channel.id);
-                console.log("관심 채널 삭제 완료:", channel.id);
-                setIsFavorited(false);
+            console.log(`관심 채널 요청 시작: ${channel.id}`, favoriteChannelId ? "삭제" : "생성");
+
+            if (favoriteChannelId != null) {
+                await removeFavoriteChannel(favoriteChannelId);
+                console.log("관심 채널 삭제 완료:", favoriteChannelId);
+                setFavoriteChannelId(null);
             } else {
-                console.log("관심 채널 등록 요청:", channel.id);
-                await addFavoriteChannel(channel.id);
-                console.log("관심 채널 등록 완료:", channel.id);
-                setIsFavorited(true);
+                const newFavoriteChannelId = await addFavoriteChannel(channel.id, channel.title);
+                console.log("관심 채널 생성 성공, ID:", newFavoriteChannelId);
+                setFavoriteChannelId(newFavoriteChannelId);
             }
         } catch (err) {
-            console.error("관심 채널 처리 실패:", err);
+            console.error("관심 채널 요청 실패:", err);
         }
     };
+
+
 
 
     return (
@@ -111,7 +113,7 @@ export default function VideoInfoSection({ data, onPlayerReady }: Props) {
                     </p>
                     <button
                         className={`size-5 transition-colors cursor-pointer ${
-                            isFavorited ? "text-gray-700" : "text-gray-300"
+                            favoriteChannelId ? "text-gray-700" : "text-gray-300"
                         }`}
                         onClick={handleFavoriteToggle}
                         aria-label="관심 채널"
