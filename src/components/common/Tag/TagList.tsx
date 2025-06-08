@@ -1,16 +1,27 @@
-import Tag from "./Tag";
+import TagItem from "./TagItem";
 
-type TagListProps = {
-    tags: string[];
+interface TagListProps {
+    tags?: string[];
     size?: "sm" | "md";
     color?: string;
-};
+    onTagClick?: (tag: string) => void;
+}
 
-export default function TagList({tags, size = "md", color}: TagListProps) {
+export default function TagList({ tags, size = "md", onTagClick }: TagListProps) {
+    const hasTags = Array.isArray(tags) && tags.length > 0;
+
+    if (!hasTags) {
+        return (
+            <div className="w-full px-4 py-3 rounded-md bg-gray-50 text-center text-sm text-gray-400">
+                키워드 데이터가 없습니다.
+            </div>
+        );
+    }
+
     return (
         <div className="flex gap-2 overflow-x-auto items-center">
             {tags.map((tag, i) => (
-                <Tag key={i} text={tag} size={size} color={color}/>
+                <TagItem key={i} text={tag} size={size} onClick={() => onTagClick?.(tag)} />
             ))}
         </div>
     );

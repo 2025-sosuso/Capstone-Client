@@ -9,6 +9,7 @@ import {
 } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { useEffect, useMemo, useState } from 'react';
+import {LanguageRatio} from "@/types/video";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -16,13 +17,8 @@ const COLORS = [
     '#FF6384', '#FF9F40', '#FFCD56', '#4BC0C0', '#36A2EB',
 ];
 
-interface LanguageRatioItem {
-    language: string;
-    ratio: number;
-}
-
 interface LanguageChartProps {
-    data: LanguageRatioItem[];
+    data?: LanguageRatio[];
 }
 
 export default function LanguageChart({ data }: LanguageChartProps) {
@@ -38,13 +34,15 @@ export default function LanguageChart({ data }: LanguageChartProps) {
         return () => window.removeEventListener('resize', updateLegend);
     }, []);
 
+    const hasValidData = Array.isArray(data) && data.length > 0 && data.some(d => d.ratio > 0);
+
     const chartData = useMemo(() => ({
-        labels: data.map((d) => d.language),
+        labels: data?.map((d) => d.language),
         datasets: [
             {
                 label: '언어 비율',
-                data: data.map((d) => d.ratio),
-                backgroundColor: data.map((_, i) => COLORS[i % COLORS.length]),
+                data: data?.map((d) => d.ratio),
+                backgroundColor: data?.map((_, i) => COLORS[i % COLORS.length]),
                 borderWidth: 1,
             },
         ],
@@ -74,6 +72,14 @@ export default function LanguageChart({ data }: LanguageChartProps) {
             },
         },
     }), [showLegend]);
+
+    if (!hasValidData) {
+        return (
+            <div className="w-full min-w-[16rem] h-[300px] mx-auto p-3 flex items-center justify-center text-sm text-gray-400 bg-gray-50 rounded-xl">
+                언어 분석 데이터가 없습니다.
+            </div>
+        );
+    }
 
     return (
         <div className="w-full max-w-sm min-w-[16rem] h-[300px] mx-auto p-3">

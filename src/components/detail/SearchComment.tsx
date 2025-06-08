@@ -21,7 +21,7 @@ export default function SearchComment() {
 
     return (
         <div
-            className={`flex w-fit h-fit items-center gap-2 px-3 py-1 rounded-full transition-colors duration-200 ${
+            className={`flex w-fit h-fit items-center gap-2 px-3 py-1 rounded-full hover:bg-gray-200 transition-colors duration-200 ${
                 isFocus ? "bg-gray-200" : "bg-gray-100"
             }`}
         >

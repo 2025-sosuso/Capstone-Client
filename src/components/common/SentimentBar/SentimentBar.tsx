@@ -5,7 +5,7 @@ import SentimentItem from './SentimentItem';
 import { SentimentRatio } from '@/types/video';
 
 interface EmotionBarProps {
-    ratio: SentimentRatio;
+    ratio?: SentimentRatio;
     size?: 'sm' | 'md';
 }
 
@@ -38,6 +38,18 @@ export default function SentimentBar({ ratio, size = 'md' }: EmotionBarProps) {
     const handleClick = useCallback((label: string, percent: number) => {
         console.log(`${label}: ${percent}%`);
     }, []);
+
+    const hasValidData =
+        ratio &&
+        Object.values(ratio).some((v) => typeof v === 'number' && v > 0);
+
+    if (!hasValidData) {
+        return (
+            <div className="w-full px-4 py-3 text-center text-sm text-gray-400 bg-gray-50 rounded-xl">
+                감정 분석 데이터가 없습니다.
+            </div>
+        );
+    }
 
     return (
         <div className="flex w-full gap-2 items-center">
