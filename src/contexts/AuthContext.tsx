@@ -1,24 +1,26 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect } from 'react';
-import { UserInfo } from '@/types/user';
-import {router} from "next/client";
+import { UserInfoResponse } from '@/types/user';
+import { useRouter } from 'next/navigation';
+import { logoutUser } from '@/service/authService';
 
 interface AuthContextType {
     isLoggedIn: boolean;
-    user: UserInfo | null;
+    user: UserInfoResponse["data"] | null;
     handleLogin: () => void;
     handleLogout: () => void;
-    setUserData: (user: UserInfo | null) => void;
+    setUserData: (user: UserInfoResponse["data"] | null) => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(true);
-    const [user, setUser] = useState<UserInfo | null>(null);
+    const router = useRouter();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [user, setUser] = useState<UserInfoResponse["data"] | null>(null);
 
-    const setUserData = (userData: UserInfo | null) => {
+    const setUserData = (userData: UserInfoResponse["data"] | null) => {
         if (userData) {
             localStorage.setItem('auth', JSON.stringify(userData));
             setUser(userData);
@@ -36,10 +38,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const handleLogout = async () => {
         try {
-            await fetch("https://knu-sosuso.com/api/auth/logout", {
-                method: "POST",
-                credentials: "include",
-            });
+            await logoutUser();
         } catch (error) {
             console.error("로그아웃 실패", error);
         } finally {
