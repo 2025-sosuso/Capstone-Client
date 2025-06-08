@@ -2,11 +2,11 @@ import { VideoSummaryResponse } from "@/types/video-summary";
 
 export const mockVideoSummaryList: VideoSummaryResponse[] = [
     {
-        timestamp: Date.now(),
+        timeStamp: new Date().toISOString(),
         message: "요약이 완료되었습니다.",
         data: {
             video: {
-                id: "ey-6TCSQ5sk",
+                id: "iPgt1tDN_So",
                 title: "생후 20일차의 개꿀 빠는 일상",
                 description: "즐겁게 시청해주세요♥",
                 publishedAt: "2025-05-11T09:45:02Z",
@@ -33,7 +33,7 @@ export const mockVideoSummaryList: VideoSummaryResponse[] = [
                         author: "@로하-c6p",
                         text: "썸네일 미친 너무너무 귀여워😍",
                         likeCount: 1572,
-                        sentiment: "POSITIVE",
+                        sentiment: "positive",
                         publishedAt: "2025-05-11T09:46:09Z"
                     },
                     {
@@ -41,7 +41,7 @@ export const mockVideoSummaryList: VideoSummaryResponse[] = [
                         author: "@user-mini0",
                         text: "아 목덜미 잡히는거 왜케 귀여움 ㅋㅋㅋ 하찮닼ㅋㅋㅋ",
                         likeCount: 535,
-                        sentiment: "POSITIVE",
+                        sentiment: "other",
                         publishedAt: "2025-05-11T09:51:33Z"
                     },
                     {
@@ -49,7 +49,7 @@ export const mockVideoSummaryList: VideoSummaryResponse[] = [
                         author: "@Sia272",
                         text: "하루에 다섯번  새벽에도 일어나셔서 젖먹이고 배변시키고 ... 고생이 많으십니다.  정말 경의를 표합니다 👍",
                         likeCount: 457,
-                        sentiment: "POSITIVE",
+                        sentiment: "negative",
                         publishedAt: "2025-05-11T09:54:37Z"
                     }
                 ],
@@ -58,7 +58,7 @@ export const mockVideoSummaryList: VideoSummaryResponse[] = [
         }
     },
     {
-        timestamp: Date.now(),
+        timeStamp: new Date().toISOString(),
         message: "요약이 완료되었습니다.",
         data: {
             video: {
@@ -87,7 +87,7 @@ export const mockVideoSummaryList: VideoSummaryResponse[] = [
         }
     },
     {
-        timestamp: Date.now(),
+        timeStamp: new Date().toISOString(),
         message: "요약이 완료되었습니다.",
         data: {
             video: {
@@ -116,7 +116,7 @@ export const mockVideoSummaryList: VideoSummaryResponse[] = [
         }
     },
     {
-        timestamp: Date.now(),
+        timeStamp: new Date().toISOString(),
         message: "요약이 완료되었습니다.",
         data: {
             video: {
@@ -145,7 +145,7 @@ export const mockVideoSummaryList: VideoSummaryResponse[] = [
         }
     },
     {
-        timestamp: Date.now(),
+        timeStamp: new Date().toISOString(),
         message: "요약이 완료되었습니다.",
         data: {
             video: {

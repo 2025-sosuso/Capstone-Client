@@ -1,7 +1,7 @@
 import { ChannelSearchResponse } from "@/types/channel";
 
 export const mockChannelSearchResponse: ChannelSearchResponse = {
-    timestamp: "2021-01-01",
+    timeStamp: new Date().toISOString(),
     message: "hi",
     data: {
         searchType: "CHANNEL",
