@@ -73,7 +73,7 @@ export default function VideoInfoSection({ data, onPlayerReady }: Props) {
                 console.log("관심 채널 삭제 완료:", favoriteChannelId);
                 setFavoriteChannelId(null);
             } else {
-                const newFavoriteChannelId = await addFavoriteChannel(channel.id, channel.title);
+                const newFavoriteChannelId = await addFavoriteChannel(channel.id, channel.title, channel.thumbnailUrl);
                 console.log("관심 채널 생성 성공, ID:", newFavoriteChannelId);
                 setFavoriteChannelId(newFavoriteChannelId);
             }
