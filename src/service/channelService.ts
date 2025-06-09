@@ -1,5 +1,7 @@
 import api from "@/lib/axios";
 import {BaseApiResponse} from "@/types/common";
+import type {FavoriteChannel, FavoriteChannelListResponse} from "@/types/channel";
+
 
 export const addFavoriteChannel = async (
     apiChannelId: string,
@@ -13,7 +15,11 @@ export const addFavoriteChannel = async (
     return res.data.data.favoriteChannelId;
 };
 
-
 export const removeFavoriteChannel = async (favoriteChannelId: number): Promise<void> => {
     await api.delete(`/favorite-channels/${favoriteChannelId}`);
+};
+
+export const fetchFavoriteChannels = async (): Promise<FavoriteChannel[]> => {
+    const res = await api.get<FavoriteChannelListResponse>("/favorite-channels");
+    return res.data.data;
 };

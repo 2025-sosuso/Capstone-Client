@@ -23,11 +23,14 @@ export default function SearchChannelResultItem({ channel }: Props) {
 
         try {
             if (favoriteChannelId) {
+                console.log(`[관심 해제] 채널 ID: ${channel.id}, 이름: ${channel.title}, 현재 favoriteChannelId: ${favoriteChannelId}`);
                 await removeFavoriteChannel(favoriteChannelId);
                 setFavoriteChannelId(null);
             } else {
+                console.log(`[관심 등록] 채널 ID: ${channel.id}, 이름: ${channel.title}`);
                 const newId = await addFavoriteChannel(channel.id, channel.title, channel.thumbnailUrl);
                 setFavoriteChannelId(newId);
+                console.log(`관심 채널 등록 완료, 새 ID: ${newId}`);
             }
         } catch (e) {
             console.error("관심 채널 처리 실패:", e);

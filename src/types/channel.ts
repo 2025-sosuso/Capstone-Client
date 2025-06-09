@@ -14,3 +14,11 @@ export interface ChannelSearchResult {
     subscriberCount: number;
     favoriteChannelId?: number | null;
 }
+
+export type FavoriteChannelListResponse = BaseApiResponse<FavoriteChannel[]>;
+
+export interface FavoriteChannel {
+    favoriteChannelId: number;
+    apiChannelName: string;
+    apiChannelThumbnail: string;
+}
