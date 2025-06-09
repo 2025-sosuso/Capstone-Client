@@ -1,9 +1,6 @@
 import Detail from "@components/detail";
 
-interface Props {
-    params: { videoId: string };
-}
-
-export default function Page({ params }: Props) {
-    return <Detail videoId={params.videoId} />;
+export default async function Page({ params }: { params: Promise<{ videoId: string }> }) {
+    const { videoId } = await params;
+    return <Detail videoId={videoId} />;
 }
