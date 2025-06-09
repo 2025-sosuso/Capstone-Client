@@ -3,11 +3,12 @@ import {BaseApiResponse} from "@/types/common";
 
 export const addFavoriteChannel = async (
     apiChannelId: string,
-    apiChannelName: string
+    apiChannelName: string,
+    apiChannelThumbnail: string,
 ): Promise<number> => {
     const res = await api.post<BaseApiResponse<{ favoriteChannelId: number }>>(
         "/favorite-channels",
-        { apiChannelId, apiChannelName }
+        { apiChannelId, apiChannelName, apiChannelThumbnail }
     );
     return res.data.data.favoriteChannelId;
 };
