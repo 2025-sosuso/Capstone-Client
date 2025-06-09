@@ -22,7 +22,7 @@ export default function VideoSummaryItem({ rank, data }: Props) {
         <div className="flex flex-col lg:flex-row gap-6 w-full">
             <div
                 className="flex flex-col sm:flex-row gap-4 flex-1 min-w-0 cursor-pointer"
-                onClick={() => router.push(`/detail`)}
+                onClick={() => router.push(`/detail/${video.id}`)}
             >
                 {rank !== undefined && (
                     <span className="text-xl font-bold w-6">{rank}</span>
