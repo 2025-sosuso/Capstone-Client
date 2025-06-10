@@ -3,7 +3,7 @@ import {BaseApiResponse} from "@/types/common";
 import {VideoResult} from "@/types/video";
 
 export const fetchVideoDetail = async (apiVideoId: string): Promise<VideoResult> => {
-    const res = await api.get<BaseApiResponse<VideoResult>>(`/detail/${apiVideoId}`);
+    const res = await api.get<BaseApiResponse<VideoResult>>(`/videos/${apiVideoId}`);
     return res.data.data;
 };
 

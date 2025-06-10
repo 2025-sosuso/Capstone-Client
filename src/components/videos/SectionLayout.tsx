@@ -1,4 +1,4 @@
-import SearchComment from "@components/detail/SearchComment";
+import SearchComment from "@components/videos/SearchComment";
 
 interface Props {
     header: string;
