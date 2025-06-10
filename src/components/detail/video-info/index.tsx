@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import YouTubePlayer, { YouTubePlayerRef } from "./YoutubePlayer";
-import { formatDate } from "@/utils/date";
+import { formatDate } from "@/utils/data-format";
 import type { VideoResult } from "@/types/video";
 import { useAuth } from "@/contexts/AuthContext";
 import { createScrap, deleteScrap } from "@/service/videoService";
