@@ -30,7 +30,7 @@ export default function SearchContent() {
                     const videoId = result.results[0]?.video.id;
                     console.log("이동할 videoId:", videoId);
                     if (videoId) {
-                        router.replace(`/detail/${videoId}`);
+                        router.replace(`/videos/${videoId}`);
                     }
                 } else if (result.searchType === "CHANNEL") {
                     setChannels(result.results);
