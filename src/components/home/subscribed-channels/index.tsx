@@ -7,7 +7,7 @@ import RecentVideo from "@components/home/subscribed-channels/RecentVideo";
 
 export default function SubscribedChannels() {
     const { isLoggedIn, handleLogin } = useAuth();
-    const mockData = mockVideoSummaryList[0].data;
+    const mockData = mockVideoSummaryList[0];
 
     return (
         <div className="flex flex-col w-full p-4 pt-5 gap-4 rounded-3xl bg-gray-100">
