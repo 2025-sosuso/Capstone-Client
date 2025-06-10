@@ -24,13 +24,13 @@ export const fetchTrendingVideos = async (
     maxResults: number
 ): Promise<VideoSummaryItem[]> => {
     const res = await api.get<BaseApiResponse<VideoSummaryItem[]>>(
-        "/trending/category",
-        {
-            params: {
-                categoryType: category,
-                maxResults,
-            },
-        }
+        "/trending/category", {params: {categoryType: category, maxResults,},}
     );
     return res.data.data;
 };
+
+export const fetchScrapsVideos = async (): Promise<VideoSummaryItem[]> => {
+    const res = await api.get<BaseApiResponse<VideoSummaryItem[]>>(
+        "/scraps");
+    return res.data.data;
+}
