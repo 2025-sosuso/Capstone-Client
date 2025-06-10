@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import {ChevronRightIcon} from "@heroicons/react/24/outline";
 import VideoSummaryList from "@components/common/VideoSummary/VideoSummaryList";
-import {VideoSummaryResponse} from "@/types/video-summary";
+import {VideoSummaryItem} from "@/types/video-summary";
 
 interface Props {
     type: "trending" | "scraps";
-    data: VideoSummaryResponse[];
+    data: VideoSummaryItem[];
 }
 
 export default function ListSection({ type, data }: Props) {
