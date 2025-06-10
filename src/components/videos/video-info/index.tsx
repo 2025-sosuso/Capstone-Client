@@ -66,8 +66,7 @@ export default function VideoInfoSection({ data, onPlayerReady }: Props) {
         if (requireLogin()) return;
 
         try {
-            console.log(`관심 채널 요청 시작: ${channel.id}`, favoriteChannelId ? "삭제" : "생성");
-
+            console.log(`관심 채널 요청 시작: ${channel.id} ${channel.title} ${channel.thumbnailUrl}`, favoriteChannelId ? "삭제" : "생성");
             if (favoriteChannelId != null) {
                 await removeFavoriteChannel(favoriteChannelId);
                 console.log("관심 채널 삭제 완료:", favoriteChannelId);
