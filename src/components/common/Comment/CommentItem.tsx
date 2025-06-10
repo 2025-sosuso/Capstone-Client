@@ -1,5 +1,5 @@
 import { HandThumbUpIcon } from "@heroicons/react/24/solid";
-import { formatDate } from "@/utils/date";
+import {formatDate, formatNumber} from "@/utils/data-format";
 import { Comment } from "@/types/video";
 
 type Props = Comment & {
@@ -27,12 +27,12 @@ export default function CommentItem({
                     <div className="flex items-center gap-2">
                         <p className="text-sm font-semibold text-gray-800">{author}</p>
 
-                        <p className="text-sm text-gray-400">{formatDate(publishedAt)}</p>
+                        <p className="text-sm text-gray-400">{formatDate(publishedAt, true)}</p>
                         <span className={`text-xs px-2 py-[2px] rounded-full font-medium ${badge.color}`}>{badge.text}</span>
                     </div>
                     <div className="flex gap-1 items-center">
                         <HandThumbUpIcon className="w-4 h-4 text-gray-400"/>
-                        <p className="text-sm text-gray-500">{likeCount}</p>
+                        <p className="text-sm text-gray-500">{formatNumber(likeCount)}</p>
                     </div>
                 </div>
 

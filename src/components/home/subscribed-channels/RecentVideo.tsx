@@ -2,7 +2,7 @@
 
 import ChannelAvatarList from "@components/home/subscribed-channels/ChannelAvatarList";
 import Thumbnail from "@components/home/Thumbnail";
-import { formatDate } from "@/utils/date";
+import {formatDate, formatNumber} from "@/utils/data-format";
 import { VideoSummaryResponse } from "@/types/video-summary";
 import SummarySection from "@components/common/VideoSummary/SummarySection";
 import {
@@ -35,7 +35,7 @@ const RecentVideo = ({ data }: { data: VideoSummaryResponse["data"] }) => {
                         <p className="text-base font-semibold line-clamp-2">{video.title}</p>
                         <div className="flex flex-wrap text-sm text-gray-500 gap-x-3">
                             <span>{channel.title}</span>
-                            <span>조회수 {video.viewCount.toLocaleString()}회</span>
+                            <span>조회수{formatNumber(video.viewCount)}회</span>
                             <span>{formatDate(video.publishedAt)}</span>
                         </div>
                     </div>
