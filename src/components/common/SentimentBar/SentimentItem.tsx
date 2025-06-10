@@ -45,7 +45,7 @@ export default function SentimentItem(props: SentimentItemProps) {
                 width: displayWidth,
                 minWidth: shouldShowText ? '3rem' : '0',
             }}
-            onClick={() => onClick(label, percent)}
+            onClick={() => onClick(keyName, percent)}
             onMouseEnter={() => onHover(keyName)}
             onMouseLeave={() => onHover(null)}
         >

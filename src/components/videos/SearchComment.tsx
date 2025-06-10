@@ -1,15 +1,19 @@
 'use client';
-import {MagnifyingGlassIcon} from "@heroicons/react/24/outline";
-import {useState} from "react";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
 
-export default function SearchComment() {
+interface Props {
+    onSearch: (q: string) => void;
+}
+
+export default function SearchComment({ onSearch }: Props) {
     const [search, setSearch] = useState('');
     const [isFocus, setFocus] = useState(false);
     const [isComposing, setIsComposing] = useState(false);
 
     const handleSearch = () => {
         if (!search.trim()) return;
-        console.log(search);
+        onSearch(search.trim());
         setSearch('');
     };
 
