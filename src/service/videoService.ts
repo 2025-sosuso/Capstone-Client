@@ -1,11 +1,26 @@
 import api from "@/lib/axios";
 import {BaseApiResponse} from "@/types/common";
-import {VideoResult} from "@/types/video";
+import {Comment, VideoResult} from "@/types/video";
 import {VideoSummaryItem} from "@/types/video-summary";
 
 export const fetchVideoDetail = async (apiVideoId: string): Promise<VideoResult> => {
     const res = await api.get<BaseApiResponse<VideoResult>>(`/videos/${apiVideoId}`);
-    return res.data.data;
+    const raw = res.data.data;
+
+    const normalizeSentiment = (comments: Comment[]): Comment[] =>
+        comments.map(comment => ({
+            ...comment,
+            sentiment: comment.sentiment?.toLowerCase?.() as 'positive' | 'negative' | 'other',
+        }));
+
+    return {
+        ...raw,
+        comments: normalizeSentiment(raw.comments),
+        analysis: {
+            ...raw.analysis,
+            topComments: normalizeSentiment(raw.analysis.topComments),
+        }
+    };
 };
 
 export const createScrap = async (apiVideoId: string): Promise<number> => {
