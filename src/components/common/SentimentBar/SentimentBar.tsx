@@ -4,9 +4,12 @@ import { useState, useCallback } from 'react';
 import SentimentItem from './SentimentItem';
 import { SentimentRatio } from '@/types/video';
 
-interface EmotionBarProps {
+type SentimentType = 'POSITIVE' | 'NEGATIVE' | 'OTHER';
+
+interface SentimentBarProps {
     ratio?: SentimentRatio;
     size?: 'sm' | 'md';
+    onClick?: (sentiment: SentimentType) => void;
 }
 
 const COLORS = {
@@ -32,12 +35,23 @@ const COLORS = {
 
 const clampPercent = (value: number) => Math.max(0, Math.min(100, value));
 
-export default function SentimentBar({ ratio, size = 'md' }: EmotionBarProps) {
+export default function SentimentBar({ ratio, size = 'md', onClick }: SentimentBarProps) {
     const [hoveredKey, setHoveredKey] = useState<string | null>(null);
 
-    const handleClick = useCallback((label: string, percent: number) => {
-        console.log(`${label}: ${percent}%`);
-    }, []);
+    const handleClick = useCallback((key: string) => {
+        const map: Record<string, SentimentType> = {
+            positive: 'POSITIVE',
+            negative: 'NEGATIVE',
+            other: 'OTHER',
+        };
+        const sentiment = map[key.toLowerCase()];
+        console.log("감정 클릭됨", key, "→", sentiment);
+
+        if (onClick && sentiment) {
+            onClick(sentiment);
+        }
+    }, [onClick]);
+
 
     const hasValidData =
         ratio &&
