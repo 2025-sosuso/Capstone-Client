@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import YouTubePlayer, { YouTubePlayerRef } from "./YoutubePlayer";
-import { formatDate } from "@/utils/data-format";
+import {formatDate, formatNumber} from "@/utils/data-format";
 import type { VideoResult } from "@/types/video";
 import { useAuth } from "@/contexts/AuthContext";
 import { createScrap, deleteScrap } from "@/service/videoService";
@@ -108,7 +108,7 @@ export default function VideoInfoSection({ data, onPlayerReady }: Props) {
 
                 <div className="flex flex-row gap-3 items-center">
                     <p className="text-md text-gray-700">
-                        {channel.title} | 구독자 {channel.subscriberCount.toLocaleString()}명
+                        {channel.title} | 구독자 {formatNumber(channel.subscriberCount)}명
                     </p>
                     <button
                         className={`size-5 transition-colors cursor-pointer ${
@@ -124,8 +124,8 @@ export default function VideoInfoSection({ data, onPlayerReady }: Props) {
                 </div>
 
                 <div className="text-sm text-gray-500 font-light">
-                    <p>조회수 {video.viewCount.toLocaleString()}회 | {formatDate(video.publishedAt)}</p>
-                    <p>좋아요 {video.likeCount.toLocaleString()}개 | 댓글 {video.commentCount.toLocaleString()}개</p>
+                    <p>조회수 {formatNumber(video.viewCount)}회 | {formatDate(video.publishedAt)}</p>
+                    <p>좋아요 {formatNumber(video.likeCount)}개 | 댓글 {formatNumber(video.commentCount)}개</p>
                 </div>
 
                 <div
