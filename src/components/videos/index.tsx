@@ -2,17 +2,17 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { VideoResult } from "@/types/video";
-import type { YouTubePlayerRef } from "@components/detail/video-info/YoutubePlayer";
+import type { YouTubePlayerRef } from "@components/videos/video-info/YoutubePlayer";
 
-import VideoInfo from "@components/detail/video-info";
-import SectionLayout from "@components/detail/SectionLayout";
+import VideoInfo from "@components/videos/video-info";
+import SectionLayout from "@components/videos/SectionLayout";
 import CommentList from "@components/common/Comment/CommentList";
-import LanguageChart from "@components/detail/LanguageChart";
-import CommentTimeChart from "@components/detail/CommentTimeChart";
+import LanguageChart from "@components/videos/LanguageChart";
+import CommentTimeChart from "@components/videos/CommentTimeChart";
 import TagList from "@components/common/Tag/TagList";
 import AISummary from "@components/common/AISummary";
 import SentimentBar from "@components/common/SentimentBar/SentimentBar";
-import WarningBanner from "@components/detail/WarningBanner";
+import WarningBanner from "@components/videos/WarningBanner";
 import {fetchVideoDetail} from "@/service/videoService";
 import LoadingSection from "@components/common/LoadingSection";
 
