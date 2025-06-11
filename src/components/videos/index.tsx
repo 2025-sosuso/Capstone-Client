@@ -118,8 +118,12 @@ export default function Detail({ videoId }: { videoId: string }) {
                         <LanguageChart data={languageDistribution} />
                     </SectionLayout>
                     <SectionLayout header="가장 많이 언급한 시간대">
-                        <TagList tags={popularTimestamps.map(t => t.time)} onTagClick={handleSeek} />
+                        <TagList
+                            tags={(popularTimestamps ?? []).map(t => t.time)}
+                            onTagClick={handleSeek}
+                        />
                     </SectionLayout>
+
                     <SectionLayout header="댓글 작성 시간대">
                         <CommentTimeChart data={commentHistogram} />
                     </SectionLayout>

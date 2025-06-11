@@ -19,6 +19,7 @@ export type FavoriteChannelListResponse = BaseApiResponse<FavoriteChannel[]>;
 
 export interface FavoriteChannel {
     favoriteChannelId: number;
+    apiChannelId: string;
     apiChannelName: string;
     apiChannelThumbnail: string;
 }

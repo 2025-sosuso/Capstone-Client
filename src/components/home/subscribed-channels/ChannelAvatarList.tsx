@@ -1,53 +1,37 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { AdjustmentsVerticalIcon } from '@heroicons/react/24/outline';
 import ChannelAvatar from './ChannelAvatar';
 import { ChannelSearchResult } from '@/types/channel';
-import { fetchFavoriteChannels, removeFavoriteChannel } from '@/service/channelService';
+import {useState} from "react";
+import {removeFavoriteChannel} from "@/service/channelService";
 
-export default function ChannelAvatarList() {
+interface Props {
+    channels: ChannelSearchResult[];
+    onSelectChannel?: (apiChannelId: string) => void;
+}
+
+export default function ChannelAvatarList({ channels, onSelectChannel }: Props) {
     const [edit, setEdit] = useState(false);
-    const [channels, setChannels] = useState<ChannelSearchResult[]>([]);
 
     const toggleEdit = () => setEdit(prev => !prev);
 
-    const loadChannels = async () => {
-        try {
-            const result = await fetchFavoriteChannels();
-            const mapped = result.map((item): ChannelSearchResult => ({
-                id: String(item.favoriteChannelId),
-                title: item.apiChannelName,
-                handle: '',
-                description: '',
-                thumbnailUrl: item.apiChannelThumbnail,
-                subscriberCount: 0,
-                favoriteChannelId: item.favoriteChannelId,
-            }));
-            setChannels(mapped);
-
-            console.log(result);
-        } catch (e) {
-            console.error("관심 채널 불러오기 실패:", e);
-        }
-    };
-
     const handleRemove = async (favoriteChannelId?: number | null) => {
-        if (confirm("관심 채널에서 삭제할까요?")) {
-            if (!favoriteChannelId) return;
-            try {
-                await removeFavoriteChannel(favoriteChannelId);
-                setChannels(prev => prev.filter(c => c.favoriteChannelId !== favoriteChannelId));
-                console.log(`[관심 해제] favoriteChannelId: ${favoriteChannelId}`);
-            } catch (e) {
-                console.error("삭제 실패:", e);
-            }
+        if (!favoriteChannelId) return;
+        if (!confirm('관심 채널에서 삭제할까요?')) return;
+
+        try {
+            await removeFavoriteChannel(favoriteChannelId);
+            console.log(`[관심 해제] favoriteChannelId: ${favoriteChannelId}`);
+            // 이 경우 새로고침해야 함
+        } catch (e) {
+            console.error('삭제 실패:', e);
         }
     };
 
-    useEffect(() => {
-        loadChannels();
-    }, []);
+    if (channels.length === 0) {
+        return <p className="text-gray-400 text-sm px-1">관심 채널이 없습니다.</p>;
+    }
 
     return (
         <div className="flex items-start justify-between gap-4 px-1">
@@ -59,7 +43,11 @@ export default function ChannelAvatarList() {
                         title={channel.title}
                         edit={edit}
                         onClick={() => {
-                            if (edit) handleRemove(channel.favoriteChannelId);
+                            if (edit) {
+                                handleRemove(channel.favoriteChannelId);
+                            } else {
+                                onSelectChannel?.(channel.id);
+                            }
                         }}
                     />
                 ))}

@@ -16,16 +16,16 @@ export default function Scraps() {
 
     useEffect(() => {
         const fetch = async () => {
-            console.log("[스크랩 페이지] API 요청 시작");
+            console.log("[스크랩] API 요청 시작");
             setIsLoading(true);
             setIsError(false);
 
             try {
                 const result = await fetchScrapsVideos();
-                console.log("[인기급상승] API 응답 성공", result);
+                console.log("[스크랩] API 응답 성공", result);
                 setVideoList(result);
             } catch (err) {
-                console.error("[인기급상승] API 요청 실패", err);
+                console.error("[스크랩] API 요청 실패", err);
                 setIsError(true);
             } finally {
                 setIsLoading(false);
