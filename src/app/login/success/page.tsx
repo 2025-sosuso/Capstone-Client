@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { fetchAuthUser } from '@/service/authService';
@@ -8,8 +8,12 @@ import { fetchAuthUser } from '@/service/authService';
 export default function LoginSuccessPage() {
     const router = useRouter();
     const { setUserData } = useAuth();
+    const called = useRef(false);  // ✅ 실행 여부 추적
 
     useEffect(() => {
+        if (called.current) return;  // ✅ 이미 호출되었으면 중단
+        called.current = true;
+
         const login = async () => {
             try {
                 const user = await fetchAuthUser();

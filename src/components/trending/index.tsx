@@ -20,7 +20,7 @@ export default function Trending() {
     const [videoList, setVideoList] = useState<VideoSummaryItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
-    const maxResults = 10;
+    const maxResults = 7;
 
     useEffect(() => {
         const fetch = async () => {
