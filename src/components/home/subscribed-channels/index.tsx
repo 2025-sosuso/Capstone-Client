@@ -31,7 +31,7 @@ export default function SubscribedChannels({ data, favoriteChannelList }: Props)
     const handleChannelSelect = async (channelId: string) => {
         console.log('[Select] 채널 선택됨:', channelId);
         try {
-            const res = await api.get<BaseApiResponse<VideoSummaryItem>>(`/api/favorite-channels/${channelId}`);
+            const res = await api.get<BaseApiResponse<VideoSummaryItem>>(`/favorite-channels/${channelId}`);
             setSelectedVideo(res.data.data);
             console.log('[State] selectedVideo 변경됨:', res.data.data);
         } catch (e) {
