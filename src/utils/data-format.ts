@@ -14,6 +14,8 @@ export function formatDate(dateString: string, withTime: boolean = false): strin
 }
 
 export function formatNumber(num: number): string {
+    if (typeof num !== 'number' || isNaN(num)) return '0';
+
     if (num >= 1_0000_0000) return (num / 1_0000_0000).toFixed(1).replace(/\.0$/, '') + '억';
     if (num >= 1_0000) return (num / 1_0000).toFixed(1).replace(/\.0$/, '') + '만';
     if (num >= 1_000) return (num / 1_000).toFixed(1).replace(/\.0$/, '') + '천';

@@ -5,6 +5,7 @@ import Image from "next/image";
 import {useEffect, useState} from "react";
 import { addFavoriteChannel, removeFavoriteChannel } from "@/service/channelService";
 import {useAuth} from "@/contexts/AuthContext";
+import {formatNumber} from "@/utils/data-format";
 
 interface Props {
     channel: ChannelSearchResult;
@@ -59,7 +60,7 @@ export default function SearchChannelResultItem({ channel }: Props) {
             <div className="flex flex-col w-full h-full gap-1">
                 <p className="text-lg text-gray-700 line-clamp-1">{channel.title}</p>
                 <div>
-                    <p className="text-sm text-gray-500">구독자 {channel.subscriberCount.toLocaleString()}명</p>
+                    <p className="text-sm text-gray-500">구독자 {formatNumber(channel.subscriberCount)}명</p>
                     <p className="text-sm text-gray-500 line-clamp-2">{channel.description}</p>
                 </div>
             </div>
