@@ -3,11 +3,18 @@ import TagItem from "./TagItem";
 interface TagListProps {
     tags?: string[];
     size?: "sm" | "md";
-    color?: string;
     onTagClick?: (tag: string) => void;
+    selectedTag?: string | null;
+    highlightSelected?: boolean;
 }
 
-export default function TagList({ tags, size = "md", onTagClick }: TagListProps) {
+export default function TagList({
+                                    tags,
+                                    size = "md",
+                                    onTagClick,
+                                    selectedTag,
+                                    highlightSelected = false,
+                                }: TagListProps) {
     const hasTags = Array.isArray(tags) && tags.length > 0;
 
     if (!hasTags) {
@@ -21,7 +28,13 @@ export default function TagList({ tags, size = "md", onTagClick }: TagListProps)
     return (
         <div className="flex gap-2 overflow-x-auto items-center">
             {tags.map((tag, i) => (
-                <TagItem key={i} text={tag} size={size} onClick={() => onTagClick?.(tag)} />
+                <TagItem
+                    key={i}
+                    text={tag}
+                    size={size}
+                    isSelected={highlightSelected && selectedTag === tag}
+                    onClick={() => onTagClick?.(tag)}
+                />
             ))}
         </div>
     );

@@ -21,6 +21,7 @@ export default function Detail({ videoId }: { videoId: string }) {
     const [data, setData] = useState<VideoResult | null>(null);
     const [filteredComments, setFilteredComments] = useState<Comment[]>([]);
     const [keywordComments, setKeywordComments] = useState<Comment[]>([]);
+    const [selectedKeyword, setSelectedKeyword] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const playerRef = useRef<YouTubePlayerRef | null>(null);
@@ -42,17 +43,23 @@ export default function Detail({ videoId }: { videoId: string }) {
         fetchData();
     }, [videoId]);
 
+    useEffect(() => {
+        if (!loading && Array.isArray(data?.analysis?.keywords) && data.analysis.keywords.length > 0) {
+            const firstKeyword = data.analysis.keywords[0];
+            setSelectedKeyword(firstKeyword);
+            handleKeywordFilter(firstKeyword);
+        }
+    }, [loading, data]);
+
     const handleSeek = (timeString: string) => {
-        const parts = timeString.split(":" ).map(Number);
+        const parts = timeString.split(":").map(Number);
         const seconds = parts.reduce((acc, val, idx) => acc + val * Math.pow(60, parts.length - idx - 1), 0);
         playerRef.current?.seekToTime(seconds);
     };
 
     const handleFilterComments = async (filter: { q?: string; sentiment?: 'POSITIVE' | 'NEGATIVE' | 'OTHER' }) => {
         try {
-            console.log("[전체 댓글 필터]", filter);
             const results = await fetchFilteredComments({ videoId, ...filter });
-            console.log("[전체 댓글 응답]", results);
             setFilteredComments(results);
         } catch (err) {
             console.error("댓글 필터링 실패:", err);
@@ -61,9 +68,8 @@ export default function Detail({ videoId }: { videoId: string }) {
 
     const handleKeywordFilter = async (keyword: string) => {
         try {
-            console.log("[키워드 클릭]", keyword);
+            setSelectedKeyword(keyword);
             const results = await fetchFilteredComments({ videoId, keyword });
-            console.log("[키워드 댓글 응답]", results);
             setKeywordComments(results);
         } catch (err) {
             console.error("키워드 댓글 필터링 실패:", err);
@@ -71,7 +77,6 @@ export default function Detail({ videoId }: { videoId: string }) {
     };
 
     const handleSearch = async (q: string) => {
-        console.log("[검색어 입력됨]", q);
         await handleFilterComments({ q });
     };
 
@@ -90,7 +95,7 @@ export default function Detail({ videoId }: { videoId: string }) {
     } = analysis;
 
     return (
-        <div className="flex flex-col w-full items-center max-w-[1000px] m-auto gap-5 ">
+        <div className="flex flex-col w-full items-center max-w-[1000px] m-auto gap-5">
             {analysis.isWarning && <WarningBanner />}
             <VideoInfo data={data} onPlayerReady={(ref) => (playerRef.current = ref)} />
             <div className="grid grid-cols-1 md:grid-cols-2 w-full mt-10 gap-10">
@@ -123,12 +128,16 @@ export default function Detail({ videoId }: { videoId: string }) {
                             onTagClick={handleSeek}
                         />
                     </SectionLayout>
-
                     <SectionLayout header="댓글 작성 시간대">
                         <CommentTimeChart data={commentHistogram} />
                     </SectionLayout>
                     <SectionLayout header="키워드 분석">
-                        <TagList tags={keywords} onTagClick={handleKeywordFilter} />
+                        <TagList
+                            tags={keywords}
+                            onTagClick={handleKeywordFilter}
+                            selectedTag={selectedKeyword}
+                            highlightSelected={true}
+                        />
                         <CommentList comments={keywordComments} />
                     </SectionLayout>
                 </div>
