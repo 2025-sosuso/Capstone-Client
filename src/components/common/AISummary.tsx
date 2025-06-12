@@ -6,7 +6,7 @@ type AISummaryProps = {
 export default function AISummary({ summary, size = "md" }: AISummaryProps) {
     const sizeStyle =
         size === "sm"
-            ? "text-sm text-purple-700 p-3 line-clamp-1 truncate"
+            ? "text-sm text-purple-700 p-3 overflow-auto h-16"
             : "text-md text-purple-700 px-4 py-4";
 
     const hasSummary = summary && summary.trim().length > 0;
@@ -14,7 +14,7 @@ export default function AISummary({ summary, size = "md" }: AISummaryProps) {
     return (
         <div className="w-full">
             {hasSummary ? (
-                <p className={`w-full bg-purple-50 rounded-xl whitespace-pre-line ${sizeStyle}`}>
+                <p className={`w-full bg-purple-50 rounded-xl ${sizeStyle}`}>
                     {summary}
                 </p>
             ) : (
