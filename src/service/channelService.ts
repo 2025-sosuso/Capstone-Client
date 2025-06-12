@@ -1,6 +1,6 @@
 import api from "@/lib/axios";
 import {BaseApiResponse} from "@/types/common";
-import type {FavoriteChannel, FavoriteChannelListResponse} from "@/types/channel";
+import {ChannelSearchResult, FavoriteChannelListResponse} from "@/types/channel";
 
 
 export const addFavoriteChannel = async (
@@ -19,7 +19,16 @@ export const removeFavoriteChannel = async (favoriteChannelId: number): Promise<
     await api.delete(`/favorite-channels/${favoriteChannelId}`);
 };
 
-export const fetchFavoriteChannels = async (): Promise<FavoriteChannel[]> => {
+export const fetchFavoriteChannels = async (): Promise<ChannelSearchResult[]> => {
     const res = await api.get<FavoriteChannelListResponse>("/favorite-channels");
-    return res.data.data;
+
+    return res.data.data.map((item) => ({
+        id: item.apiChannelId,
+        title: item.apiChannelName,
+        handle: '',
+        description: '',
+        thumbnailUrl: item.apiChannelThumbnail,
+        subscriberCount: 0,
+        favoriteChannelId: item.favoriteChannelId,
+    }));
 };

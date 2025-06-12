@@ -3,18 +3,19 @@
 import { AdjustmentsVerticalIcon } from '@heroicons/react/24/outline';
 import ChannelAvatar from './ChannelAvatar';
 import { ChannelSearchResult } from '@/types/channel';
-import {useState} from "react";
-import {removeFavoriteChannel} from "@/service/channelService";
+import { useState } from 'react';
+import { removeFavoriteChannel } from '@/service/channelService';
 
 interface Props {
     channels: ChannelSearchResult[];
     onSelectChannel?: (apiChannelId: string) => void;
+    onUpdateChannels?: () => void;
 }
 
-export default function ChannelAvatarList({ channels, onSelectChannel }: Props) {
+export default function ChannelAvatarList({ channels, onSelectChannel, onUpdateChannels }: Props) {
     const [edit, setEdit] = useState(false);
 
-    const toggleEdit = () => setEdit(prev => !prev);
+    const toggleEdit = () => setEdit((prev) => !prev);
 
     const handleRemove = async (favoriteChannelId?: number | null) => {
         if (!favoriteChannelId) return;
@@ -22,8 +23,7 @@ export default function ChannelAvatarList({ channels, onSelectChannel }: Props) 
 
         try {
             await removeFavoriteChannel(favoriteChannelId);
-            console.log(`[관심 해제] favoriteChannelId: ${favoriteChannelId}`);
-            // 이 경우 새로고침해야 함
+            await onUpdateChannels?.(); // 부모에게 갱신 요청
         } catch (e) {
             console.error('삭제 실패:', e);
         }
