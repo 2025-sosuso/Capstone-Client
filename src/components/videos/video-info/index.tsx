@@ -95,7 +95,7 @@ export default function VideoInfoSection({ data, onPlayerReady }: Props) {
                     <h3 className="text-lg font-semibold truncate">{video.title}</h3>
                     <button
                         className={`size-6 shrink-0 transition-colors cursor-pointer ${
-                            scrapId ? "text-gray-800" : "text-gray-300"
+                            scrapId ? "text-blue-500" : "text-gray-300"
                         }`}
                         onClick={handleScrapToggle}
                         aria-label="스크랩"
@@ -112,7 +112,7 @@ export default function VideoInfoSection({ data, onPlayerReady }: Props) {
                     </p>
                     <button
                         className={`size-5 transition-colors cursor-pointer ${
-                            favoriteChannelId ? "text-gray-700" : "text-gray-300"
+                            favoriteChannelId ? "text-red-400" : "text-gray-300"
                         }`}
                         onClick={handleFavoriteToggle}
                         aria-label="관심 채널"

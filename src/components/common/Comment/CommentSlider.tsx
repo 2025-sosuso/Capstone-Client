@@ -11,7 +11,7 @@ type Props = {
     color?: string;
 };
 
-export default function CommentSlider({ comments, intervalMs = 8000, color = "100" }: Props) {
+export default function CommentSlider({ comments, intervalMs = 7000, color = "100" }: Props) {
     const [index, setIndex] = useState(0);
 
     useEffect(() => {
