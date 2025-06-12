@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import type { VideoResult, Comment } from "@/types/video";
 import type { YouTubePlayerRef } from "@components/videos/video-info/YoutubePlayer";
 
@@ -43,14 +43,6 @@ export default function Detail({ videoId }: { videoId: string }) {
         fetchData();
     }, [videoId]);
 
-    useEffect(() => {
-        if (!loading && Array.isArray(data?.analysis?.keywords) && data.analysis.keywords.length > 0) {
-            const firstKeyword = data.analysis.keywords[0];
-            setSelectedKeyword(firstKeyword);
-            handleKeywordFilter(firstKeyword);
-        }
-    }, [loading, data]);
-
     const handleSeek = (timeString: string) => {
         const parts = timeString.split(":").map(Number);
         const seconds = parts.reduce((acc, val, idx) => acc + val * Math.pow(60, parts.length - idx - 1), 0);
@@ -66,7 +58,7 @@ export default function Detail({ videoId }: { videoId: string }) {
         }
     };
 
-    const handleKeywordFilter = async (keyword: string) => {
+    const handleKeywordFilter = useCallback(async (keyword: string) => {
         try {
             setSelectedKeyword(keyword);
             const results = await fetchFilteredComments({ videoId, keyword });
@@ -74,11 +66,19 @@ export default function Detail({ videoId }: { videoId: string }) {
         } catch (err) {
             console.error("키워드 댓글 필터링 실패:", err);
         }
-    };
+    }, [videoId]);
 
     const handleSearch = async (q: string) => {
         await handleFilterComments({ q });
     };
+
+    useEffect(() => {
+        if (!loading && Array.isArray(data?.analysis?.keywords) && data.analysis.keywords.length > 0) {
+            const firstKeyword = data.analysis.keywords[0];
+            setSelectedKeyword(firstKeyword);
+            handleKeywordFilter(firstKeyword);
+        }
+    }, [loading, data, handleKeywordFilter]);
 
     if (loading) return <LoadingSection message="데이터를 불러오고 있습니다..." />;
     if (error || !data) return <div className="text-center mt-10 text-gray-500">영상을 불러올 수 없습니다.</div>;
