@@ -13,6 +13,21 @@ export function formatDate(dateString: string, withTime: boolean = false): strin
     return `${yyyy}.${mm}.${dd}`;
 }
 
+export function formatTime(dateString: string): string {
+    const date = new Date(dateString);
+    let hours = date.getHours();
+
+    const period = hours >= 12 ? '오후' : '오전';
+
+    if (hours > 12) {
+        hours -= 12;
+    } else if (hours === 0) {
+        hours = 12;
+    }
+
+    return `${period} ${hours}시`;
+}
+
 export function formatNumber(num: number): string {
     if (typeof num !== 'number' || isNaN(num)) return '0';
 
