@@ -2,6 +2,7 @@ import LoginButton from "../../common/LoginButton";
 import LogoutButton from "./LogoutButton";
 import MenuItem from "./MenuItem";
 import { MenuItems } from "./side-bar-config";
+import PopularSearchList from "./PopularSearchList";
 
 interface SideBarProps {
     isOpen: boolean;
@@ -40,8 +41,9 @@ const SideBar = ({
                         <MenuItem key={item.href} {...item} />
                     ))}
                 </nav>
-            </div>
 
+                <PopularSearchList />
+            </div>
             {isLoggedIn && <LogoutButton isOpen={isOpen} onLogout={onLogout} />}
         </div>
     </div>

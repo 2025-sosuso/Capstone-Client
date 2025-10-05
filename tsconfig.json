@@ -20,6 +20,7 @@
     ],
     "baseUrl": ".",
     "paths": {
+      "public/*": ["./public/*"],
       "@/*": ["./src/*"],
       "@components/*": ["src/components/*"],
       "@styles/*": ["src/styles/*"],
@@ -27,6 +28,6 @@
       "@mock/*": ["src/mock/*"]
     },
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["svgr.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }
