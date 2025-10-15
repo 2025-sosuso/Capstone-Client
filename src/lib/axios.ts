@@ -1,7 +1,8 @@
-import axios from "axios";
+import axios from 'axios';
+import { getApiBaseUrl } from '@/lib/url';
 
 const api = axios.create({
-    baseURL: "https://knu-sosuso.com/api",
+    baseURL: `${getApiBaseUrl()}/api`,
     withCredentials: true,
 });
 

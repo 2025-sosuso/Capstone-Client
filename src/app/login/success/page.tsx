@@ -1,39 +1,41 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { AxiosError } from 'axios';
 import { useAuth } from '@/contexts/AuthContext';
 import { fetchAuthUser } from '@/service/authService';
 
 export default function LoginSuccessPage() {
     const router = useRouter();
     const { setUserData } = useAuth();
-    const called = useRef(false);  // ✅ 실행 여부 추적
 
     useEffect(() => {
-        if (called.current) return;  // ✅ 이미 호출되었으면 중단
-        called.current = true;
-
-        const login = async () => {
+        let mounted = true;
+        (async () => {
             try {
                 const user = await fetchAuthUser();
-                console.log("로그인 유저 정보:", user);
+                if (!mounted) return;
 
                 if (!user?.userName) {
-                    console.warn("유저 정보 누락:", user);
-                    return router.push("/?error=invalid");
+                    router.replace('/login?error=invalid');
+                    return;
                 }
 
                 setUserData(user);
-                router.push("/");
-
-            } catch (error) {
-                console.error("로그인 처리 중 예외:", error);
-                router.push("/?error=login-fail");
+                router.replace('/');
+            } catch (err) {
+                if (!mounted) return;
+                const ax = err as AxiosError;
+                const status = ax.response?.status;
+                router.replace(
+                    status === 401 || status === 403
+                        ? '/login?error=unauthenticated'
+                        : '/login?error=login-fail'
+                );
             }
-        };
-
-        login();
+        })();
+        return () => { mounted = false; };
     }, [router, setUserData]);
 
     return (
