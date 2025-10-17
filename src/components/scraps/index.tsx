@@ -10,11 +10,12 @@ import type {VideoSummaryItem} from "@/types/video-summary";
 
 export default function Scraps() {
     const { isLoggedIn, handleLogin } = useAuth();
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const [videoList, setVideoList] = useState<VideoSummaryItem[]>([]);
 
     useEffect(() => {
+        if (!isLoggedIn) return;
         const fetch = async () => {
             console.log("[스크랩] API 요청 시작");
             setIsLoading(true);
@@ -33,10 +34,10 @@ export default function Scraps() {
         };
 
         fetch();
-    }, []);
+    }, [isLoggedIn]);
 
     if (isLoading) return <LoadingSection message="데이터를 불러오고 있습니다..." />;
-    if (isError) return <div className="text-center text-gray-500 py-10">인기 영상 정보를 불러오지 못했어요.</div>;
+    if (isError) return <div className="text-center text-gray-500 py-10">스크랩 정보를 불러오지 못했어요.</div>;
 
     return (
         <div className="w-full flex justify-center px-4 py-5">
