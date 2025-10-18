@@ -6,6 +6,7 @@ import PopularSearchList from "./PopularSearchList";
 
 interface SideBarProps {
     isOpen: boolean;
+    isNarrow: boolean;
     isLoggedIn: boolean;
     userName?: string;
     userProfileImage?: string;
@@ -15,6 +16,7 @@ interface SideBarProps {
 
 const SideBar = ({
                      isOpen,
+                     isNarrow,
                      isLoggedIn,
                      userName,
                      userProfileImage,
@@ -22,11 +24,15 @@ const SideBar = ({
                      onLogout,
                  }: SideBarProps) => (
     <div
-        className={`h-[calc(100vh-48px)] bg-white transition-all duration-300 overflow-hidden ${
-            isOpen ? 'w-60' : 'w-0'
-        } shrink-0`}
+        className={`
+            h-[calc(100vh-48px)] bg-white transition-all duration-300 overflow-hidden
+            ${isNarrow
+            ? `fixed top-12 left-0 z-50 shadow-xl w-60 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`
+            : `relative ${isOpen ? 'w-60' : 'w-0'} shrink-0`
+        }
+        `}
     >
-        <div className="flex flex-col h-full p-5 justify-between whitespace-nowrap">
+        <div className="flex flex-col h-full p-5 justify-between whitespace-nowrap w-60">
             <div className="flex flex-col gap-3">
                 <LoginButton
                     role="sidebar"
