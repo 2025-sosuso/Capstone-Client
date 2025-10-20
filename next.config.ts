@@ -11,7 +11,15 @@ const nextConfig: NextConfig = {
         },
     },
     // webpack 설정
-    webpack: (config) => {
+    webpack: (config, { dev, isServer }) => {
+        // 모바일 개발을 위한 HMR 설정 추가
+        if (dev && !isServer) {
+            config.watchOptions = {
+                poll: 1000, // 1초마다 변경사항 체크
+                aggregateTimeout: 300, // 300ms 동안 변경사항 모음
+            };
+        }
+
         // @ts-expect-error 타입 에러 무시
         const fileLoaderRule = config.module.rules.find((rule) =>
             rule.test?.test?.('.svg')

@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:m": "HOST=$(ipconfig getifaddr en0) && echo \"Mobile access: http://$HOST:3000\" && next dev -H 0.0.0.0",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
