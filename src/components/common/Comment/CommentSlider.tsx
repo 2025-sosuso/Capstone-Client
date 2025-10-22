@@ -23,13 +23,11 @@ export default function CommentSlider({ comments, intervalMs = 7000, color = "10
     }, [comments.length, intervalMs]);
 
     if (!comments || comments.length === 0) {
-        return (
-            <NoCommentItem/>
-        );
+        return <NoCommentItem />;
     }
 
     return (
-        <div className="transition-opacity duration-500 ease-in-out">
+        <div className="w-full min-w-0 transition-opacity duration-500 ease-in-out">
             <CommentItem {...comments[index]} color={color} />
         </div>
     );

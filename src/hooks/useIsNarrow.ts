@@ -1,5 +1,13 @@
 import {useEffect, useState} from "react";
 
+export const BREAKPOINTS = {
+    sm: 640,
+    md: 768,
+    lg: 1024,
+    xl: 1280,
+    '2xl': 1536,
+} as const;
+
 export function useIsNarrow(breakpoint = 640) {
     const [isNarrow, setIsNarrow] = useState(false);
 
