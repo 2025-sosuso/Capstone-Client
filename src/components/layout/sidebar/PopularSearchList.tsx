@@ -1,8 +1,8 @@
 'use client'
 
 import { ChevronDownIcon, MinusIcon } from "@heroicons/react/24/outline";
-import TriangleUpIcon from "public/icons/tossface/triangle-up.svg";
-import TriangleDownIcon from "public/icons/tossface/triangle-down.svg";
+import TriangleUpIcon from "public/icons/triangle-up.svg";
+import TriangleDownIcon from "public/icons/triangle-down.svg";
 import React from "react";
 import { formatTime } from "@/utils/data-format";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
@@ -97,7 +97,7 @@ const PopularSearchList = () => {
 
         const interval = setInterval(() => {
             fetchData();
-        }, 10000); // 10초 (test)
+        }, 30000); // 30초 (test)
 
         return () => {
             clearInterval(interval);
