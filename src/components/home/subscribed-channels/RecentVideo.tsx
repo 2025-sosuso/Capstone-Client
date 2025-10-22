@@ -35,10 +35,11 @@ const RecentVideo = ({ data }: Props) => {
     const { video, channel, analysis } = data;
 
     return (
-        <div className="flex flex-col flex-wrap sm:flex-row w-full gap-6 items-start bg-white/90 p-4 rounded-2xl">
+        <div className="flex flex-col md:flex-row w-full gap-6 items-center md:items-start bg-white/90 p-4 rounded-2xl">
             <div
-                className="flex flex-col gap-3 w-full sm:w-auto sm:min-w-[320px] sm:max-w-[480px] flex-shrink-0 cursor-pointer"
-                onClick={() => router.push(`/videos/${video.id}`)}>
+                className="flex flex-col gap-3 w-full md:w-auto md:min-w-[320px] md:max-w-[480px] flex-shrink-0 cursor-pointer"
+                onClick={() => router.push(`/videos/${video.id}`)}
+            >
                 <div className="overflow-hidden rounded-2xl w-full">
                     <Thumbnail src={video.thumbnailUrl} />
                 </div>

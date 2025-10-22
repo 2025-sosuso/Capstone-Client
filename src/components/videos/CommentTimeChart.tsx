@@ -16,6 +16,7 @@ import { Line } from 'react-chartjs-2';
 import { useMemo } from 'react';
 import { calculateYAxis } from '@/utils/calculateYAxis';
 import { HourlyCommentCount } from '@/types/video';
+import EmptyState from "@components/common/EmptyState";
 
 ChartJS.register(
     CategoryScale,
@@ -87,9 +88,10 @@ export default function CommentTimeChart({ data }: Props) {
 
     if (!hasValidData) {
         return (
-            <div className="w-full min-w-[16rem] h-[250px] flex items-center justify-center rounded-xl bg-gray-50 text-sm text-gray-400">
-                시간대별 댓글 데이터가 없습니다.
-            </div>
+            <EmptyState
+                message="시간대별 댓글 데이터가 없습니다."
+                className="h-[250px] min-w-[16rem]"
+            />
         );
     }
 

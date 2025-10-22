@@ -1,4 +1,5 @@
 import TagItem from "./TagItem";
+import EmptyState from "@components/common/EmptyState";
 
 interface TagListProps {
     tags?: string[];
@@ -18,11 +19,7 @@ export default function TagList({
     const hasTags = Array.isArray(tags) && tags.length > 0;
 
     if (!hasTags) {
-        return (
-            <div className="w-full px-4 py-3 rounded-md bg-gray-50 text-center text-sm text-gray-400">
-                키워드 데이터가 없습니다.
-            </div>
-        );
+        return <EmptyState message="키워드 데이터가 없습니다." />;
     }
 
     return (

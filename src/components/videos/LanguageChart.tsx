@@ -10,6 +10,7 @@ import {
 import { Doughnut } from 'react-chartjs-2';
 import { useEffect, useMemo, useState } from 'react';
 import {LanguageRatio} from "@/types/video";
+import EmptyState from "@components/common/EmptyState";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -75,9 +76,10 @@ export default function LanguageChart({ data }: LanguageChartProps) {
 
     if (!hasValidData) {
         return (
-            <div className="w-full min-w-[16rem] h-[300px] mx-auto p-3 flex items-center justify-center text-sm text-gray-400 bg-gray-50 rounded-xl">
-                언어 분석 데이터가 없습니다.
-            </div>
+            <EmptyState
+                message="언어 분석 데이터가 없습니다."
+                className="h-[300px] min-w-[16rem] mx-auto"
+            />
         );
     }
 

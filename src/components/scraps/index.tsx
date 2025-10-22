@@ -2,14 +2,14 @@
 
 import {useAuth} from "@/contexts/AuthContext";
 import VideoSummaryList from "@components/common/VideoSummary/VideoSummaryList";
-import LoginButton from "@components/common/LoginButton";
 import {useEffect, useState} from "react";
 import {fetchScrapsVideos} from "@/service/videoService";
 import LoadingSection from "@components/common/LoadingSection";
 import type {VideoSummaryItem} from "@/types/video-summary";
+import LoginCallout from "@components/common/LoginCallout";
 
 export default function Scraps() {
-    const { isLoggedIn, handleLogin } = useAuth();
+    const { isLoggedIn } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const [videoList, setVideoList] = useState<VideoSummaryItem[]>([]);
@@ -48,12 +48,9 @@ export default function Scraps() {
                 </div>
 
                 {isLoggedIn ? (
-                    <VideoSummaryList data={videoList} />
+                    <VideoSummaryList data={videoList}/>
                 ) : (
-                    <div className="flex flex-col w-full items-center justify-center text-center py-20 gap-5 bg-gray-100 rounded-3xl">
-                        <p className="text-lg"> 지금 로그인하고, 스크랩 영상을 빠르게 확인해보세요!</p>
-                        <LoginButton isLoggedIn={isLoggedIn} onClick={handleLogin}/>
-                    </div>
+                    <LoginCallout text="지금 로그인하고, 스크랩 영상을 빠르게 확인해보세요!"/>
                 )}
             </div>
         </div>

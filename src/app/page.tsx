@@ -18,7 +18,7 @@ export default function Page() {
                 setData(null);
             })
             .finally(() => {
-                setIsLoading(false); // ✅ 반드시 로딩 상태 해제
+                setIsLoading(false);
             });
     }, []);
 

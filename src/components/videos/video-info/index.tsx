@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import YouTubePlayer, { YouTubePlayerRef } from "./YoutubePlayer";
-import {formatDate, formatNumber} from "@/utils/data-format";
+import { formatDate, formatNumber } from "@/utils/data-format";
 import type { VideoResult } from "@/types/video";
 import { useAuth } from "@/contexts/AuthContext";
 import { createScrap, deleteScrap } from "@/service/videoService";
 import { addFavoriteChannel, removeFavoriteChannel } from "@/service/channelService";
+import BookmarkIcon from 'public/icons/bookmark.svg';
+import HeartIcon from 'public/icons/heart.svg';
 
 interface Props {
     data: VideoResult;
@@ -34,55 +36,51 @@ export default function VideoInfoSection({ data, onPlayerReady }: Props) {
         return () => observer.disconnect();
     }, []);
 
-    const requireLogin = () => {
+    const requireLogin = useCallback(() => {
         if (!isLoggedIn) {
-            if (confirm("로그인이 필요한 작업입니다. 로그인하시겠습니까?")) handleLogin();
+            if (confirm("로그인이 필요한 작업입니다. 로그인하시겠습니까?")) {
+                handleLogin();
+            }
             return true;
         }
         return false;
-    };
+    }, [isLoggedIn, handleLogin]);
 
-    const handleScrapToggle = async () => {
+    const handleScrapToggle = useCallback(async () => {
         if (requireLogin()) return;
 
         try {
-            console.log(`스크랩 요청 시작: ${video.id}`, scrapId ? "삭제" : "생성");
             if (scrapId) {
                 await deleteScrap(scrapId);
-                console.log("스크랩 삭제 성공");
                 setScrapId(null);
             } else {
                 const newScrapId = await createScrap(video.id);
-                console.log("스크랩 생성 성공, ID:", newScrapId);
                 setScrapId(newScrapId);
             }
         } catch (err) {
             console.error("스크랩 요청 실패:", err);
         }
-    };
+    }, [scrapId, video.id, requireLogin]);
 
-
-    const handleFavoriteToggle = async () => {
+    const handleFavoriteToggle = useCallback(async () => {
         if (requireLogin()) return;
 
         try {
-            console.log(`관심 채널 요청 시작: ${channel.id} ${channel.title} ${channel.thumbnailUrl}`, favoriteChannelId ? "삭제" : "생성");
             if (favoriteChannelId != null) {
                 await removeFavoriteChannel(favoriteChannelId);
-                console.log("관심 채널 삭제 완료:", favoriteChannelId);
                 setFavoriteChannelId(null);
             } else {
-                const newFavoriteChannelId = await addFavoriteChannel(channel.id, channel.title, channel.thumbnailUrl);
-                console.log("관심 채널 생성 성공, ID:", newFavoriteChannelId);
+                const newFavoriteChannelId = await addFavoriteChannel(
+                    channel.id,
+                    channel.title,
+                    channel.thumbnailUrl
+                );
                 setFavoriteChannelId(newFavoriteChannelId);
             }
         } catch (err) {
             console.error("관심 채널 요청 실패:", err);
         }
-    };
-
-
-
+    }, [favoriteChannelId, channel.id, channel.title, channel.thumbnailUrl, requireLogin]);
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 w-full h-fit mx-auto items-start">
@@ -91,35 +89,31 @@ export default function VideoInfoSection({ data, onPlayerReady }: Props) {
             </div>
 
             <div className="flex flex-col gap-3 min-w-[100px]" style={{ minHeight: videoHeight }}>
-                <div className="flex justify-between items-start">
-                    <h3 className="text-lg font-semibold truncate">{video.title}</h3>
+                <div className="flex justify-between items-start gap-2">
+                    <h3 className="text-lg font-semibold line-clamp-2">{video.title}</h3>
                     <button
                         className={`size-6 shrink-0 transition-colors cursor-pointer ${
                             scrapId ? "text-blue-500" : "text-gray-300"
                         }`}
                         onClick={handleScrapToggle}
-                        aria-label="스크랩"
+                        aria-label={scrapId ? "스크랩 취소" : "스크랩"}
                     >
-                        <svg fill="currentColor" viewBox="0 0 40 40">
-                            <path d="M5.945,7.311c0-1.552,1.258-2.811,2.811-2.811h22.488c1.552,0,2.811,1.258,2.811,2.811v26.312c0,1.443-1.562,2.344-2.811,1.623l-9.838-5.68c-.87-.502-1.941-.502-2.811,0l-9.838,5.68c-1.249.721-2.811-.18-2.811-1.623V7.311Z" />
-                        </svg>
+                        <BookmarkIcon />
                     </button>
                 </div>
 
-                <div className="flex flex-row gap-3 items-center">
+                <div className="flex flex-row gap-3 items-center flex-wrap">
                     <p className="text-md text-gray-700">
                         {channel.title} | 구독자 {formatNumber(channel.subscriberCount)}명
                     </p>
                     <button
-                        className={`size-5 transition-colors cursor-pointer ${
+                        className={`size-5 shrink-0 transition-colors cursor-pointer ${
                             favoriteChannelId ? "text-red-400" : "text-gray-300"
                         }`}
                         onClick={handleFavoriteToggle}
-                        aria-label="관심 채널"
+                        aria-label={favoriteChannelId ? "관심 채널 취소" : "관심 채널 추가"}
                     >
-                        <svg fill="currentColor" viewBox="0 0 40 40">
-                            <path d="m18.118,35.443c1.144.756,2.621.756,3.765,0,3.631-2.399,11.545-8.132,14.952-14.547,4.494-8.463-.784-16.905-7.757-16.905-3.976,0-6.369,2.077-7.691,3.863-.697.941-2.075.941-2.772,0-1.322-1.786-3.715-3.863-7.691-3.863C3.95,3.991-1.328,12.432,3.166,20.896c3.406,6.415,11.321,12.148,14.952,14.547Z" />
-                        </svg>
+                        <HeartIcon />
                     </button>
                 </div>
 

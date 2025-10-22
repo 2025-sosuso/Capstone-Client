@@ -95,11 +95,13 @@ export default function Detail({ videoId }: { videoId: string }) {
     } = analysis;
 
     return (
-        <div className="flex flex-col w-full items-center max-w-[1000px] m-auto gap-5">
+        <div className="flex flex-col w-full px-3 py-5 items-center max-w-[1000px] m-auto gap-5">
             {analysis.isWarning && <WarningBanner />}
+
             <VideoInfo data={data} onPlayerReady={(ref) => (playerRef.current = ref)} />
-            <div className="grid grid-cols-1 md:grid-cols-2 w-full mt-10 gap-10">
-                <div className="col-auto flex flex-col gap-10">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-5 md:gap-10">
+                <div className="flex flex-col gap-5 md:gap-10">
                     <SectionLayout header="AI 전체 요약">
                         <AISummary summary={summary} />
                     </SectionLayout>
@@ -118,7 +120,8 @@ export default function Detail({ videoId }: { videoId: string }) {
                         <CommentList comments={filteredComments} />
                     </SectionLayout>
                 </div>
-                <div className="col-auto flex flex-col gap-10">
+
+                <div className="flex flex-col gap-5 md:gap-10">
                     <SectionLayout header="언어 비율">
                         <LanguageChart data={languageDistribution} />
                     </SectionLayout>
