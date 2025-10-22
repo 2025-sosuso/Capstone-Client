@@ -1,3 +1,5 @@
+import EmptyState from "@components/common/EmptyState";
+
 type AISummaryProps = {
     summary?: string;
     size?: "sm" | "md";
@@ -18,9 +20,7 @@ export default function AISummary({ summary, size = "md" }: AISummaryProps) {
                     {summary}
                 </p>
             ) : (
-                <div className="w-full bg-gray-50 text-center text-sm text-gray-400 px-4 py-4 rounded-xl">
-                    AI 요약 결과가 없습니다.
-                </div>
+                <EmptyState message="AI 요약 결과가 없습니다" />
             )}
         </div>
     );

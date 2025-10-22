@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react';
 import SentimentItem from './SentimentItem';
 import { SentimentRatio } from '@/types/video';
+import EmptyState from "@components/common/EmptyState";
 
 type SentimentType = 'POSITIVE' | 'NEGATIVE' | 'OTHER';
 
@@ -58,11 +59,7 @@ export default function SentimentBar({ ratio, size = 'md', onClick }: SentimentB
         Object.values(ratio).some((v) => typeof v === 'number' && v > 0);
 
     if (!hasValidData) {
-        return (
-            <div className="w-full px-4 py-3 text-center text-sm text-gray-400 bg-gray-50 rounded-xl">
-                감정 분석 데이터가 없습니다.
-            </div>
-        );
+        return <EmptyState message="감정 분석 데이터가 없습니다." />;
     }
 
     return (
