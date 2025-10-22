@@ -1,22 +1,26 @@
+'use client';
+
 import { ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/outline";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Props {
     isOpen: boolean;
-    onLogout: () => void;
 }
 
-export default function LogoutButton({ isOpen, onLogout }: Props) {
-    const handleLogout = () => {
+export default function LogoutButton({ isOpen }: Props) {
+    const { handleLogout } = useAuth();
+
+    const onLogoutClick = () => {
         const confirmed = window.confirm("정말 로그아웃하시겠습니까?");
         if (confirmed) {
-            onLogout();
+            handleLogout();
         }
     };
 
     return (
         <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 p-3 rounded-lg hover:bg-gray-100 w-full text-left transition-all duration-300"
+            onClick={onLogoutClick}
+            className="flex items-center gap-2 p-3 rounded-lg hover:bg-gray-100 w-full text-left transition-all duration-200"
         >
             <ArrowRightStartOnRectangleIcon className="w-6 h-6 text-gray-600" />
             <span

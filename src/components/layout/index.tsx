@@ -3,13 +3,11 @@
 import { useState, useEffect } from 'react';
 import Header from "@/components/layout/header";
 import SideBar from "@/components/layout/sidebar";
-import { useAuth } from "@/contexts/AuthContext";
 import { useIsNarrow } from "@/hooks/useIsNarrow";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     const [isOpen, setIsOpen] = useState(true);
     const isNarrow = useIsNarrow(1280);
-    const { isLoggedIn, user, handleLogin, handleLogout } = useAuth();
 
     useEffect(() => {
         if (isNarrow) setIsOpen(false);
@@ -30,14 +28,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <SideBar
                     isOpen={isOpen}
                     isNarrow={isNarrow}
-                    isLoggedIn={isLoggedIn}
-                    userName={user?.userName}
-                    userProfileImage={user?.userProfileImage}
-                    onLogin={handleLogin}
-                    onLogout={handleLogout}
                 />
 
-                <main className="flex-1 p-6 overflow-auto relative">
+                <main className="flex-1 sm:p-2 md:p-4 overflow-auto relative">
                     {children}
                 </main>
             </div>

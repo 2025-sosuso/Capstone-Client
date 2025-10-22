@@ -2,8 +2,8 @@
 
 import VideoSummaryItem from './VideoSummaryItem';
 import { useAuth } from "@/contexts/AuthContext";
-import LoginButton from "@components/common/LoginButton";
 import { VideoSummaryItem as VideoSummaryItemType } from "@/types/video-summary";
+import LoginCallout from "@components/common/LoginCallout";
 
 interface Props {
     type?: string;
@@ -11,13 +11,12 @@ interface Props {
 }
 
 export default function VideoSummaryList({ type = "trending", data }: Props) {
-    const { isLoggedIn, handleLogin } = useAuth();
+    const { isLoggedIn } = useAuth();
 
     if (type === "scraps" && !isLoggedIn) {
         return (
-            <div className="flex flex-col w-full items-center justify-center text-center py-20 gap-5 bg-gray-100 rounded-3xl">
-                <p className="text-lg">지금 로그인하고, 스크랩 영상을 빠르게 확인해보세요!</p>
-                <LoginButton isLoggedIn={isLoggedIn} onClick={handleLogin}/>
+            <div className="flex flex-col w-full items-center justify-center text-center px-4 gap-5 bg-gray-100 rounded-3xl">
+                <LoginCallout text="지금 로그인하고, 스크랩 영상을 빠르게 확인해보세요!" />
             </div>
         );
     }
