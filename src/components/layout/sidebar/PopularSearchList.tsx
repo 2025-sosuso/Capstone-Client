@@ -1,8 +1,7 @@
 'use client'
 
 import { ChevronDownIcon, MinusIcon } from "@heroicons/react/24/outline";
-import TriangleUpIcon from "public/icons/triangle-up.svg";
-import TriangleDownIcon from "public/icons/triangle-down.svg";
+import { TriangleUpIcon, TriangleDownIcon } from "@/components/icons";
 import React from "react";
 import { formatTime } from "@/utils/data-format";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
@@ -32,14 +31,13 @@ const mockList: PopularSearch[] = [
 ];
 
 const StatusIcon = ({ status }: { status: SearchStatus }) => {
-    const iconClass = "w-4 h-4";
     switch (status) {
         case "up":
-            return <TriangleUpIcon className={iconClass} />;
+            return <TriangleUpIcon className="text-red-500" size={16} />;
         case "down":
-            return <TriangleDownIcon className={iconClass} />;
+            return <TriangleDownIcon className="text-blue-500" size={16} />;
         case "same":
-            return <MinusIcon className={`text-gray-500 stroke-2 ${iconClass}`} />;
+            return <MinusIcon className="w-4 h-4 text-gray-500 stroke-2" />;
     }
 };
 
