@@ -1,6 +1,6 @@
 'use client'
 import {useEffect, useState, useCallback} from "react";
-import NotificationIcon from 'public/icons/notification.svg'
+import { NotificationIcon } from '@/components/icons';
 import {XMarkIcon} from "@heroicons/react/24/outline";
 
 interface Props {
@@ -31,9 +31,7 @@ const Toast = ({message, onClose}: Props) => {
             transition-all duration-300 ease-out
             ${isVisible ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}
         `}>
-            <div className="flex-shrink-0 size-6">
-                <NotificationIcon/>
-            </div>
+            <NotificationIcon size={24}/>
 
             <div className="flex-1">
                 <p className="text-gray-800 whitespace-pre-line">{message}</p>

@@ -8,8 +8,7 @@ import type { VideoResult } from "@/types/video";
 import { useAuth } from "@/contexts/AuthContext";
 import { createScrap, deleteScrap } from "@/service/videoService";
 import { addFavoriteChannel, removeFavoriteChannel } from "@/service/channelService";
-import BookmarkIcon from 'public/icons/bookmark.svg';
-import HeartIcon from 'public/icons/heart.svg';
+import { BookmarkIcon, HeartIcon } from '@/components/icons';
 
 interface Props {
     data: VideoResult;
@@ -92,13 +91,14 @@ export default function VideoInfoSection({ data, onPlayerReady }: Props) {
                 <div className="flex justify-between items-start gap-2">
                     <h3 className="text-lg font-semibold line-clamp-2">{video.title}</h3>
                     <button
-                        className={`size-6 shrink-0 transition-colors cursor-pointer ${
-                            scrapId ? "text-blue-500" : "text-gray-300"
-                        }`}
+                        className="shrink-0 transition-colors cursor-pointer"
                         onClick={handleScrapToggle}
                         aria-label={scrapId ? "스크랩 취소" : "스크랩"}
                     >
-                        <BookmarkIcon />
+                        <BookmarkIcon
+                            className={scrapId ? "text-blue-500" : "text-gray-300"}
+                            size={24}
+                        />
                     </button>
                 </div>
 
@@ -107,13 +107,14 @@ export default function VideoInfoSection({ data, onPlayerReady }: Props) {
                         {channel.title} | 구독자 {formatNumber(channel.subscriberCount)}명
                     </p>
                     <button
-                        className={`size-5 shrink-0 transition-colors cursor-pointer ${
-                            favoriteChannelId ? "text-red-400" : "text-gray-300"
-                        }`}
+                        className="shrink-0 transition-colors cursor-pointer"
                         onClick={handleFavoriteToggle}
                         aria-label={favoriteChannelId ? "관심 채널 취소" : "관심 채널 추가"}
                     >
-                        <HeartIcon />
+                        <HeartIcon
+                            className={favoriteChannelId ? "text-red-400" : "text-gray-300"}
+                            size={20}
+                        />
                     </button>
                 </div>
 
