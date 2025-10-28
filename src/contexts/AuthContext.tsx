@@ -1,10 +1,11 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
-import { UserInfoResponse } from '@/types/user';
-import { useRouter } from 'next/navigation';
-import { logoutUser } from '@/service/authService';
-import { buildRedirectUri, getApiBaseUrl } from '@/lib/url';
+import {createContext, useContext, useState, useEffect, useMemo, useCallback} from 'react';
+import {UserInfoResponse} from '@/types/user';
+import {useRouter} from 'next/navigation';
+import {fetchAuthUser, logoutUser} from '@/service/authService';
+import {buildRedirectUri, getApiBaseUrl} from '@/lib/url';
+import Toast from '@/components/common/Toast';
 
 interface AuthContextType {
     isLoggedIn: boolean;
@@ -12,14 +13,17 @@ interface AuthContextType {
     handleLogin: () => void;
     handleLogout: () => Promise<void>;
     setUserData: (user: UserInfoResponse['data'] | null) => void;
+    isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export const AuthProvider = ({children}: { children: React.ReactNode }) => {
     const router = useRouter();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [user, setUser] = useState<UserInfoResponse['data'] | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [showToast, setShowToast] = useState(false);
 
     const setUserData = useCallback((userData: UserInfoResponse['data'] | null) => {
         if (userData) {
@@ -27,7 +31,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setUser(userData);
             setIsLoggedIn(true);
         } else {
-            localStorage.clear();
+            localStorage.removeItem('auth');
             setUser(null);
             setIsLoggedIn(false);
         }
@@ -49,28 +53,63 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } finally {
             setUserData(null);
             router.push('/');
-            console.log('로그아웃 완료');
         }
     }, [router, setUserData]);
 
     useEffect(() => {
-        const authString = localStorage.getItem('auth');
-        if (!authString) return;
-        try {
-            const parsed = JSON.parse(authString);
-            setUser(parsed);
-            setIsLoggedIn(true);
-        } catch (e) {
-            console.warn('로컬 스토리지 파싱 오류', e);
-            localStorage.clear();
-        }
-    }, []);
+        const handleSessionExpired = () => {
+            setShowToast(true);
+            setUserData(null)
+
+            setTimeout(() => {
+                router.push('/');
+            }, 1500);
+        };
+
+        window.addEventListener('auth:session-expired', handleSessionExpired);
+        return () => window.removeEventListener('auth:session-expired', handleSessionExpired);
+    }, [router, setUserData]);
+
+    useEffect(() => {
+        const verifySession = async () => {
+            const authString = localStorage.getItem('auth');
+
+            if (!authString) {
+                setIsLoading(false);
+                return;
+            }
+
+            try {
+                const userData = await fetchAuthUser();
+                setUserData(userData);
+            } catch (error) {
+                console.warn('세션 검증 실패:', error);
+                setUserData(null);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        verifySession();
+    }, [setUserData]);
 
     const value = useMemo(
-        () => ({ isLoggedIn, user, handleLogin, handleLogout, setUserData }),
-        [isLoggedIn, user, handleLogin, handleLogout, setUserData]
+        () => ({isLoggedIn, user, handleLogin, handleLogout, setUserData, isLoading}),
+        [isLoggedIn, user, handleLogin, handleLogout, setUserData, isLoading]
     );
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+
+    return (
+        <AuthContext.Provider value={value}>
+            {children}
+
+            {showToast && (
+                <Toast
+                    message={`보안을 위해 자동 로그아웃되었습니다.\n다시 로그인해주세요.`}
+                    onClose={() => setShowToast(false)}
+                />
+            )}
+        </AuthContext.Provider>
+    );
 };
 
 export const useAuth = () => {
