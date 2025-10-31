@@ -2,9 +2,9 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { searchByQuery } from "@/service/searchService";
+import { searchByQuery } from "@/services/search.service";
 import SearchChannelResultItem from "@components/search/SearchChannelResultItem";
-import { ChannelSearchResult } from "@/types/channel";
+import { ChannelSearchResult } from "@/types/channel.types";
 import LoadingSection from "@components/common/LoadingSection";
 
 export default function SearchContent() {

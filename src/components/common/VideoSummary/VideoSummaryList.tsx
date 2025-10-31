@@ -1,8 +1,8 @@
 'use client';
 
 import VideoSummaryItem from './VideoSummaryItem';
-import { useAuth } from "@/contexts/AuthContext";
-import { VideoSummaryItem as VideoSummaryItemType } from "@/types/video-summary";
+import {useAuth} from "@/contexts/AuthContext";
+import {VideoSummaryItem as VideoSummaryItemType} from "@/types/video-summary.types";
 import LoginCallout from "@components/common/LoginCallout";
 
 interface Props {
@@ -10,13 +10,14 @@ interface Props {
     data: VideoSummaryItemType[];
 }
 
-export default function VideoSummaryList({ type = "trending", data }: Props) {
-    const { isLoggedIn } = useAuth();
+export default function VideoSummaryList({type = "trending", data}: Props) {
+    const {isLoggedIn} = useAuth();
 
     if (type === "scraps" && !isLoggedIn) {
         return (
-            <div className="flex flex-col w-full items-center justify-center text-center px-4 gap-5 bg-gray-100 rounded-3xl">
-                <LoginCallout text="지금 로그인하고, 스크랩 영상을 빠르게 확인해보세요!" />
+            <div
+                className="flex flex-col w-full items-center justify-center text-center px-4 gap-5 bg-gray-100 rounded-3xl">
+                <LoginCallout text="지금 로그인하고, 스크랩 영상을 빠르게 확인해보세요!"/>
             </div>
         );
     }
@@ -32,7 +33,7 @@ export default function VideoSummaryList({ type = "trending", data }: Props) {
     return (
         <div className="flex flex-col gap-5">
             {data.map((item, i) => (
-                <VideoSummaryItem key={item.video?.id ?? i} rank={i + 1} data={item} />
+                <VideoSummaryItem key={item.video?.id ?? i} rank={i + 1} data={item}/>
             ))}
         </div>
     );

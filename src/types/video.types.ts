@@ -1,4 +1,4 @@
-import { BaseApiResponse } from "./common";
+import {BaseApiResponse} from "./common.types";
 
 export type VideoSearchResponse = BaseApiResponse<{
     searchType: 'URL' | 'CHANNEL';

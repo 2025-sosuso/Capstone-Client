@@ -1,4 +1,4 @@
-import { BaseApiResponse } from "./common";
+import {BaseApiResponse} from "./common.types";
 
 export type UserInfoResponse = BaseApiResponse<{
     userName: string;

@@ -15,7 +15,7 @@ import {
 import { Line } from 'react-chartjs-2';
 import { useMemo } from 'react';
 import { calculateYAxis } from '@/utils/calculateYAxis';
-import { HourlyCommentCount } from '@/types/video';
+import { HourlyCommentCount } from '@/types/video.types';
 import EmptyState from "@components/common/EmptyState";
 
 ChartJS.register(

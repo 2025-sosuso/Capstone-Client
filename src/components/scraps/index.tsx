@@ -3,9 +3,9 @@
 import {useAuth} from "@/contexts/AuthContext";
 import VideoSummaryList from "@components/common/VideoSummary/VideoSummaryList";
 import {useEffect, useState} from "react";
-import {fetchScrapsVideos} from "@/service/videoService";
+import {fetchScrapsVideos} from "@/services/video.service";
 import LoadingSection from "@components/common/LoadingSection";
-import type {VideoSummaryItem} from "@/types/video-summary";
+import type {VideoSummaryItem} from "@/types/video-summary.types";
 import LoginCallout from "@components/common/LoginCallout";
 
 export default function Scraps() {

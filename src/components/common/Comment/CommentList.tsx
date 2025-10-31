@@ -1,5 +1,5 @@
 import CommentItem from "./CommentItem";
-import type { Comment as CommentType } from "@/types/video";
+import type { Comment as CommentType } from "@/types/video.types";
 import NoCommentItem from "@components/common/Comment/NoCommentItem";
 
 type Props = {

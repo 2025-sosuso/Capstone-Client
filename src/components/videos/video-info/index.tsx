@@ -4,10 +4,10 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import YouTubePlayer, { YouTubePlayerRef } from "./YoutubePlayer";
 import { formatDate, formatNumber } from "@/utils/data-format";
-import type { VideoResult } from "@/types/video";
+import type { VideoResult } from "@/types/video.types";
 import { useAuth } from "@/contexts/AuthContext";
-import { createScrap, deleteScrap } from "@/service/videoService";
-import { addFavoriteChannel, removeFavoriteChannel } from "@/service/channelService";
+import { createScrap, deleteScrap } from "@/services/video.service";
+import { addFavoriteChannel, removeFavoriteChannel } from "@/services/channel.service";
 import { BookmarkIcon, HeartIcon } from '@/components/icons';
 
 interface Props {

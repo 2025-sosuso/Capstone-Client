@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import {useState, useCallback} from 'react';
 import SentimentItem from './SentimentItem';
-import { SentimentRatio } from '@/types/video';
+import {SentimentRatio} from '@/types/video.types';
 import EmptyState from "@components/common/EmptyState";
 
 type SentimentType = 'POSITIVE' | 'NEGATIVE' | 'OTHER';
@@ -36,7 +36,7 @@ const COLORS = {
 
 const clampPercent = (value: number) => Math.max(0, Math.min(100, value));
 
-export default function SentimentBar({ ratio, size = 'md', onClick }: SentimentBarProps) {
+export default function SentimentBar({ratio, size = 'md', onClick}: SentimentBarProps) {
     const [hoveredKey, setHoveredKey] = useState<string | null>(null);
 
     const handleClick = useCallback((key: string) => {
@@ -59,7 +59,7 @@ export default function SentimentBar({ ratio, size = 'md', onClick }: SentimentB
         Object.values(ratio).some((v) => typeof v === 'number' && v > 0);
 
     if (!hasValidData) {
-        return <EmptyState message="감정 분석 데이터가 없습니다." />;
+        return <EmptyState message="감정 분석 데이터가 없습니다."/>;
     }
 
     return (
@@ -72,7 +72,7 @@ export default function SentimentBar({ ratio, size = 'md', onClick }: SentimentB
 
                     if (!colorSet) return null;
 
-                    const { text, bg, hoverBg, label } = colorSet;
+                    const {text, bg, hoverBg, label} = colorSet;
 
                     return (
                         <SentimentItem

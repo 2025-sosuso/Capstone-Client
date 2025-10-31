@@ -1,4 +1,4 @@
-import { Comment } from "./video";
+import {Comment} from "./video.types";
 
 export interface CommentSearchResponse {
     timeStamp: string;

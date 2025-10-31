@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { Comment as CommentType } from "@/types/video";
+import type { Comment as CommentType } from "@/types/video.types";
 import CommentItem from "@components/common/Comment/CommentItem";
 import NoCommentItem from "@components/common/Comment/NoCommentItem";
 

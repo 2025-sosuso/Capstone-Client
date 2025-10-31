@@ -2,7 +2,7 @@
 
 import Thumbnail from "@components/home/Thumbnail";
 import { formatDate, formatNumber } from "@/utils/data-format";
-import { VideoSummaryResponse } from "@/types/video-summary";
+import { VideoSummaryResponse } from "@/types/video-summary.types";
 import SummarySection from "@components/common/VideoSummary/SummarySection";
 import {
     FaceSmileIcon,
