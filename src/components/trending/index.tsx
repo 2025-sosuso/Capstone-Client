@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import CategoryBar from "@components/trending/CategoryBar";
 import VideoSummaryList from "@components/common/VideoSummary/VideoSummaryList";
-import type { VideoSummaryItem } from "@/types/video-summary";
-import { fetchTrendingVideos } from "@/service/videoService";
+import type { VideoSummaryItem } from "@/types/video-summary.types";
+import { fetchTrendingVideos } from "@/services/video.service";
 import LoadingSection from "@components/common/LoadingSection";
 
 type CategoryType = "latest" | "music" | "game";

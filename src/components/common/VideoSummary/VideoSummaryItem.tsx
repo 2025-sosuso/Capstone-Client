@@ -1,23 +1,23 @@
 'use client';
 
-import { useRouter } from "next/navigation";
+import {useRouter} from "next/navigation";
 import Thumbnail from "@components/home/Thumbnail";
 import SentimentBar from "@components/common/SentimentBar/SentimentBar";
 import AISummary from "@components/common/AISummary";
-import { FaceSmileIcon, HashtagIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import {FaceSmileIcon, HashtagIcon, SparklesIcon} from "@heroicons/react/24/outline";
 import SummarySection from "@components/common/VideoSummary/SummarySection";
 import TagList from "@components/common/Tag/TagList";
-import type { VideoSummaryItem as VideoSummaryItemType } from "@/types/video-summary";
-import { formatDate, formatNumber } from "@/utils/data-format";
+import type {VideoSummaryItem as VideoSummaryItemType} from "@/types/video-summary.types";
+import {formatDate, formatNumber} from "@/utils/data-format";
 
 type Props = {
     rank?: number;
     data: VideoSummaryItemType;
 };
 
-export default function VideoSummaryItem({ rank, data }: Props) {
+export default function VideoSummaryItem({rank, data}: Props) {
     const router = useRouter();
-    const { video, channel, analysis } = data;
+    const {video, channel, analysis} = data;
 
     if (!video || !channel) return null;
 
@@ -32,7 +32,7 @@ export default function VideoSummaryItem({ rank, data }: Props) {
                 )}
 
                 <div className="w-full sm:w-[280px] flex-shrink-0 overflow-hidden rounded-2xl">
-                    <Thumbnail src={video.thumbnailUrl ?? ""} />
+                    <Thumbnail src={video.thumbnailUrl ?? ""}/>
                 </div>
 
                 <div className="flex flex-col flex-1 min-w-0">
@@ -50,16 +50,17 @@ export default function VideoSummaryItem({ rank, data }: Props) {
             </div>
 
             <div className="flex flex-col gap-2 w-full lg:w-[40%]">
-                <SummarySection icon={<SparklesIcon className="size-5 stroke-2" />}>
-                    <AISummary summary={analysis?.summary ?? ""} size="sm" />
+                <SummarySection icon={<SparklesIcon className="size-5 stroke-2"/>}>
+                    <AISummary summary={analysis?.summary ?? ""} size="sm"/>
                 </SummarySection>
 
-                <SummarySection icon={<FaceSmileIcon className="size-5 stroke-2" />}>
-                    <SentimentBar ratio={analysis?.sentimentDistribution ?? { positive: 0, neutral: 0, negative: 0 }} size="sm" />
+                <SummarySection icon={<FaceSmileIcon className="size-5 stroke-2"/>}>
+                    <SentimentBar ratio={analysis?.sentimentDistribution ?? {positive: 0, neutral: 0, negative: 0}}
+                                  size="sm"/>
                 </SummarySection>
 
-                <SummarySection icon={<HashtagIcon className="size-5 stroke-2" />}>
-                    <TagList tags={analysis?.keywords ?? []} size="sm" />
+                <SummarySection icon={<HashtagIcon className="size-5 stroke-2"/>}>
+                    <TagList tags={analysis?.keywords ?? []} size="sm"/>
                 </SummarySection>
             </div>
         </div>

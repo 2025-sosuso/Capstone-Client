@@ -1,4 +1,4 @@
-import {ChannelSearchResult} from "@/types/channel";
+import {ChannelSearchResult} from "@/types/channel.types";
 
 type UrlSearchResponse = {
     searchType: "URL";

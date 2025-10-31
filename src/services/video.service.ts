@@ -1,7 +1,7 @@
 import api from "@/lib/axios";
-import { BaseApiResponse } from "@/types/common";
-import { Comment, VideoResult } from "@/types/video";
-import { VideoSummaryItem } from "@/types/video-summary";
+import {BaseApiResponse} from "@/types/common.types";
+import {Comment, VideoResult} from "@/types/video.types";
+import {VideoSummaryItem} from "@/types/video-summary.types";
 
 const normalizeSentiment = (comments: Comment[] | null | undefined): Comment[] =>
     (comments ?? []).map(comment => ({
@@ -25,7 +25,7 @@ export const fetchVideoDetail = async (apiVideoId: string): Promise<VideoResult>
 
 export const createScrap = async (apiVideoId: string): Promise<number> => {
     const res = await api.post<BaseApiResponse<{ scrapId: number }>>(
-        "/scraps", { apiVideoId }
+        "/scraps", {apiVideoId}
     );
     return res.data.data.scrapId;
 };
@@ -39,7 +39,7 @@ export const fetchTrendingVideos = async (
     maxResults: number
 ): Promise<VideoSummaryItem[]> => {
     const res = await api.get<BaseApiResponse<VideoSummaryItem[]>>(
-        "/trending/category", { params: { categoryType: category, maxResults } }
+        "/trending/category", {params: {categoryType: category, maxResults}}
     );
     return res.data.data;
 };

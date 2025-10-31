@@ -1,10 +1,10 @@
 'use client';
 
-import { AdjustmentsVerticalIcon } from '@heroicons/react/24/outline';
+import {AdjustmentsVerticalIcon} from '@heroicons/react/24/outline';
 import ChannelAvatar from './ChannelAvatar';
-import { ChannelSearchResult } from '@/types/channel';
-import { useState } from 'react';
-import { removeFavoriteChannel } from '@/service/channelService';
+import {ChannelSearchResult} from '@/types/channel.types';
+import {useState} from 'react';
+import {removeFavoriteChannel} from '@/services/channel.service';
 
 interface Props {
     channels: ChannelSearchResult[];
@@ -12,7 +12,7 @@ interface Props {
     onUpdateChannels?: () => void;
 }
 
-export default function ChannelAvatarList({ channels, onSelectChannel, onUpdateChannels }: Props) {
+export default function ChannelAvatarList({channels, onSelectChannel, onUpdateChannels}: Props) {
     const [edit, setEdit] = useState(false);
 
     const toggleEdit = () => setEdit((prev) => !prev);
@@ -23,7 +23,7 @@ export default function ChannelAvatarList({ channels, onSelectChannel, onUpdateC
 
         try {
             await removeFavoriteChannel(favoriteChannelId);
-            await onUpdateChannels?.(); // 부모에게 갱신 요청
+            onUpdateChannels?.();
         } catch (e) {
             console.error('삭제 실패:', e);
         }
@@ -53,7 +53,7 @@ export default function ChannelAvatarList({ channels, onSelectChannel, onUpdateC
                 ))}
             </div>
             <button className="cursor-pointer" onClick={toggleEdit}>
-                <AdjustmentsVerticalIcon className="size-6 text-gray-500" />
+                <AdjustmentsVerticalIcon className="size-6 text-gray-500"/>
             </button>
         </div>
     );

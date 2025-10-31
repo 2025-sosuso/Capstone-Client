@@ -1,9 +1,9 @@
 import api from "@/lib/axios";
-import type { Comment } from "@/types/video";
+import type {Comment} from "@/types/video.types";
 
 export const searchByQuery = async (query: string) => {
     const res = await api.get("/search", {
-        params: { query },
+        params: {query},
     });
     return res.data.data;
 };
@@ -19,8 +19,8 @@ export const fetchFilteredComments = async ({
     sentiment?: 'POSITIVE' | 'NEGATIVE' | 'OTHER';
     keyword?: string;
 }): Promise<Comment[]> => {
-    console.log("[API 호출됨]", { videoId, q, sentiment, keyword });
-    const params = q ? { q } : sentiment ? { sentiment } : keyword ? { keyword } : {};
-    const res = await api.get(`/videos/${videoId}/comments`, { params });
+    console.log("[API 호출됨]", {videoId, q, sentiment, keyword});
+    const params = q ? {q} : sentiment ? {sentiment} : keyword ? {keyword} : {};
+    const res = await api.get(`/videos/${videoId}/comments`, {params});
     return res.data.data.results;
 };

@@ -1,6 +1,6 @@
 import { HandThumbUpIcon } from "@heroicons/react/24/solid";
 import { formatDate, formatNumber } from "@/utils/data-format";
-import { Comment } from "@/types/video";
+import { Comment } from "@/types/video.types";
 
 type Props = Comment & {
     color?: string;

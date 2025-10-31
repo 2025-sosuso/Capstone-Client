@@ -1,9 +1,9 @@
 'use client';
 
 import {createContext, useContext, useState, useEffect, useMemo, useCallback} from 'react';
-import {UserInfoResponse} from '@/types/user';
+import {UserInfoResponse} from '@/types/user.types';
 import {useRouter} from 'next/navigation';
-import {fetchAuthUser, logoutUser} from '@/service/authService';
+import {fetchAuthUser, logoutUser} from '@/services/auth.service';
 import {buildRedirectUri, getApiBaseUrl} from '@/lib/url';
 import Toast from '@/components/common/Toast';
 

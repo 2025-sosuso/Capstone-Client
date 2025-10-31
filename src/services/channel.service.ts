@@ -1,6 +1,6 @@
 import api from "@/lib/axios";
-import {BaseApiResponse} from "@/types/common";
-import {ChannelSearchResult, FavoriteChannelListResponse} from "@/types/channel";
+import {BaseApiResponse} from "@/types/common.types";
+import {ChannelSearchResult, FavoriteChannelListResponse} from "@/types/channel.types";
 
 
 export const addFavoriteChannel = async (
@@ -10,7 +10,7 @@ export const addFavoriteChannel = async (
 ): Promise<number> => {
     const res = await api.post<BaseApiResponse<{ favoriteChannelId: number }>>(
         "/favorite-channels",
-        { apiChannelId, apiChannelName, apiChannelThumbnail }
+        {apiChannelId, apiChannelName, apiChannelThumbnail}
     );
     return res.data.data.favoriteChannelId;
 };

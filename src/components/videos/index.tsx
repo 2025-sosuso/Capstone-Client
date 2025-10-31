@@ -1,7 +1,7 @@
 "use client";
 
 import {useCallback, useEffect, useRef, useState} from "react";
-import type { VideoResult, Comment } from "@/types/video";
+import type { VideoResult, Comment } from "@/types/video.types";
 import type { YouTubePlayerRef } from "@components/videos/video-info/YoutubePlayer";
 
 import VideoInfo from "@components/videos/video-info";
@@ -13,9 +13,9 @@ import TagList from "@components/common/Tag/TagList";
 import AISummary from "@components/common/AISummary";
 import SentimentBar from "@components/common/SentimentBar/SentimentBar";
 import WarningBanner from "@components/videos/WarningBanner";
-import { fetchVideoDetail } from "@/service/videoService";
+import { fetchVideoDetail } from "@/services/video.service";
 import LoadingSection from "@components/common/LoadingSection";
-import { fetchFilteredComments } from "@/service/searchService";
+import { fetchFilteredComments } from "@/services/search.service";
 
 export default function Detail({ videoId }: { videoId: string }) {
     const [data, setData] = useState<VideoResult | null>(null);

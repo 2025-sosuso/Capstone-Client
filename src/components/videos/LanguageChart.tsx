@@ -9,7 +9,7 @@ import {
 } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { useEffect, useMemo, useState } from 'react';
-import {LanguageRatio} from "@/types/video";
+import {LanguageRatio} from "@/types/video.types";
 import EmptyState from "@components/common/EmptyState";
 
 ChartJS.register(ArcElement, Tooltip, Legend);

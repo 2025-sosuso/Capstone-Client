@@ -1,4 +1,4 @@
-import { UserInfoResponse } from '@/types/user';
+import {UserInfoResponse} from '@/types/user.types';
 import api from '@/lib/axios';
 
 export const fetchAuthUser = async (): Promise<UserInfoResponse["data"]> => {

@@ -1,13 +1,15 @@
 import Link from "next/link";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import VideoSummaryList from "@components/common/VideoSummary/VideoSummaryList";
-import type { VideoSummaryItem } from "@/types/video-summary";
+import type { VideoSummaryItem } from "@/types/video-summary.types";
+import LoadingSection from "@components/common/LoadingSection";
 
 type SectionType = "trending" | "scraps";
 
 interface ListSectionProps {
     type: SectionType;
     data: VideoSummaryItem[];
+    isLoading: boolean;
 }
 
 const SECTION_CONFIG = {
@@ -21,7 +23,7 @@ const SECTION_CONFIG = {
     }
 } as const;
 
-export default function ListSection({ type, data }: ListSectionProps) {
+export default function ListSection({ type, data, isLoading }: ListSectionProps) {
     const { title, href } = SECTION_CONFIG[type];
 
     return (
@@ -35,7 +37,11 @@ export default function ListSection({ type, data }: ListSectionProps) {
                 </h2>
                 <ChevronRightIcon className="size-6" />
             </Link>
-            <VideoSummaryList data={data} type={type} />
+            {isLoading ? (
+                <LoadingSection message="데이터를 불러오는 중..." />
+            ) : (
+                <VideoSummaryList data={data} type={type} />
+            )}
         </div>
     );
 }

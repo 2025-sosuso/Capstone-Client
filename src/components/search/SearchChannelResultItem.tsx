@@ -1,9 +1,9 @@
 'use client';
 
-import { ChannelSearchResult } from "@/types/channel";
+import {ChannelSearchResult} from "@/types/channel.types";
 import Image from "next/image";
 import {useEffect, useState} from "react";
-import { addFavoriteChannel, removeFavoriteChannel } from "@/service/channelService";
+import {addFavoriteChannel, removeFavoriteChannel} from "@/services/channel.service";
 import {useAuth} from "@/contexts/AuthContext";
 import {formatNumber} from "@/utils/data-format";
 
@@ -11,9 +11,9 @@ interface Props {
     channel: ChannelSearchResult;
 }
 
-export default function SearchChannelResultItem({ channel }: Props) {
+export default function SearchChannelResultItem({channel}: Props) {
     const [favoriteChannelId, setFavoriteChannelId] = useState<number | null>(channel.favoriteChannelId ?? null);
-    const { isLoggedIn, handleLogin } = useAuth();
+    const {isLoggedIn, handleLogin} = useAuth();
 
 
     useEffect(() => {
@@ -75,7 +75,7 @@ export default function SearchChannelResultItem({ channel }: Props) {
                     d="m18.118,35.443c1.144.756,2.621.756,3.765,0,3.631-2.399,11.545-8.132,14.952-14.547,4.494-8.463-.784-16.905-7.757-16.905-3.976,0-6.369,2.077-7.691,3.863-.697.941-2.075.941-2.772,0-1.322-1.786-3.715-3.863-7.691-3.863C3.95,3.991-1.328,12.432,3.166,20.896c3.406,6.415,11.321,12.148,14.952,14.547Z"
                     fill="currentColor"
                 />
-                <rect x="0" y="0" width="40" height="40" fill="none" />
+                <rect x="0" y="0" width="40" height="40" fill="none"/>
             </svg>
         </div>
     );
