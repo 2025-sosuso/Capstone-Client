@@ -19,7 +19,7 @@ const Logo = ({isMini=false}: {isMini?: boolean}) => {
             onClick={handleClick}
             className="flex items-center cursor-pointer shrink-0"
         >
-            <Image src="/icons/logo.png" alt="logo" width={30} height={30}/>
+            <Image src="/logo.png" alt="logo" width={30} height={30}/>
             {isMini ? null : (<p className="ml-2 font-bold text-md">Comments</p>)}
         </Link>
     );
