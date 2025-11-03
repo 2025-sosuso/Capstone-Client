@@ -1,10 +1,5 @@
 import {BaseApiResponse} from "./common.types";
 
-export type VideoSearchResponse = BaseApiResponse<{
-    searchType: 'URL' | 'CHANNEL';
-    results: VideoResult[];
-}>;
-
 export interface VideoResult {
     video: VideoDetail;
     channel: Channel;
@@ -72,3 +67,27 @@ export interface HourlyCommentCount {
     hour: string;
     count: number;
 }
+
+export interface VideoBasicInfo {
+    video: VideoDetail;
+    channel: Channel;
+}
+
+export interface VideoAnalysisInfo {
+    commentHistogram: HourlyCommentCount[];
+    popularTimestamps: TimestampMention[];
+    topComments: Comment[];
+}
+
+export interface VideoAIAnalysis {
+    summary: string | null;
+    isWarning: boolean;
+    languageDistribution: LanguageRatio[];
+    sentimentDistribution: SentimentRatio;
+    keywords: string[];
+}
+
+export type VideoBasicResponse = BaseApiResponse<VideoBasicInfo>;
+export type VideoAnalysisResponse = BaseApiResponse<VideoAnalysisInfo>;
+export type VideoCommentsResponse = BaseApiResponse<Comment[]>;
+export type VideoAIResponse = BaseApiResponse<VideoAIAnalysis>;

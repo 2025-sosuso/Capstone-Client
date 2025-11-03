@@ -1,7 +1,7 @@
 import EmptyState from "@components/common/EmptyState";
 
 type AISummaryProps = {
-    summary?: string;
+    summary?: string | null;
     size?: "sm" | "md";
 };
 
