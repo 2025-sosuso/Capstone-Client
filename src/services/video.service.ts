@@ -70,11 +70,10 @@ export const deleteScrap = async (scrapId: number): Promise<void> => {
 };
 
 export const fetchTrendingVideos = async (
-    category: string,
-    maxResults: number
+    maxResults: number = 10
 ): Promise<VideoSummaryItem[]> => {
     const res = await api.get<BaseApiResponse<VideoSummaryItem[]>>(
-        "/trending/category", {params: {categoryType: category, maxResults}}
+        "/trending", {params: {maxResults}}
     );
     return res.data.data;
 };
