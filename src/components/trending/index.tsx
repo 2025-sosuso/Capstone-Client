@@ -1,35 +1,25 @@
 'use client';
 
-import { useEffect, useState } from "react";
-import CategoryBar from "@components/trending/CategoryBar";
+import {useEffect, useState} from "react";
 import VideoSummaryList from "@components/common/VideoSummary/VideoSummaryList";
-import type { VideoSummaryItem } from "@/types/video-summary.types";
-import { fetchTrendingVideos } from "@/services/video.service";
+import type {VideoSummaryItem} from "@/types/video-summary.types";
+import {fetchTrendingVideos} from "@/services/video.service";
 import LoadingSection from "@components/common/LoadingSection";
 
-type CategoryType = "latest" | "music" | "game";
-
-const categories: { label: string; value: CategoryType }[] = [
-    { label: "최신", value: "latest" },
-    { label: "음악", value: "music" },
-    { label: "게임", value: "game" },
-];
-
 export default function Trending() {
-    const [isSelected, setIsSelected] = useState<CategoryType>("latest");
     const [videoList, setVideoList] = useState<VideoSummaryItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
-    const maxResults = 7;
+    const maxResults = 10;
 
     useEffect(() => {
         const fetch = async () => {
-            console.log("[인기급상승] API 요청 시작", isSelected, maxResults);
+            console.log("[인기급상승] API 요청 시작", maxResults);
             setIsLoading(true);
             setIsError(false);
 
             try {
-                const result = await fetchTrendingVideos(isSelected, maxResults);
+                const result = await fetchTrendingVideos(maxResults);
                 console.log("[인기급상승] API 응답 성공", result);
                 setVideoList(result);
             } catch (err) {
@@ -41,9 +31,9 @@ export default function Trending() {
         };
 
         fetch();
-    }, [isSelected]);
+    }, []);
 
-    if (isLoading) return <LoadingSection message="데이터를 불러오고 있습니다..." />;
+    if (isLoading) return <LoadingSection message="데이터를 불러오고 있습니다..."/>;
     if (isError) return <div className="text-center text-gray-500 py-10">인기 영상 정보를 불러오지 못했어요.</div>;
 
     return (
@@ -54,18 +44,7 @@ export default function Trending() {
                     <h1 className="text-2xl font-semibold text-gray-900">인기 급상승</h1>
                 </div>
 
-                <div className="flex border-b border-gray-200">
-                    {categories.map(({ label, value }) => (
-                        <CategoryBar
-                            key={value}
-                            category={label}
-                            selected={value === isSelected}
-                            onClick={() => setIsSelected(value)}
-                        />
-                    ))}
-                </div>
-
-                <VideoSummaryList data={videoList} />
+                <VideoSummaryList data={videoList}/>
             </div>
         </div>
     );
