@@ -1,6 +1,16 @@
 import api from "@/lib/axios";
 import {BaseApiResponse} from "@/types/common.types";
-import {Comment, VideoResult} from "@/types/video.types";
+import {
+    Comment,
+    VideoResult,
+    VideoBasicResponse,
+    VideoAnalysisResponse,
+    VideoCommentsResponse,
+    VideoAIResponse,
+    VideoBasicInfo,
+    VideoAnalysisInfo,
+    VideoAIAnalysis
+} from "@/types/video.types";
 import {VideoSummaryItem} from "@/types/video-summary.types";
 
 const normalizeSentiment = (comments: Comment[] | null | undefined): Comment[] =>
@@ -8,6 +18,31 @@ const normalizeSentiment = (comments: Comment[] | null | undefined): Comment[] =
         ...comment,
         sentiment: comment.sentiment?.toLowerCase?.() as 'positive' | 'negative' | 'other',
     }));
+
+export const fetchVideoBasic = async (apiVideoId: string): Promise<VideoBasicInfo> => {
+    const res = await api.get<VideoBasicResponse>(`/videos/${apiVideoId}/basic`);
+    return res.data.data;
+};
+
+export const fetchVideoAnalysis = async (apiVideoId: string): Promise<VideoAnalysisInfo> => {
+    const res = await api.get<VideoAnalysisResponse>(`/videos/${apiVideoId}/analysis`);
+    const raw = res.data.data;
+
+    return {
+        ...raw,
+        topComments: normalizeSentiment(raw.topComments),
+    };
+};
+
+export const fetchVideoComments = async (apiVideoId: string): Promise<Comment[]> => {
+    const res = await api.get<VideoCommentsResponse>(`/videos/${apiVideoId}/comments/all`);
+    return normalizeSentiment(res.data.data);
+};
+
+export const fetchVideoAI = async (apiVideoId: string): Promise<VideoAIAnalysis> => {
+    const res = await api.get<VideoAIResponse>(`/videos/${apiVideoId}/ai`);
+    return res.data.data;
+};
 
 export const fetchVideoDetail = async (apiVideoId: string): Promise<VideoResult> => {
     const res = await api.get<BaseApiResponse<VideoResult>>(`/videos/${apiVideoId}`);
