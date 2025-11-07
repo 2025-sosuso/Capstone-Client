@@ -8,10 +8,9 @@ import NoCommentItem from "@components/common/Comment/NoCommentItem";
 type Props = {
     comments: CommentType[];
     intervalMs?: number;
-    color?: string;
 };
 
-export default function CommentSlider({ comments, intervalMs = 7000, color = "100" }: Props) {
+export default function CommentSlider({ comments, intervalMs = 7000 }: Props) {
     const [index, setIndex] = useState(0);
 
     useEffect(() => {
@@ -28,7 +27,7 @@ export default function CommentSlider({ comments, intervalMs = 7000, color = "10
 
     return (
         <div className="w-full min-w-0 transition-opacity duration-500 ease-in-out">
-            <CommentItem {...comments[index]} color={color} />
+            <CommentItem {...comments[index]} />
         </div>
     );
 }

@@ -2,6 +2,7 @@ import api from "@/lib/axios";
 import {BaseApiResponse} from "@/types/common.types";
 import {
     Comment,
+    Reply,
     VideoResult,
     VideoBasicResponse,
     VideoAnalysisResponse,
@@ -9,7 +10,8 @@ import {
     VideoAIResponse,
     VideoBasicInfo,
     VideoAnalysisInfo,
-    VideoAIAnalysis
+    VideoAIAnalysis,
+    CommentRepliesResponse
 } from "@/types/video.types";
 import {VideoSummaryItem} from "@/types/video-preview.types";
 
@@ -31,6 +33,11 @@ export const fetchVideoComments = async (apiVideoId: string): Promise<Comment[]>
 export const fetchVideoAI = async (apiVideoId: string): Promise<VideoAIAnalysis> => {
     const res = await api.get<VideoAIResponse>(`/videos/${apiVideoId}/ai`);
     return res.data.data;
+};
+
+export const fetchCommentReplies = async (apiCommentId: string): Promise<Reply[]> => {
+    const res = await api.get<CommentRepliesResponse>(`/comments/${apiCommentId}/replies`);
+    return res.data.data.replies ?? [];
 };
 
 export const fetchVideoDetail = async (apiVideoId: string): Promise<VideoResult> => {
