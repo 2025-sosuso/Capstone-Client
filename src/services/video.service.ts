@@ -11,7 +11,7 @@ import {
     VideoAnalysisInfo,
     VideoAIAnalysis
 } from "@/types/video.types";
-import {VideoSummaryItem} from "@/types/video-summary.types";
+import {VideoSummaryItem} from "@/types/video-preview.types";
 
 const normalizeSentiment = (comments: Comment[] | null | undefined): Comment[] =>
     (comments ?? []).map(comment => ({

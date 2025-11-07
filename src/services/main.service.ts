@@ -1,5 +1,5 @@
 import {FavoriteChannelData} from '@/types/main.types';
-import {VideoSummaryItem} from '@/types/video-summary.types';
+import {VideoSummaryItem} from '@/types/video-preview.types';
 import {ChannelSearchResult, FavoriteChannel} from '@/types/channel.types';
 
 const API_BASE = 'https://knu-sosuso.com/api/main';
