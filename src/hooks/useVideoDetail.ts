@@ -1,11 +1,18 @@
 import {useState, useEffect, useCallback, useRef} from "react";
-import type {Comment, VideoBasicInfo, VideoAnalysisInfo, VideoAIAnalysis} from "@/types/video.types";
+import type {Comment, VideoBasicInfo, VideoAnalysisInfo, VideoAIAnalysis} from "@/types";
 import type {YouTubePlayerRef} from "@components/videos/video-info/YoutubePlayer";
+import type {
+    VideoDetailLoadingState,
+    UseVideoDetailReturn,
+    VideoDetailActions
+} from "@/types/video-detail.types";
 import {fetchVideoBasic, fetchVideoAnalysis, fetchVideoComments, fetchVideoAI} from "@/services/video.service";
 import {fetchFilteredComments} from "@/services/search.service";
 
-export function useVideoDetail(videoId: string) {
-    // 각 섹션별 독립적인 상태 관리
+const MAX_RETRIES = 24;
+const RETRY_INTERVAL = 6000;
+
+export function useVideoDetail(videoId: string): UseVideoDetailReturn {
     const [basicInfo, setBasicInfo] = useState<VideoBasicInfo | null>(null);
     const [analysisInfo, setAnalysisInfo] = useState<VideoAnalysisInfo | null>(null);
     const [comments, setComments] = useState<Comment[]>([]);
@@ -15,92 +22,107 @@ export function useVideoDetail(videoId: string) {
     const [keywordComments, setKeywordComments] = useState<Comment[]>([]);
     const [selectedKeyword, setSelectedKeyword] = useState<string | null>(null);
 
-    // 각 섹션별 로딩 상태
-    const [isLoading, setIsLoading] = useState({
+    const [isLoading, setIsLoading] = useState<VideoDetailLoadingState>({
         basic: true,
         analysis: true,
         comments: true,
         ai: true,
     });
 
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [retryCount, setRetryCount] = useState(0);
     const [error, setError] = useState(false);
     const playerRef = useRef<YouTubePlayerRef | null>(null);
 
-    // 데이터 fetching
     useEffect(() => {
         let mounted = true;
+        let timeoutId: number;
+        let currentRetry = 0;
 
-        fetchVideoBasic(videoId)
-            .then((result) => {
+        const fetchBasicWithRetry = async () => {
+            try {
+                const result = await fetchVideoBasic(videoId);
                 if (!mounted) return;
+
                 setBasicInfo(result);
-            })
-            .catch((err) => {
-                console.error("기본 정보 로딩 실패:", err);
-                setError(true);
-            })
-            .finally(() => {
-                if (!mounted) return;
-                setIsLoading((prev) => ({...prev, basic: false}));
-            });
+                setIsProcessing(false);
+                setRetryCount(0);
 
-        fetchVideoAnalysis(videoId)
-            .then((result) => {
+            } catch (err: unknown) {
                 if (!mounted) return;
-                setAnalysisInfo(result);
-            })
-            .catch((err) => {
-                console.error("분석 정보 로딩 실패:", err);
-            })
-            .finally(() => {
-                if (!mounted) return;
-                setIsLoading((prev) => ({...prev, analysis: false}));
-            });
 
-        fetchVideoComments(videoId)
-            .then((result) => {
-                if (!mounted) return;
-                setComments(result);
-                setFilteredComments(result);
-                setKeywordComments(result);
-            })
-            .catch((err) => {
-                console.error("댓글 로딩 실패:", err);
-            })
-            .finally(() => {
-                if (!mounted) return;
-                setIsLoading((prev) => ({...prev, comments: false}));
-            });
+                const error = err as { status?: number; message?: string };
 
-        fetchVideoAI(videoId)
-            .then((result) => {
-                if (!mounted) return;
-                setAIAnalysis(result);
-            })
-            .catch((err) => {
-                console.error("AI 분석 로딩 실패:", err);
-            })
-            .finally(() => {
-                if (!mounted) return;
-                setIsLoading((prev) => ({...prev, ai: false}));
+                if (error.status === 404 || error.message?.includes('404')) {
+                    if (currentRetry < MAX_RETRIES) {
+                        setIsProcessing(true);
+                        currentRetry++;
+                        setRetryCount(currentRetry);
+                        timeoutId = window.setTimeout(fetchBasicWithRetry, RETRY_INTERVAL);
+                    } else {
+                        console.error('[기본 정보] 최대 재시도 횟수 초과');
+                        setError(true);
+                        setIsProcessing(false);
+                    }
+                } else {
+                    console.error('[기본 정보] 에러:', error);
+                    setError(true);
+                    setIsProcessing(false);
+                }
+            } finally {
+                if (mounted) {
+                    setIsLoading((prev) => ({...prev, basic: false}));
+                }
+            }
+        };
+
+        fetchBasicWithRetry();
+
+        return () => {
+            mounted = false;
+            if (timeoutId) clearTimeout(timeoutId);
+        };
+    }, [videoId]);
+
+    useEffect(() => {
+        if (!basicInfo) return;
+        let mounted = true;
+
+        Promise.all([
+            fetchVideoAnalysis(videoId).catch(() => null),
+            fetchVideoComments(videoId).catch(() => []),
+            fetchVideoAI(videoId).catch(() => null)
+        ]).then(([analysis, commentsList, ai]) => {
+            if (!mounted) return;
+
+            if (analysis) setAnalysisInfo(analysis);
+            if (commentsList && commentsList.length > 0) {
+                setComments(commentsList);
+                setFilteredComments(commentsList);
+                setKeywordComments(commentsList);
+            }
+            if (ai) setAIAnalysis(ai);
+
+            setIsLoading({
+                basic: false,
+                analysis: !analysis,
+                comments: !commentsList || commentsList.length === 0,
+                ai: !ai,
             });
+        });
 
         return () => {
             mounted = false;
         };
-    }, [videoId]);
+    }, [videoId, basicInfo]);
 
-    // Handlers
-    const handleSeek = useCallback((timeString: string) => {
+    const handleSeek = useCallback<VideoDetailActions['handleSeek']>((timeString) => {
         const parts = timeString.split(":").map(Number);
         const seconds = parts.reduce((acc, val, idx) => acc + val * Math.pow(60, parts.length - idx - 1), 0);
         playerRef.current?.seekToTime(seconds);
     }, []);
 
-    const handleFilterComments = useCallback(async (filter: {
-        q?: string;
-        sentiment?: 'POSITIVE' | 'NEGATIVE' | 'OTHER'
-    }) => {
+    const handleFilterComments = useCallback<VideoDetailActions['handleFilterComments']>(async (filter) => {
         try {
             const results = await fetchFilteredComments({videoId, ...filter});
             setFilteredComments(results);
@@ -109,7 +131,7 @@ export function useVideoDetail(videoId: string) {
         }
     }, [videoId]);
 
-    const handleKeywordFilter = useCallback(async (keyword: string) => {
+    const handleKeywordFilter = useCallback<VideoDetailActions['handleKeywordFilter']>(async (keyword) => {
         try {
             setSelectedKeyword(keyword);
             const results = await fetchFilteredComments({videoId, keyword});
@@ -119,11 +141,10 @@ export function useVideoDetail(videoId: string) {
         }
     }, [videoId]);
 
-    const handleSearch = useCallback(async (q: string) => {
+    const handleSearch = useCallback<VideoDetailActions['handleSearch']>(async (q) => {
         await handleFilterComments({q});
     }, [handleFilterComments]);
 
-    // 첫 키워드 자동 선택
     useEffect(() => {
         if (!isLoading.ai && Array.isArray(aiAnalysis?.keywords) && aiAnalysis.keywords.length > 0) {
             const firstKeyword = aiAnalysis.keywords[0];
@@ -133,23 +154,29 @@ export function useVideoDetail(videoId: string) {
     }, [isLoading.ai, aiAnalysis, handleKeywordFilter]);
 
     return {
-        basicInfo,
-        analysisInfo,
-        comments,
-        aiAnalysis,
-        filteredComments,
-        keywordComments,
-        selectedKeyword,
-
-        isLoading,
-        error,
-
+        data: {
+            basicInfo,
+            analysisInfo,
+            comments,
+            aiAnalysis,
+        },
+        filtered: {
+            comments: filteredComments,
+            keywordComments,
+            selectedKeyword,
+        },
+        state: {
+            isLoading,
+            isProcessing,
+            retryCount,
+            error,
+        },
+        actions: {
+            handleSeek,
+            handleFilterComments,
+            handleKeywordFilter,
+            handleSearch,
+        },
         playerRef,
-
-        // Handlers
-        handleSeek,
-        handleFilterComments,
-        handleKeywordFilter,
-        handleSearch,
     };
 }

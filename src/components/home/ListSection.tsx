@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
-import VideoSummaryList from "@components/common/VideoSummary/VideoSummaryList";
-import type { VideoSummaryItem } from "@/types/video-summary.types";
+import VideoPreviewList from "@components/common/video-preview/VideoPreviewList";
+import type { VideoSummaryItem } from "@/types/video-preview.types";
 import LoadingSection from "@components/common/LoadingSection";
 
 type SectionType = "trending" | "scraps";
@@ -40,7 +40,7 @@ export default function ListSection({ type, data, isLoading }: ListSectionProps)
             {isLoading ? (
                 <LoadingSection message="데이터를 불러오는 중..." />
             ) : (
-                <VideoSummaryList data={data} type={type} />
+                <VideoPreviewList data={data} type={type} />
             )}
         </div>
     );

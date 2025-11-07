@@ -1,11 +1,11 @@
 'use client';
 
 import {useAuth} from "@/contexts/AuthContext";
-import VideoSummaryList from "@components/common/VideoSummary/VideoSummaryList";
+import VideoPreviewList from "@components/common/video-preview/VideoPreviewList";
 import {useEffect, useState} from "react";
 import {fetchScrapsVideos} from "@/services/video.service";
 import LoadingSection from "@components/common/LoadingSection";
-import type {VideoSummaryItem} from "@/types/video-summary.types";
+import type {VideoSummaryItem} from "@/types/video-preview.types";
 import LoginCallout from "@components/common/LoginCallout";
 
 export default function Scraps() {
@@ -48,7 +48,7 @@ export default function Scraps() {
                 </div>
 
                 {isLoggedIn ? (
-                    <VideoSummaryList data={videoList}/>
+                    <VideoPreviewList data={videoList}/>
                 ) : (
                     <LoginCallout text="지금 로그인하고, 스크랩 영상을 빠르게 확인해보세요!"/>
                 )}

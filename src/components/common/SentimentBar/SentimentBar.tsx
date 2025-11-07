@@ -14,19 +14,19 @@ interface SentimentBarProps {
 }
 
 const COLORS = {
-    positive: {
+    POSITIVE: {
         text: 'text-blue-500',
         bg: 'bg-blue-50',
         hoverBg: 'hover:bg-blue-100/90',
         label: '긍정',
     },
-    negative: {
+    NEGATIVE: {
         text: 'text-red-500',
         bg: 'bg-red-50',
         hoverBg: 'hover:bg-red-100/70',
         label: '부정',
     },
-    other: {
+    OTHER: {
         text: 'text-gray-500',
         bg: 'bg-gray-50',
         hoverBg: 'hover:bg-gray-200/70',

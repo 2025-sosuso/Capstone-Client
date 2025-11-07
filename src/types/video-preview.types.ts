@@ -16,3 +16,4 @@ export interface SummaryAnalysis {
 
 export type VideoSummaryListResponse = BaseApiResponse<VideoSummaryItem[]>;
 export type VideoSummaryResponse = BaseApiResponse<VideoSummaryItem>;
+export type AnalysisSummaryOnly = Omit<SummaryAnalysis, 'topComments'>;
