@@ -54,9 +54,9 @@ export interface LanguageRatio {
 }
 
 export interface SentimentRatio {
-    positive: number;
-    negative: number;
-    other: number;
+    POSITIVE: number;
+    NEGATIVE: number;
+    OTHER: number;
 }
 
 export interface TimestampMention {

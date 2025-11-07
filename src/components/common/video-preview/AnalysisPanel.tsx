@@ -21,7 +21,7 @@ export default function AnalysisPanel({ analysis, className }: Props) {
 
             <AnalysisItem icon={<FaceSmileIcon className="size-5 stroke-2"/>}>
                 <SentimentBar
-                    ratio={sentimentDistribution ?? {positive: 0, negative: 0, other: 0}}
+                    ratio={sentimentDistribution ?? {POSITIVE: 0, NEGATIVE: 0, OTHER: 0}}
                     size="sm"
                 />
             </AnalysisItem>

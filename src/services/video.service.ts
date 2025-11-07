@@ -13,12 +13,6 @@ import {
 } from "@/types/video.types";
 import {VideoSummaryItem} from "@/types/video-preview.types";
 
-const normalizeSentiment = (comments: Comment[] | null | undefined): Comment[] =>
-    (comments ?? []).map(comment => ({
-        ...comment,
-        sentiment: comment.sentiment?.toLowerCase?.() as 'positive' | 'negative' | 'other',
-    }));
-
 export const fetchVideoBasic = async (apiVideoId: string): Promise<VideoBasicInfo> => {
     const res = await api.get<VideoBasicResponse>(`/videos/${apiVideoId}/basic`);
     return res.data.data;
@@ -26,17 +20,12 @@ export const fetchVideoBasic = async (apiVideoId: string): Promise<VideoBasicInf
 
 export const fetchVideoAnalysis = async (apiVideoId: string): Promise<VideoAnalysisInfo> => {
     const res = await api.get<VideoAnalysisResponse>(`/videos/${apiVideoId}/analysis`);
-    const raw = res.data.data;
-
-    return {
-        ...raw,
-        topComments: normalizeSentiment(raw.topComments),
-    };
+    return res.data.data;
 };
 
 export const fetchVideoComments = async (apiVideoId: string): Promise<Comment[]> => {
     const res = await api.get<VideoCommentsResponse>(`/videos/${apiVideoId}/comments/all`);
-    return normalizeSentiment(res.data.data);
+    return res.data.data ?? [];
 };
 
 export const fetchVideoAI = async (apiVideoId: string): Promise<VideoAIAnalysis> => {
@@ -46,16 +35,7 @@ export const fetchVideoAI = async (apiVideoId: string): Promise<VideoAIAnalysis>
 
 export const fetchVideoDetail = async (apiVideoId: string): Promise<VideoResult> => {
     const res = await api.get<BaseApiResponse<VideoResult>>(`/videos/${apiVideoId}`);
-    const raw = res.data.data;
-
-    return {
-        ...raw,
-        comments: normalizeSentiment(raw.comments),
-        analysis: {
-            ...raw.analysis,
-            topComments: normalizeSentiment(raw.analysis?.topComments),
-        },
-    };
+    return res.data.data;
 };
 
 export const createScrap = async (apiVideoId: string): Promise<number> => {

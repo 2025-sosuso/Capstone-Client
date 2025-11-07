@@ -47,20 +47,25 @@ export function useVideoDetail(videoId: string): UseVideoDetailReturn {
                 setBasicInfo(result);
                 setIsProcessing(false);
                 setRetryCount(0);
-            } catch (err: any) {
+
+            } catch (err: unknown) {
                 if (!mounted) return;
 
-                if (err.status === 404 || err.message?.includes('404')) {
+                const error = err as { status?: number; message?: string };
+
+                if (error.status === 404 || error.message?.includes('404')) {
                     if (currentRetry < MAX_RETRIES) {
                         setIsProcessing(true);
                         currentRetry++;
                         setRetryCount(currentRetry);
                         timeoutId = window.setTimeout(fetchBasicWithRetry, RETRY_INTERVAL);
                     } else {
+                        console.error('[기본 정보] 최대 재시도 횟수 초과');
                         setError(true);
                         setIsProcessing(false);
                     }
                 } else {
+                    console.error('[기본 정보] 에러:', error);
                     setError(true);
                     setIsProcessing(false);
                 }
@@ -106,7 +111,9 @@ export function useVideoDetail(videoId: string): UseVideoDetailReturn {
             });
         });
 
-        return () => { mounted = false; };
+        return () => {
+            mounted = false;
+        };
     }, [videoId, basicInfo]);
 
     const handleSeek = useCallback<VideoDetailActions['handleSeek']>((timeString) => {

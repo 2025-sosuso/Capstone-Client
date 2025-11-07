@@ -28,9 +28,9 @@ const convertMockToVideoSummaryItem = (mockVideo: typeof MOCK_VIDEOS[0]): VideoS
     analysis: {
         summary: mockVideo.summary || '',
         sentimentDistribution: {
-            positive: mockVideo.sentiment.positive,
-            negative: mockVideo.sentiment.negative,
-            other: mockVideo.sentiment.other,
+            POSITIVE: mockVideo.sentiment.positive,
+            NEGATIVE: mockVideo.sentiment.negative,
+            OTHER: mockVideo.sentiment.other,
         },
         keywords: mockVideo.keywords,
     },
