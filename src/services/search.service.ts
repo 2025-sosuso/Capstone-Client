@@ -16,7 +16,7 @@ export const fetchFilteredComments = async ({
                                             }: {
     videoId: string;
     q?: string;
-    sentiment?: 'POSITIVE' | 'NEGATIVE' | 'OTHER';
+    sentiment?: 'positive' | 'negative' | 'other';
     keyword?: string;
 }): Promise<Comment[]> => {
     console.log("[API 호출됨]", {videoId, q, sentiment, keyword});

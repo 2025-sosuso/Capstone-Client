@@ -119,7 +119,7 @@ export default function Detail({videoId}: { videoId: string }) {
                             <LoadingSection message="감정 분석 중..."/>
                         ) : (
                             <SentimentBar
-                                ratio={data.aiAnalysis?.sentimentDistribution ?? {POSITIVE: 0, NEGATIVE: 0, OTHER: 0}}
+                                ratio={data.aiAnalysis?.sentimentDistribution ?? {positive: 0, negative: 0, other: 0}}
                                 onClick={(sentiment) => actions.handleFilterComments({sentiment})}
                             />
                         )}
