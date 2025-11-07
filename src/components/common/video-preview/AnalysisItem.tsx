@@ -7,7 +7,7 @@ interface Props {
     children: ReactNode;
 }
 
-export default function SummarySection({ icon, title, children }: Props) {
+export default function AnalysisItem({ icon, title, children }: Props) {
     const isNarrow = useIsNarrow(BREAKPOINTS.lg);
 
     return (

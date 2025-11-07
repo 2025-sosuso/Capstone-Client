@@ -43,8 +43,9 @@ export interface Comment {
     author: string;
     text: string;
     likeCount: number;
-    sentiment: 'positive' | 'negative' | 'other';
+    sentiment: 'POSITIVE' | 'NEGATIVE' | 'OTHER';
     publishedAt: string;
+    hasReplies?: boolean;
 }
 
 export interface LanguageRatio {
