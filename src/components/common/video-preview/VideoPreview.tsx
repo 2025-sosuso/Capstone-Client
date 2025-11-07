@@ -2,16 +2,16 @@
 
 import {useRouter} from "next/navigation";
 import Thumbnail from "@components/common/Thumbnail/Thumbnail";
-import type {VideoSummaryItem as VideoSummaryItemType} from "@/types/video-summary.types";
-import AnalysisPanel from "@components/common/Video/AnalysisPanel";
-import VideoInfo from "@components/common/Video/VideoInfo";
+import type {VideoSummaryItem as VideoSummaryItemType} from "@/types/video-preview.types";
+import AnalysisPanel from "@components/common/video-preview/AnalysisPanel";
+import VideoInfo from "@components/common/video-preview/VideoInfo";
 
 type Props = {
     rank?: number;
     data: VideoSummaryItemType;
 };
 
-export default function VideoItem({rank, data}: Props) {
+export default function VideoPreview({rank, data}: Props) {
     const router = useRouter();
     const {video, channel, analysis} = data;
 
@@ -34,7 +34,7 @@ export default function VideoItem({rank, data}: Props) {
                 <VideoInfo video={video} channel={channel}/>
             </div>
 
-            <AnalysisPanel analysis={analysis}/>
+            <AnalysisPanel analysis={analysis} className="w-full lg:w-[40%]" />
         </div>
     );
 }

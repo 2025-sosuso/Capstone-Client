@@ -9,7 +9,7 @@ interface Props {
 
 export default function VideoInfo({ video, channel }: Props) {
     return (
-        <div className="flex flex-col flex-1 min-w-0">
+        <div className="flex flex-col flex-1">
             <p className="font-semibold text-base line-clamp-2">{video.title}</p>
             <p className="text-sm text-gray-500">
                 {channel.title} | 구독자 {formatNumber(channel.subscriberCount)}명

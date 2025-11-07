@@ -1,19 +1,20 @@
-import AnalysisItem from "@components/common/Video/AnalysisItem";
+import AnalysisItem from "@components/common/video-preview/AnalysisItem";
 import {FaceSmileIcon, HashtagIcon, SparklesIcon} from "@heroicons/react/24/outline";
 import AISummary from "@components/common/AISummary";
 import SentimentBar from "@components/common/SentimentBar/SentimentBar";
 import TagList from "@components/common/Tag/TagList";
-import {AnalysisSummaryOnly} from "@/types/video-summary.types";
+import {AnalysisSummaryOnly} from "@/types/video-preview.types";
 
 interface Props {
     analysis: AnalysisSummaryOnly;
+    className?: string;
 }
 
-export default function AnalysisPanel({ analysis }: Props) {
+export default function AnalysisPanel({ analysis, className }: Props) {
     const { summary, sentimentDistribution, keywords } = analysis;
 
     return (
-        <div className="flex flex-col gap-2 w-full lg:w-[40%]">
+        <div className={`flex flex-col gap-2 ${className ?? 'w-full'}`}>
             <AnalysisItem icon={<SparklesIcon className="size-5 stroke-2"/>}>
                 <AISummary summary={summary ?? ""} size="sm"/>
             </AnalysisItem>
