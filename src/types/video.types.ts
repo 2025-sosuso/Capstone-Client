@@ -46,6 +46,15 @@ export interface Comment {
     sentiment: 'positive' | 'negative' | 'other';
     publishedAt: string;
     hasReplies?: boolean;
+    replies?: Reply[];
+}
+
+export interface Reply {
+    id: string;
+    author: string;
+    text: string;
+    likeCount: number;
+    publishedAt: string;
 }
 
 export interface LanguageRatio {
@@ -92,3 +101,12 @@ export type VideoBasicResponse = BaseApiResponse<VideoBasicInfo>;
 export type VideoAnalysisResponse = BaseApiResponse<VideoAnalysisInfo>;
 export type VideoCommentsResponse = BaseApiResponse<Comment[]>;
 export type VideoAIResponse = BaseApiResponse<VideoAIAnalysis>;
+
+export interface CommentRepliesResponse {
+    timeStamp: string;
+    message: string;
+    data: {
+        apiCommentId: string;
+        replies: Reply[];
+    };
+}

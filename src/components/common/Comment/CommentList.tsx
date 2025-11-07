@@ -26,7 +26,7 @@ export default function CommentList({comments}: Props) {
             {hasMore && (
                 <button
                     onClick={loadMore}
-                    className="w-full py-3 mt-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors text-sm text-gray-600 font-medium"
+                    className="w-full py-3 mt-2 rounded-lg bg-gray-50 hover:bg-gray-200 transition-colors text-sm text-gray-600 font-medium"
                 >
                     댓글 더보기
                 </button>
