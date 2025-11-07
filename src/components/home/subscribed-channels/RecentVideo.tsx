@@ -1,9 +1,9 @@
 'use client';
 
-import Thumbnail from "@components/home/Thumbnail";
+import Thumbnail from "@components/common/Thumbnail/Thumbnail";
 import { formatDate, formatNumber } from "@/utils/data-format";
-import { VideoSummaryResponse } from "@/types/video-summary.types";
-import SummarySection from "@components/common/VideoSummary/SummarySection";
+import { VideoSummaryResponse } from "@/types/video-preview.types";
+import AnalysisItem from "@components/common/video-preview/AnalysisItem";
 import {
     FaceSmileIcon,
     HashtagIcon,
@@ -54,18 +54,18 @@ const RecentVideo = ({ data }: Props) => {
             </div>
 
             <div className="flex flex-col gap-2 flex-1 w-full">
-                <SummarySection icon={<SparklesIcon className="size-5 stroke-2" />} title="AI 댓글 요약">
+                <AnalysisItem icon={<SparklesIcon className="size-5 stroke-2" />} title="AI 댓글 요약">
                     <AISummary summary={analysis.summary} size="sm" />
-                </SummarySection>
-                <SummarySection icon={<FaceSmileIcon className="size-5 stroke-2" />} title="감정 분석">
+                </AnalysisItem>
+                <AnalysisItem icon={<FaceSmileIcon className="size-5 stroke-2" />} title="감정 분석">
                     <SentimentBar ratio={analysis.sentimentDistribution} size="sm" />
-                </SummarySection>
-                <SummarySection icon={<HashtagIcon className="size-5 stroke-2" />} title="키워드 분석">
+                </AnalysisItem>
+                <AnalysisItem icon={<HashtagIcon className="size-5 stroke-2" />} title="키워드 분석">
                     <TagList tags={analysis.keywords} size="sm" />
-                </SummarySection>
-                <SummarySection icon={<HeartIcon className="size-5 stroke-2" />} title="좋아요 Top 5">
+                </AnalysisItem>
+                <AnalysisItem icon={<HeartIcon className="size-5 stroke-2" />} title="좋아요 Top 5">
                     <CommentSlider comments={analysis.topComments || []} />
-                </SummarySection>
+                </AnalysisItem>
             </div>
         </div>
     );

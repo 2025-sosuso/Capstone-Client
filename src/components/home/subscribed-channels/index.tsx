@@ -3,7 +3,7 @@
 import {useState, useEffect} from 'react'; // ← useEffect 추가
 import RecentVideo from './RecentVideo';
 import ChannelAvatarList from './ChannelAvatarList';
-import {VideoSummaryItem} from '@/types/video-summary.types';
+import {VideoSummaryItem} from '@/types/video-preview.types';
 import {useAuth} from '@/contexts/AuthContext';
 import api from '@/lib/axios';
 import {BaseApiResponse} from '@/types/common.types';

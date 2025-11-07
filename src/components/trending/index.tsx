@@ -1,8 +1,8 @@
 'use client';
 
 import {useEffect, useState} from "react";
-import VideoSummaryList from "@components/common/VideoSummary/VideoSummaryList";
-import type {VideoSummaryItem} from "@/types/video-summary.types";
+import VideoPreviewList from "@components/common/video-preview/VideoPreviewList";
+import type {VideoSummaryItem} from "@/types/video-preview.types";
 import {fetchTrendingVideos} from "@/services/video.service";
 import LoadingSection from "@components/common/LoadingSection";
 
@@ -44,7 +44,7 @@ export default function Trending() {
                     <h1 className="text-2xl font-semibold text-gray-900">인기 급상승</h1>
                 </div>
 
-                <VideoSummaryList data={videoList}/>
+                <VideoPreviewList data={videoList}/>
             </div>
         </div>
     );

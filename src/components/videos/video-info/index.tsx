@@ -1,30 +1,36 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
-import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import YouTubePlayer, { YouTubePlayerRef } from "./YoutubePlayer";
-import { formatDate, formatNumber } from "@/utils/data-format";
-import type { VideoResult } from "@/types/video.types";
-import { useAuth } from "@/contexts/AuthContext";
-import { createScrap, deleteScrap } from "@/services/video.service";
-import { addFavoriteChannel, removeFavoriteChannel } from "@/services/channel.service";
-import { BookmarkIcon, HeartIcon } from '@/components/icons';
+import {useEffect, useRef, useState, useCallback} from "react";
+import {ChevronDownIcon} from "@heroicons/react/24/solid";
+import YouTubePlayer, {YouTubePlayerRef} from "./YoutubePlayer";
+import {formatDate, formatNumber} from "@/utils/data-format";
+import type {VideoBasicInfo} from "@/types";
+import {useAuth} from "@/contexts/AuthContext";
+import {createScrap, deleteScrap} from "@/services/video.service";
+import {useFavoriteChannel} from "@/hooks/useFavoriteChannel";
+import {BookmarkIcon, HeartIcon} from '@/components/icons';
 
 interface Props {
-    data: VideoResult;
+    data: VideoBasicInfo;
     onPlayerReady?: (ref: YouTubePlayerRef) => void;
 }
 
-export default function VideoInfoSection({ data, onPlayerReady }: Props) {
-    const { video, channel } = data;
-    const { isLoggedIn, handleLogin } = useAuth();
+export default function VideoInfoSection({data, onPlayerReady}: Props) {
+    const {video, channel} = data;
+    const {isLoggedIn, handleLogin} = useAuth();
 
     const [scrapId, setScrapId] = useState<number | null>(video.scrapId ?? null);
-    const [favoriteChannelId, setFavoriteChannelId] = useState<number | null>(channel.favoriteChannelId ?? null);
     const [isExpanded, setIsExpanded] = useState(false);
     const [videoHeight, setVideoHeight] = useState(0);
 
     const leftRef = useRef<HTMLDivElement>(null);
+
+    const {favoriteChannelId, handleFavoriteToggle} = useFavoriteChannel({
+        channelId: channel.id,
+        channelTitle: channel.title,
+        channelThumbnail: channel.thumbnailUrl,
+        initialFavoriteId: channel.favoriteChannelId ?? null,
+    });
 
     useEffect(() => {
         if (!leftRef.current) return;
@@ -61,33 +67,13 @@ export default function VideoInfoSection({ data, onPlayerReady }: Props) {
         }
     }, [scrapId, video.id, requireLogin]);
 
-    const handleFavoriteToggle = useCallback(async () => {
-        if (requireLogin()) return;
-
-        try {
-            if (favoriteChannelId != null) {
-                await removeFavoriteChannel(favoriteChannelId);
-                setFavoriteChannelId(null);
-            } else {
-                const newFavoriteChannelId = await addFavoriteChannel(
-                    channel.id,
-                    channel.title,
-                    channel.thumbnailUrl
-                );
-                setFavoriteChannelId(newFavoriteChannelId);
-            }
-        } catch (err) {
-            console.error("관심 채널 요청 실패:", err);
-        }
-    }, [favoriteChannelId, channel.id, channel.title, channel.thumbnailUrl, requireLogin]);
-
     return (
         <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 w-full h-fit mx-auto items-start">
             <div ref={leftRef} className="md:min-w-[450px] md:max-w-[800px]">
-                <YouTubePlayer videoId={video.id} onReadyRef={onPlayerReady} />
+                <YouTubePlayer videoId={video.id} onReadyRef={onPlayerReady}/>
             </div>
 
-            <div className="flex flex-col gap-3 min-w-[100px]" style={{ minHeight: videoHeight }}>
+            <div className="flex flex-col gap-3 min-w-[100px]" style={{minHeight: videoHeight}}>
                 <div className="flex justify-between items-start gap-2">
                     <h3 className="text-lg font-semibold line-clamp-2">{video.title}</h3>
                     <button
