@@ -1,7 +1,7 @@
-import React from "react";
+type SentimentType = 'positive' | 'negative' | 'other';
 
 type SentimentItemProps = {
-    keyName: string;
+    sentiment: SentimentType;
     label: string;
     percent: number;
     isHovered: boolean;
@@ -9,13 +9,13 @@ type SentimentItemProps = {
     bg: string;
     hoverBg: string;
     size: 'sm' | 'md';
-    onClick: (label: string, percent: number) => void;
-    onHover: (key: string | null) => void;
+    onClick: (sentiment: SentimentType) => void;
+    onHover: (sentiment: SentimentType | null) => void;
 };
 
 export default function SentimentItem(props: SentimentItemProps) {
     const {
-        keyName,
+        sentiment,
         label,
         percent,
         isHovered,
@@ -45,8 +45,8 @@ export default function SentimentItem(props: SentimentItemProps) {
                 width: displayWidth,
                 minWidth: shouldShowText ? '3rem' : '0',
             }}
-            onClick={() => onClick(keyName, percent)}
-            onMouseEnter={() => onHover(keyName)}
+            onClick={() => onClick(sentiment)}
+            onMouseEnter={() => onHover(sentiment)}
             onMouseLeave={() => onHover(null)}
         >
             {shouldShowText && `${label} ${percent}%`}

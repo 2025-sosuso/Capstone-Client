@@ -95,6 +95,8 @@ export function useVideoDetail(videoId: string): UseVideoDetailReturn {
         ]).then(([analysis, commentsList, ai]) => {
             if (!mounted) return;
 
+            console.log(`[${videoId}] 로딩된 데이터:`, {analysis, commentsList, ai});
+
             if (analysis) setAnalysisInfo(analysis);
             if (commentsList && commentsList.length > 0) {
                 setComments(commentsList);

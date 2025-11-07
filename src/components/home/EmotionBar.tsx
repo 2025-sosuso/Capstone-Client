@@ -3,10 +3,10 @@ import {HashtagIcon} from "@heroicons/react/24/outline";
 type EmotionBarProps = {
     positive: number;
     negative: number;
-    etc: number;
+    other: number;
 };
 
-export default function EmotionBar({ positive, negative, etc }: EmotionBarProps) {
+export default function EmotionBar({ positive, negative, other }: EmotionBarProps) {
     return (
         <div className="flex gap-2 items-center">
             <HashtagIcon className="size-6"/>
@@ -25,9 +25,9 @@ export default function EmotionBar({ positive, negative, etc }: EmotionBarProps)
       </span>
                 <span
                     className="text-gray-500 bg-gray-50 px-4 py-2 text-xs truncate"
-                    style={{width: `${etc}%`}}
+                    style={{width: `${other}%`}}
                 >
-        기타 {etc}%
+        기타 {other}%
       </span>
             </div>
         </div>

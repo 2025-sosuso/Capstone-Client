@@ -5,7 +5,7 @@ import SentimentItem from './SentimentItem';
 import {SentimentRatio} from '@/types/video.types';
 import EmptyState from "@components/common/EmptyState";
 
-type SentimentType = 'POSITIVE' | 'NEGATIVE' | 'OTHER';
+type SentimentType = 'positive' | 'negative' | 'other';
 
 interface SentimentBarProps {
     ratio?: SentimentRatio;
@@ -14,19 +14,19 @@ interface SentimentBarProps {
 }
 
 const COLORS = {
-    POSITIVE: {
+    positive: {
         text: 'text-blue-500',
         bg: 'bg-blue-50',
         hoverBg: 'hover:bg-blue-100/90',
         label: '긍정',
     },
-    NEGATIVE: {
+    negative: {
         text: 'text-red-500',
         bg: 'bg-red-50',
         hoverBg: 'hover:bg-red-100/70',
         label: '부정',
     },
-    OTHER: {
+    other: {
         text: 'text-gray-500',
         bg: 'bg-gray-50',
         hoverBg: 'hover:bg-gray-200/70',
@@ -37,22 +37,13 @@ const COLORS = {
 const clampPercent = (value: number) => Math.max(0, Math.min(100, value));
 
 export default function SentimentBar({ratio, size = 'md', onClick}: SentimentBarProps) {
-    const [hoveredKey, setHoveredKey] = useState<string | null>(null);
+    const [hoveredKey, setHoveredKey] = useState<SentimentType | null>(null);
 
-    const handleClick = useCallback((key: string) => {
-        const map: Record<string, SentimentType> = {
-            positive: 'POSITIVE',
-            negative: 'NEGATIVE',
-            other: 'OTHER',
-        };
-        const sentiment = map[key.toLowerCase()];
-        console.log("감정 클릭됨", key, "→", sentiment);
-
-        if (onClick && sentiment) {
+    const handleClick = useCallback((sentiment: SentimentType) => {
+        if (onClick) {
             onClick(sentiment);
         }
     }, [onClick]);
-
 
     const hasValidData =
         ratio &&
@@ -66,9 +57,10 @@ export default function SentimentBar({ratio, size = 'md', onClick}: SentimentBar
         <div className="flex w-full gap-2 items-center">
             <div className="flex items-center w-full overflow-hidden rounded-full">
                 {Object.entries(ratio).map(([key, value]) => {
+                    const sentimentKey = key as SentimentType;
                     const percent = clampPercent(value);
-                    const isHovered = hoveredKey === key;
-                    const colorSet = COLORS[key as keyof typeof COLORS];
+                    const isHovered = hoveredKey === sentimentKey;
+                    const colorSet = COLORS[sentimentKey];
 
                     if (!colorSet) return null;
 
@@ -76,8 +68,8 @@ export default function SentimentBar({ratio, size = 'md', onClick}: SentimentBar
 
                     return (
                         <SentimentItem
-                            key={key}
-                            keyName={key}
+                            key={sentimentKey}
+                            sentiment={sentimentKey}
                             label={label}
                             percent={percent}
                             isHovered={isHovered}

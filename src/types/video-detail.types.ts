@@ -31,7 +31,7 @@ export interface VideoDetailState {
 
 export type CommentFilterParams = {
     q?: string;
-    sentiment?: 'POSITIVE' | 'NEGATIVE' | 'OTHER';
+    sentiment?: 'positive' | 'negative' | 'other';
 };
 
 export interface VideoDetailActions {
