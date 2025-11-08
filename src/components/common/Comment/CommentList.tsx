@@ -1,6 +1,5 @@
-import CommentItem from "./CommentItem";
+import {CommentItem, NoCommentItem} from "@components/common/Comment";
 import type {Comment as CommentType} from "@/types/video.types";
-import NoCommentItem from "@components/common/Comment/NoCommentItem";
 import {useLoadMore} from "@/hooks/useLoadMore";
 
 type Props = {
