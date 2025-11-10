@@ -1,8 +1,9 @@
 import {FavoriteChannelData} from '@/types/main.types';
 import {VideoSummaryItem} from '@/types/video-preview.types';
 import {ChannelSearchResult, FavoriteChannel} from '@/types/channel.types';
+import {getApiBaseUrl} from '@/lib/url';
 
-const API_BASE = 'https://knu-sosuso.com/api/main';
+const API_BASE = `${getApiBaseUrl()}/api/main`;
 
 async function fetchNoStore(input: RequestInfo, init?: RequestInit) {
     return fetch(input, {credentials: 'include', cache: 'no-store', ...init});
