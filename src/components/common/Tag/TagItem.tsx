@@ -18,7 +18,7 @@ export default function TagItem({
 
     const selectedClass =
         size === "md" && isSelected
-            ? "bg-green-100 text-green-700 border-green-300 font-semibold"
+            ? "bg-blue-100 text-blue-700 border-blue-300 font-semibold"
             : "bg-gray-100 text-gray-700 hover:bg-gray-200/80 border-transparent";
 
     return (

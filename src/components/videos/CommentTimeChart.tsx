@@ -29,6 +29,11 @@ ChartJS.register(
     Filler
 );
 
+const CHART_COLORS = {
+    border:  'rgba(248, 113, 113, 0.8)',
+    background:  'rgba(248, 113, 113, 0.4)',
+} as const;
+
 interface Props {
     data?: HourlyCommentCount[];
 }
@@ -45,8 +50,8 @@ export default function CommentTimeChart({ data }: Props) {
             {
                 label: '댓글 수',
                 data: hasValidData ? data.map((d) => d.count) : [],
-                borderColor: 'rgba(255, 99, 132, 1)',
-                backgroundColor: 'rgba(255, 99, 132, 0.3)',
+                borderColor: CHART_COLORS.border,
+                backgroundColor: CHART_COLORS.background,
                 fill: true,
                 tension: 0.4,
             },
