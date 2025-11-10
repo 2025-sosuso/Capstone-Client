@@ -15,8 +15,18 @@ import EmptyState from "@components/common/EmptyState";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const COLORS = [
-    '#FF6384', '#FF9F40', '#FFCD56', '#4BC0C0', '#36A2EB',
-];
+    'rgba(248, 113, 113, 0.7)',  // red-400
+    'rgba(251, 146, 60, 0.7)',   // orange-400
+    'rgba(74, 222, 128, 0.7)',   // green-400
+    'rgba(96, 165, 250, 0.7)',   // blue-400
+    'rgba(167, 139, 250, 0.7)',  // violet-400
+    'rgba(148, 163, 184, 0.7)',  // slate-400
+    'rgba(251, 191, 36, 0.7)',   // amber-400
+    'rgba(34, 211, 238, 0.7)',   // cyan-400
+    'rgba(56, 189, 248, 0.7)',   // sky-400
+    'rgba(244, 114, 182, 0.7)',  // pink-400
+] as const;
+
 
 interface LanguageChartProps {
     data?: LanguageRatio[];
