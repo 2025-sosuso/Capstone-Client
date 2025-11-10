@@ -78,6 +78,13 @@ export interface HourlyCommentCount {
     count: number;
 }
 
+export interface SentimentFlowData {
+    date: string;
+    positive: number;
+    negative: number;
+    other: number;
+}
+
 export interface VideoBasicInfo {
     video: VideoDetail;
     channel: Channel;

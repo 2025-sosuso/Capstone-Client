@@ -12,6 +12,7 @@ import WarningBanner from "@components/videos/WarningBanner";
 import LoadingSection from "@components/common/LoadingSection";
 import {useVideoDetail} from "@/hooks/useVideoDetail";
 import {useMemo} from "react";
+import SentimentFlowChart from "@components/videos/SentimentFlowChart";
 
 export default function Detail({videoId}: { videoId: string }) {
     const {data, filtered, state, actions, playerRef} = useVideoDetail(videoId);
@@ -148,6 +149,14 @@ export default function Detail({videoId}: { videoId: string }) {
                                 tags={timestampTags}
                                 onTagClick={actions.handleSeek}
                             />
+                        )}
+                    </SectionLayout>
+
+                    <SectionLayout header="댓글 반응 흐름 분석" >
+                        {state.isLoading.analysis ? (
+                            <LoadingSection message="댓글 반응 흐름 분석 분석 중..."/>
+                        ) : (
+                            <SentimentFlowChart />
                         )}
                     </SectionLayout>
 
