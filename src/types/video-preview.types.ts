@@ -4,11 +4,11 @@ import {Channel, Comment, SentimentRatio, VideoDetail} from "./video.types";
 export type VideoSummaryItem = {
     video: Pick<VideoDetail, 'id' | 'title' | 'description' | 'publishedAt' | 'thumbnailUrl' | 'viewCount' | 'likeCount' | 'commentCount' | 'scrapId'>;
     channel: Pick<Channel, 'id' | 'title' | 'thumbnailUrl' | 'subscriberCount' | 'favoriteChannelId'>;
-    analysis: SummaryAnalysis;
+    analysis: SummaryAnalysis | null;
 };
 
 export interface SummaryAnalysis {
-    summary: string;
+    summary: string | null;
     sentimentDistribution: SentimentRatio;
     keywords: string[];
     topComments?: Comment[];

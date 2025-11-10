@@ -1,13 +1,15 @@
-import {ChannelSearchResult} from "@/types/channel.types";
+import {VideoSummaryItem} from "@/types/video-preview.types";
 
-type UrlSearchResponse = {
-    searchType: "URL";
-    results: { apiVideoId: string }[];
-};
+export interface VideoSearchResponse {
+    results: VideoSummaryItem[];
+    nextPageToken: string | null;
+    totalResults: number;
+    hasMore: boolean;
+}
 
-type ChannelSearchResponse = {
-    searchType: "CHANNEL";
-    results: ChannelSearchResult[];
-};
-
-export type SearchResponse = UrlSearchResponse | ChannelSearchResponse;
+export interface ShortsSearchResponse {
+    results: VideoSummaryItem[];
+    nextPageToken: string | null;
+    totalResults: number;
+    hasMore: boolean;
+}

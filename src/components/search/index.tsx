@@ -1,13 +1,12 @@
 'use client';
 
-import { useSearchParams } from "next/navigation";
+import {useSearchParams} from "next/navigation";
 import SearchTabs from "@components/search/tabs/SearchTabs";
 import AllTab from "@components/search/tabs/AllTab";
 import VideoTab from "@components/search/tabs/VideoTab";
 import ShortsTab from "@components/search/tabs/ShortsTab";
 import ChannelTab from "@components/search/tabs/ChannelTab";
-import LoadingSection from "@components/common/LoadingSection";
-import { useSearchQuery } from "@/hooks/useSearchQuery";
+import {useSearchQuery} from "@/hooks/useSearchQuery";
 
 type TabType = 'all' | 'video' | 'shorts' | 'channel';
 
@@ -16,21 +15,22 @@ export default function SearchContent() {
     const query = searchParams.get("q");
     const activeTab = (searchParams.get("tab") as TabType) || 'all';
 
-    const { channels, videos, shorts, searchType, loading } = useSearchQuery(query, activeTab);
-
-    if (searchType === "URL") {
-        return (
-            <div className="max-w-screen-xl mx-auto px-4 py-20 text-center">
-                <LoadingSection message="영상 페이지로 이동 중..." />
-            </div>
-        );
-    }
+    const {
+        channels,
+        videos,
+        shorts,
+        loading,
+        videoNextPageToken,
+        videosHasMore,
+        shortsNextPageToken,
+        shortsHasMore,
+    } = useSearchQuery(query, activeTab);
 
     return (
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-2xl font-bold mb-6">&apos;{query}&apos; 검색 결과</h2>
 
-            <SearchTabs />
+            <SearchTabs/>
 
             {activeTab === 'all' && (
                 <AllTab
@@ -43,15 +43,25 @@ export default function SearchContent() {
             )}
 
             {activeTab === 'video' && (
-                <VideoTab videos={videos} loading={loading.videos} />
+                <VideoTab
+                    videos={videos}
+                    loading={loading.videos}
+                    initialNextPageToken={videoNextPageToken}
+                    initialHasMore={videosHasMore}
+                />
             )}
 
             {activeTab === 'shorts' && (
-                <ShortsTab shorts={shorts} loading={loading.shorts} />
+                <ShortsTab
+                    shorts={shorts}
+                    loading={loading.shorts}
+                    initialNextPageToken={shortsNextPageToken}
+                    initialHasMore={shortsHasMore}
+                />
             )}
 
             {activeTab === 'channel' && (
-                <ChannelTab channels={channels} loading={loading.channels} />
+                <ChannelTab channels={channels} loading={loading.channels}/>
             )}
         </div>
     );
