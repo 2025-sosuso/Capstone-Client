@@ -17,6 +17,16 @@ const SENTIMENT_LABEL = {
     other: {text: "기타", color: "bg-gray-200 text-gray-600"},
 } as const;
 
+const DETAIL_EMOTION_MAP: Record<string, { text: string; color: string }> = {
+    JOY: {text: "기쁨", color: "bg-yellow-50 text-yellow-600 border border-yellow-300"},
+    LOVE: {text: "사랑", color: "bg-rose-50 text-rose-600 border border-rose-300"},
+    GRATITUDE: {text: "감사", color: "bg-emerald-50 text-emerald-600 border border-emerald-300"},
+    ANGER: {text: "분노", color: "bg-red-50 text-red-600 border border-red-300"},
+    SADNESS: {text: "슬픔", color: "bg-indigo-50 text-indigo-600 border border-indigo-300"},
+    FEAR: {text: "두려움", color: "bg-purple-50 text-purple-600 border border-purple-300"},
+    NEUTRAL: {text: "중립", color: "bg-gray-50 text-gray-500 border border-gray-300"},
+};
+
 export default function CommentItem({
                                         id,
                                         author,
@@ -26,6 +36,7 @@ export default function CommentItem({
                                         sentiment = "other",
                                         hasReplies = false,
                                         replies: initialReplies,
+                                        detailEmotion = [],
                                     }: Props) {
     const [isRepliesOpen, setIsRepliesOpen] = useState(false);
     const [replies, setReplies] = useState(initialReplies ?? []);
@@ -36,6 +47,7 @@ export default function CommentItem({
     const {selectedText, position, clearSelection} = useTextSelection(commentRef);
 
     const badge = SENTIMENT_LABEL[sentiment] ?? SENTIMENT_LABEL.other;
+    const displayEmotions = detailEmotion.slice(0, 3);
 
     const handleToggleReplies = async () => {
         if (isRepliesOpen) {
@@ -80,6 +92,18 @@ export default function CommentItem({
                                 className={`text-xs px-2 py-[2px] rounded-full font-medium whitespace-nowrap ${badge.color}`}>
                                 {badge.text}
                             </span>
+                            {displayEmotions.map((emotion, index) => {
+                                const emotionStyle = DETAIL_EMOTION_MAP[emotion];
+                                if (!emotionStyle) return null;
+                                return (
+                                    <span
+                                        key={`${emotion}-${index}`}
+                                        className={`text-xs px-2 py-[2px] rounded-full font-medium whitespace-nowrap ${emotionStyle.color}`}
+                                    >
+                                        {emotionStyle.text}
+                                    </span>
+                                );
+                            })}
                         </div>
                         <div className="flex gap-1 items-center flex-shrink-0">
                             <HandThumbUpIcon className="w-4 h-4 text-gray-400"/>
