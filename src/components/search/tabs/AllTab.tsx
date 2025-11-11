@@ -49,8 +49,8 @@ export default function AllTab({query, channels, videos, shorts, loading}: Props
                         onClick={() => router.push(`/search?q=${query}&tab=video`)}
                     />
                     <div className="flex flex-col gap-5">
-                        {videos.map((video) => (
-                            <VideoPreview key={video.video.id} data={video}/>
+                        {videos.map((video, index) => (
+                            <VideoPreview key={`video-${video.video.id}-${index}`} data={video} />
                         ))}
                     </div>
                 </section>
@@ -63,8 +63,8 @@ export default function AllTab({query, channels, videos, shorts, loading}: Props
                         onClick={() => router.push(`/search?q=${query}&tab=shorts`)}
                     />
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-                        {shorts.map((video) => (
-                            <ShortsPreview key={video.video.id} data={video}/>
+                        {shorts.map((video, index) => (
+                            <ShortsPreview key={`shorts-${video.video.id}-${index}`} data={video}/>
                         ))}
                     </div>
                 </section>

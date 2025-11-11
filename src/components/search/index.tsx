@@ -6,6 +6,7 @@ import AllTab from "@components/search/tabs/AllTab";
 import VideoTab from "@components/search/tabs/VideoTab";
 import ShortsTab from "@components/search/tabs/ShortsTab";
 import ChannelTab from "@components/search/tabs/ChannelTab";
+import CompareActions from "@components/search/CompareActions";
 import {useSearchQuery} from "@/hooks/useSearchQuery";
 
 type TabType = 'all' | 'video' | 'shorts' | 'channel';
@@ -26,9 +27,14 @@ export default function SearchContent() {
         shortsHasMore,
     } = useSearchQuery(query, activeTab);
 
+    const showCompareMode = activeTab !== 'channel';
+
     return (
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold mb-6">&apos;{query}&apos; 검색 결과</h2>
+            <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold">&apos;{query}&apos; 검색 결과</h2>
+                {showCompareMode && <CompareActions />}
+            </div>
 
             <SearchTabs/>
 

@@ -3,7 +3,8 @@
 import "@styles/globals.css";
 import Layout from "@components/layout";
 
-import { AuthProvider } from "@/contexts/AuthContext";
+import {AuthProvider} from "@/contexts/AuthContext";
+import {CompareProvider} from "@/contexts/CompareContext";
 
 
 export default function RootLayout({
@@ -15,7 +16,9 @@ export default function RootLayout({
         <html lang="en">
         <body>
         <AuthProvider>
-            <Layout>{children}</Layout>
+            <CompareProvider>
+                <Layout>{children}</Layout>
+            </CompareProvider>
         </AuthProvider>
         </body>
         </html>

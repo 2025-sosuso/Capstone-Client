@@ -1,29 +1,59 @@
 'use client';
 
 import {useRouter} from "next/navigation";
-import ShortsThumbnail from "@components/common/Thumbnail/ShortsThumbnail";
-import AnalysisPanel from "@components/common/video-preview/AnalysisPanel";
+import Thumbnail from "@components/common/Thumbnail/Thumbnail";
 import type {VideoSummaryItem} from "@/types/video-preview.types";
+import AnalysisPanel from "@components/common/video-preview/AnalysisPanel";
 import VideoInfo from "@components/common/video-preview/VideoInfo";
+import SelectButton from "@components/common/SelectButton";
+import {useCompare} from "@/contexts/CompareContext";
 
-interface Props {
+type Props = {
+    rank?: number;
     data: VideoSummaryItem;
-}
+};
 
-export default function ShortsPreview({data}: Props) {
+export default function VideoPreview({rank, data}: Props) {
     const router = useRouter();
+    const {compareMode, selectVideo, isSelected} = useCompare();
     const {video, channel, analysis} = data;
 
+    if (!video || !channel) return null;
+
+    const selected = isSelected(video.id);
+
+    const handleClick = () => {
+        if (compareMode) {
+            selectVideo(data);
+        } else {
+            router.push(`/videos/${video.id}`);
+        }
+    };
+
     return (
-        <div className="flex gap-4 cursor-pointer" onClick={() => router.push(`/videos/${video.id}`)}>
-            <div className="w-[140px] flex-shrink-0">
-                <ShortsThumbnail src={video.thumbnailUrl}/>
+        <div
+            className={`flex flex-col lg:flex-row gap-6 w-full ${compareMode ? 'cursor-pointer' : ''}`}
+            onClick={handleClick}
+        >
+            <div className="flex flex-col sm:flex-row gap-4 flex-1 min-w-0">
+                {rank !== undefined && (
+                    <span className="text-xl font-bold w-6">{rank}</span>
+                )}
+
+                <div className="w-full sm:w-[280px] flex-shrink-0 overflow-hidden rounded-2xl relative">
+                    <Thumbnail src={video.thumbnailUrl ?? ""}/>
+
+                    {compareMode && (
+                        <div className="absolute top-3 right-3">
+                            <SelectButton selected={selected} />
+                        </div>
+                    )}
+                </div>
+
+                <VideoInfo video={video} channel={channel}/>
             </div>
 
-            <div className="flex flex-col w-full flex-1 gap-2 min-w-0">
-                <VideoInfo video={video} channel={channel}/>
-                <AnalysisPanel analysis={analysis}/>
-            </div>
+            <AnalysisPanel analysis={analysis} className="w-full lg:w-[40%]"/>
         </div>
     );
 }
