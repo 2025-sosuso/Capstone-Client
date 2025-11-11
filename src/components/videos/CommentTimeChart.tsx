@@ -11,12 +11,12 @@ import {
     TooltipItem,
     Legend,
     Filler,
+    Plugin,
 } from 'chart.js';
-import { Line } from 'react-chartjs-2';
-import { useMemo } from 'react';
-import { calculateYAxis } from '@/utils/calculateYAxis';
-import { HourlyCommentCount } from '@/types/video.types';
-import EmptyState from "@components/common/EmptyState";
+import {Line} from 'react-chartjs-2';
+import {useMemo} from 'react';
+import {calculateYAxis} from '@/utils/calculateYAxis';
+import {HourlyCommentCount} from '@/types/video.types';
 
 ChartJS.register(
     CategoryScale,
@@ -30,40 +30,80 @@ ChartJS.register(
 );
 
 const CHART_COLORS = {
-    border:  'rgba(248, 113, 113, 0.8)',
-    background:  'rgba(248, 113, 113, 0.4)',
+    border: 'rgba(248, 113, 113, 0.8)',
+    background: 'rgba(248, 113, 113, 0.4)',
 } as const;
+
+const centerTextPlugin: Plugin<'line'> = {
+    id: 'centerText',
+    afterDraw: (chart) => {
+        const {ctx, chartArea} = chart;
+        if (!chartArea) return;
+
+        const centerX = (chartArea.left + chartArea.right) / 2;
+        const centerY = (chartArea.top + chartArea.bottom) / 2;
+
+        ctx.save();
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.font = '14px sans-serif';
+        ctx.fillStyle = '#9ca3af'; // gray-400
+        ctx.fillText('시간대별 댓글 데이터가 없습니다', centerX, centerY);
+        ctx.restore();
+    },
+};
 
 interface Props {
     data?: HourlyCommentCount[];
 }
 
-export default function CommentTimeChart({ data }: Props) {
+export default function CommentTimeChart({data}: Props) {
     const hasValidData = Array.isArray(data) && data.length > 0;
 
     const maxCount = hasValidData ? Math.max(...data.map((d) => d.count)) : 0;
-    const { stepSize, roundedMax } = calculateYAxis(maxCount);
+    const {stepSize, roundedMax} = calculateYAxis(maxCount);
 
-    const chartData = useMemo(() => ({
-        labels: hasValidData ? data.map((d) => d.hour) : [],
-        datasets: [
-            {
-                label: '댓글 수',
-                data: hasValidData ? data.map((d) => d.count) : [],
-                borderColor: CHART_COLORS.border,
-                backgroundColor: CHART_COLORS.background,
-                fill: true,
-                tension: 0.4,
-            },
-        ],
-    }), [data, hasValidData]);
+    const chartData = useMemo(() => {
+        if (!hasValidData) {
+            return {
+                labels: [''],
+                datasets: [
+                    {
+                        label: '',
+                        data: [0],
+                        borderColor: 'rgba(229, 231, 235, 0.8)',
+                        backgroundColor: 'rgba(229, 231, 235, 0.4)',
+                        fill: true,
+                        tension: 0.4,
+                    },
+                ],
+            };
+        }
+
+        return {
+            labels: data.map((d) => d.hour),
+            datasets: [
+                {
+                    label: '댓글 수',
+                    data: data.map((d) => d.count),
+                    borderColor: CHART_COLORS.border,
+                    backgroundColor: CHART_COLORS.background,
+                    fill: true,
+                    tension: 0.4,
+                },
+            ],
+        };
+    }, [data, hasValidData]);
 
     const options = {
         maintainAspectRatio: false,
         responsive: true,
         plugins: {
-            legend: { display: false },
+            legend: {
+                display: false,
+            },
             tooltip: {
+                enabled: hasValidData,
                 callbacks: {
                     label: function (context: TooltipItem<'line'>) {
                         const hour = context.label;
@@ -91,18 +131,13 @@ export default function CommentTimeChart({ data }: Props) {
         },
     };
 
-    if (!hasValidData) {
-        return (
-            <EmptyState
-                message="시간대별 댓글 데이터가 없습니다."
-                className="h-[250px] min-w-[16rem]"
-            />
-        );
-    }
-
     return (
         <div className="w-full min-w-[16rem] h-[250px]">
-            <Line data={chartData} options={options} />
+            <Line
+                data={chartData}
+                options={options}
+                plugins={!hasValidData ? [centerTextPlugin] : []}
+            />
         </div>
     );
 }
