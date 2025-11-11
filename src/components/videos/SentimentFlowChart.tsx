@@ -1,6 +1,6 @@
 "use client";
 
-import { Line } from 'react-chartjs-2';
+import {Line} from 'react-chartjs-2';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -11,6 +11,7 @@ import {
     Tooltip,
     Legend,
     ChartOptions,
+    Plugin,
 } from 'chart.js';
 import {SentimentFlowData} from "@/types";
 
@@ -47,35 +48,41 @@ const CHART_CONFIG = {
     maxY: 100,
 } as const;
 
+// 차트 중앙에 텍스트를 그리는 플러그인
+const centerTextPlugin: Plugin<'line'> = {
+    id: 'centerText',
+    afterDraw: (chart) => {
+        const { ctx, chartArea } = chart;
+        if (!chartArea) return;
+
+        const centerX = (chartArea.left + chartArea.right) / 2;
+        const centerY = (chartArea.top + chartArea.bottom) / 2;
+
+        ctx.save();
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.font = '14px sans-serif';
+        ctx.fillStyle = '#9ca3af'; // gray-400
+        ctx.fillText('감정 흐름 데이터가 없습니다', centerX, centerY);
+        ctx.restore();
+    },
+};
+
 interface SentimentFlowChartProps {
     data?: SentimentFlowData[];
 }
 
-const MOCK_DATA: SentimentFlowData[] = [
-    { date: "2024-01-15", positive: 0.67, negative: 0.22, other: 0.11 },
-    { date: "2024-01-16", positive: 0.72, negative: 0.19, other: 0.09 },
-    { date: "2024-01-17", positive: 0.65, negative: 0.25, other: 0.10 },
-    { date: "2024-01-18", positive: 0.70, negative: 0.20, other: 0.10 },
-    { date: "2024-01-19", positive: 0.68, negative: 0.22, other: 0.10 },
-    { date: "2024-01-20", positive: 0.75, negative: 0.15, other: 0.10 },
-    { date: "2024-01-21", positive: 0.80, negative: 0.12, other: 0.08 },
-];
+export default function SentimentFlowChart({data}: SentimentFlowChartProps) {
+    const hasValidData = data && data.length > 0;
 
-export default function SentimentFlowChart({ data = MOCK_DATA }: SentimentFlowChartProps) {
     const convertToPercentage = (values: number[]) => values.map(v => v * 100);
 
-    const labels = data.map(item => item.date);
-
-    const positiveData = convertToPercentage(data.map(item => item.positive));
-    const negativeData = convertToPercentage(data.map(item => item.negative));
-    const otherData = convertToPercentage(data.map(item => item.other));
-
-    const chartData = {
-        labels,
+    const chartData = hasValidData ? {
+        labels: data.map(item => item.date),
         datasets: [
             {
                 label: '긍정',
-                data: positiveData,
+                data: convertToPercentage(data.map(item => item.positive)),
                 backgroundColor: CHART_COLORS.positive.background,
                 borderColor: CHART_COLORS.positive.border,
                 borderWidth: CHART_CONFIG.borderWidth,
@@ -84,7 +91,7 @@ export default function SentimentFlowChart({ data = MOCK_DATA }: SentimentFlowCh
             },
             {
                 label: '부정',
-                data: negativeData,
+                data: convertToPercentage(data.map(item => item.negative)),
                 backgroundColor: CHART_COLORS.negative.background,
                 borderColor: CHART_COLORS.negative.border,
                 borderWidth: CHART_CONFIG.borderWidth,
@@ -93,9 +100,22 @@ export default function SentimentFlowChart({ data = MOCK_DATA }: SentimentFlowCh
             },
             {
                 label: '기타',
-                data: otherData,
+                data: convertToPercentage(data.map(item => item.other)),
                 backgroundColor: CHART_COLORS.other.background,
                 borderColor: CHART_COLORS.other.border,
+                borderWidth: CHART_CONFIG.borderWidth,
+                fill: true,
+                tension: CHART_CONFIG.tension,
+            },
+        ],
+    } : {
+        labels: [''],
+        datasets: [
+            {
+                label: '',
+                data: [0],
+                backgroundColor: 'rgba(229, 231, 235, 0.5)',
+                borderColor: 'rgba(229, 231, 235, 0.5)',
                 borderWidth: CHART_CONFIG.borderWidth,
                 fill: true,
                 tension: CHART_CONFIG.tension,
@@ -132,6 +152,7 @@ export default function SentimentFlowChart({ data = MOCK_DATA }: SentimentFlowCh
         },
         plugins: {
             legend: {
+                display: hasValidData,
                 position: 'top',
                 labels: {
                     usePointStyle: true,
@@ -139,6 +160,7 @@ export default function SentimentFlowChart({ data = MOCK_DATA }: SentimentFlowCh
                 },
             },
             tooltip: {
+                enabled: hasValidData,
                 callbacks: {
                     label: (context) => {
                         const label = context.dataset.label || '';
@@ -151,8 +173,12 @@ export default function SentimentFlowChart({ data = MOCK_DATA }: SentimentFlowCh
     };
 
     return (
-        <div className="w-full" style={{ height: `${CHART_CONFIG.height}px` }}>
-            <Line data={chartData} options={options} />
+        <div className="w-full" style={{height: `${CHART_CONFIG.height}px`}}>
+            <Line
+                data={chartData}
+                options={options}
+                plugins={!hasValidData ? [centerTextPlugin] : []}
+            />
         </div>
     );
 }

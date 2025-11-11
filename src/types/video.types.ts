@@ -93,6 +93,7 @@ export interface VideoBasicInfo {
 export interface VideoAnalysisInfo {
     commentHistogram: HourlyCommentCount[];
     popularTimestamps: TimestampMention[];
+    sentimentFlow: SentimentFlowData[];
     topComments: Comment[];
 }
 

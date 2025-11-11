@@ -156,7 +156,7 @@ export default function Detail({videoId}: { videoId: string }) {
                         {state.isLoading.analysis ? (
                             <LoadingSection message="댓글 반응 흐름 분석 분석 중..."/>
                         ) : (
-                            <SentimentFlowChart />
+                            <SentimentFlowChart data={data.analysisInfo?.sentimentFlow ?? []}/>
                         )}
                     </SectionLayout>
 
