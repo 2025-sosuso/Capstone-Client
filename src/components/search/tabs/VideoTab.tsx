@@ -31,8 +31,8 @@ export default function VideoTab({videos, loading, initialNextPageToken, initial
 
     return (
         <div className="flex flex-col w-full gap-5">
-            {data.map((video) => (
-                <VideoPreview key={video.video.id} data={video}/>
+            {data.map((video, index) => (
+                <VideoPreview key={`${video.video.id}-${index}`} data={video} />
             ))}
 
             {hasMore && (

@@ -32,8 +32,8 @@ export default function ShortsTab({shorts, loading, initialNextPageToken, initia
     return (
         <div className="flex flex-col gap-5">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                {data.map((video) => (
-                    <ShortsPreview key={video.video.id} data={video}/>
+                {data.map((video, index) => (
+                    <ShortsPreview key={`${video.video.id}-${index}`} data={video} />
                 ))}
             </div>
 

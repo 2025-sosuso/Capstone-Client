@@ -68,7 +68,7 @@ export function useSearchQuery(query: string | null, activeTab: TabType) {
 
                     // 채널 검색
                     if (channelResult.status === 'fulfilled') {
-                        newState.channels = channelResult.value;  // 배열 직접 저장
+                        newState.channels = channelResult.value;
                         console.log('✅ [All Tab] 채널 설정:', newState.channels.length);
                     } else {
                         console.error('❌ [All Tab] 채널 검색 실패:', channelResult.reason);
@@ -76,7 +76,7 @@ export function useSearchQuery(query: string | null, activeTab: TabType) {
 
                     // 동영상
                     if (videoResult.status === 'fulfilled') {
-                        newState.videos = videoResult.value.results;  // slice 제거 - 백엔드가 이미 적절한 개수로 보냄
+                        newState.videos = videoResult.value.results;
                         newState.videoPagination = {
                             nextPageToken: videoResult.value.nextPageToken,
                             hasMore: videoResult.value.hasMore,
@@ -88,7 +88,7 @@ export function useSearchQuery(query: string | null, activeTab: TabType) {
 
                     // 쇼츠
                     if (shortsResult.status === 'fulfilled') {
-                        newState.shorts = shortsResult.value.results;  // slice 제거 - 백엔드가 이미 적절한 개수로 보냄
+                        newState.shorts = shortsResult.value.results;
                         newState.shortsPagination = {
                             nextPageToken: shortsResult.value.nextPageToken,
                             hasMore: shortsResult.value.hasMore,
