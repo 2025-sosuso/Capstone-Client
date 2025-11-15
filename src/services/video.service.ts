@@ -13,7 +13,7 @@ import {
     VideoAIAnalysis,
     CommentRepliesResponse
 } from "@/types/video.types";
-import {VideoSummaryItem} from "@/types/video-preview.types";
+import {VideoSummaryItem, AnalysisSummaryOnly} from "@/types/video-preview.types";
 
 export const fetchVideoBasic = async (apiVideoId: string): Promise<VideoBasicInfo> => {
     const res = await api.get<VideoBasicResponse>(`/videos/${apiVideoId}/basic`);
@@ -31,6 +31,12 @@ export const fetchVideoComments = async (apiVideoId: string): Promise<Comment[]>
 };
 
 export const fetchVideoAI = async (apiVideoId: string): Promise<VideoAIAnalysis> => {
+    const res = await api.get<VideoAIResponse>(`/videos/${apiVideoId}/ai`);
+    return res.data.data;
+};
+
+// 프리뷰용 AI 분석 조회 (새로 추가)
+export const fetchVideoAISummary = async (apiVideoId: string): Promise<AnalysisSummaryOnly> => {
     const res = await api.get<VideoAIResponse>(`/videos/${apiVideoId}/ai`);
     return res.data.data;
 };

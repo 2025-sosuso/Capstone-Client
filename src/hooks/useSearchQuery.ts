@@ -1,7 +1,8 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect, useCallback} from "react";
 import {useRouter} from "next/navigation";
 import {searchChannels, searchVideos, searchShorts} from "@/services/search.service";
-import type {VideoSummaryItem, ChannelSearchResult} from "@/types";
+import type {VideoSummaryItem, ChannelSearchResult, AnalysisSummaryOnly} from "@/types";
+import {useAIPolling} from "@/hooks/useAIPolling";
 
 type TabType = 'all' | 'video' | 'shorts' | 'channel';
 
@@ -36,6 +37,29 @@ const initialState: SearchState = {
 export function useSearchQuery(query: string | null, activeTab: TabType) {
     const router = useRouter();
     const [state, setState] = useState<SearchState>(initialState);
+
+    // AI 폴링 업데이트 콜백
+    const handleVideoAIUpdate = useCallback((videoId: string, analysis: AnalysisSummaryOnly) => {
+        setState((prev) => ({
+            ...prev,
+            videos: prev.videos.map((item) =>
+                item.video.id === videoId ? { ...item, analysis } : item
+            ),
+        }));
+    }, []);
+
+    const handleShortsAIUpdate = useCallback((videoId: string, analysis: AnalysisSummaryOnly) => {
+        setState((prev) => ({
+            ...prev,
+            shorts: prev.shorts.map((item) =>
+                item.video.id === videoId ? { ...item, analysis } : item
+            ),
+        }));
+    }, []);
+
+    // AI 폴링 시작
+    useAIPolling(state.videos, handleVideoAIUpdate);
+    useAIPolling(state.shorts, handleShortsAIUpdate);
 
     useEffect(() => {
         if (!query) return;
@@ -162,7 +186,7 @@ export function useSearchQuery(query: string | null, activeTab: TabType) {
 
                     setState((prev) => ({
                         ...prev,
-                        channels: result,  // 배열 직접 저장
+                        channels: result,
                         loading: {...prev.loading, channels: false},
                     }));
 

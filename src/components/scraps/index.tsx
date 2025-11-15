@@ -2,17 +2,28 @@
 
 import {useAuth} from "@/contexts/AuthContext";
 import VideoPreviewList from "@components/common/video-preview/VideoPreviewList";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useCallback} from "react";
 import {fetchScrapsVideos} from "@/services/video.service";
 import LoadingSection from "@components/common/LoadingSection";
-import type {VideoSummaryItem} from "@/types/video-preview.types";
+import type {VideoSummaryItem, AnalysisSummaryOnly} from "@/types/video-preview.types";
 import LoginCallout from "@components/common/LoginCallout";
+import {useAIPolling} from "@/hooks/useAIPolling";
 
 export default function Scraps() {
-    const { isLoggedIn } = useAuth();
+    const {isLoggedIn} = useAuth();
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const [videoList, setVideoList] = useState<VideoSummaryItem[]>([]);
+
+    const handleAIUpdate = useCallback((videoId: string, analysis: AnalysisSummaryOnly) => {
+        setVideoList((prev) =>
+            prev.map((item) =>
+                item.video.id === videoId ? {...item, analysis} : item
+            )
+        );
+    }, []);
+
+    useAIPolling(videoList, handleAIUpdate);
 
     useEffect(() => {
         if (!isLoggedIn) return;
@@ -36,7 +47,7 @@ export default function Scraps() {
         fetch();
     }, [isLoggedIn]);
 
-    if (isLoading) return <LoadingSection message="데이터를 불러오고 있습니다..." />;
+    if (isLoading) return <LoadingSection message="데이터를 불러오고 있습니다..."/>;
     if (isError) return <div className="text-center text-gray-500 py-10">스크랩 정보를 불러오지 못했어요.</div>;
 
     return (
