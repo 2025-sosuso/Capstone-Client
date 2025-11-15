@@ -17,7 +17,7 @@ const SENTIMENT_LABEL = {
     other: {text: "기타", color: "bg-gray-200 text-gray-600"},
 } as const;
 
-const DETAIL_EMOTION_MAP: Record<string, { text: string; color: string }> = {
+const DETAIL_SENTIMENTS_MAP: Record<string, { text: string; color: string }> = {
     JOY: {text: "기쁨", color: "bg-yellow-50 text-yellow-600 border border-yellow-300"},
     LOVE: {text: "사랑", color: "bg-rose-50 text-rose-600 border border-rose-300"},
     GRATITUDE: {text: "감사", color: "bg-emerald-50 text-emerald-600 border border-emerald-300"},
@@ -36,7 +36,7 @@ export default function CommentItem({
                                         sentiment = "other",
                                         hasReplies = false,
                                         replies: initialReplies,
-                                        detailEmotion = [],
+                                        detailSentiments = [],
                                     }: Props) {
     const [isRepliesOpen, setIsRepliesOpen] = useState(false);
     const [replies, setReplies] = useState(initialReplies ?? []);
@@ -47,7 +47,7 @@ export default function CommentItem({
     const {selectedText, position, clearSelection} = useTextSelection(commentRef);
 
     const badge = SENTIMENT_LABEL[sentiment] ?? SENTIMENT_LABEL.other;
-    const displayEmotions = detailEmotion.slice(0, 3);
+    const displayEmotions = detailSentiments.slice(0, 3);
 
     const handleToggleReplies = async () => {
         if (isRepliesOpen) {
@@ -93,7 +93,7 @@ export default function CommentItem({
                                 {badge.text}
                             </span>
                             {displayEmotions.map((emotion, index) => {
-                                const emotionStyle = DETAIL_EMOTION_MAP[emotion];
+                                const emotionStyle = DETAIL_SENTIMENTS_MAP[emotion];
                                 if (!emotionStyle) return null;
                                 return (
                                     <span

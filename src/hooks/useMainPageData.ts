@@ -1,7 +1,9 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 import {fetchFavoriteChannelVideo, fetchTrendingVideos, fetchScrapVideos} from '@/services/main.service';
 import {MainPageData} from '@/types/main.types';
 import {useAuth} from '@/contexts/AuthContext';
+import {useAIPolling} from '@/hooks/useAIPolling';
+import {AnalysisSummaryOnly} from '@/types/video-preview.types';
 
 export function useMainPageData() {
     const {isLoggedIn} = useAuth();
@@ -17,6 +19,27 @@ export function useMainPageData() {
         trending: true,
         scraps: true,
     });
+
+    const handleTrendingAIUpdate = useCallback((videoId: string, analysis: AnalysisSummaryOnly) => {
+        setData((prev) => ({
+            ...prev,
+            trendingVideos: prev.trendingVideos.map((item) =>
+                item.video.id === videoId ? { ...item, analysis } : item
+            ),
+        }));
+    }, []);
+
+    const handleScrapAIUpdate = useCallback((videoId: string, analysis: AnalysisSummaryOnly) => {
+        setData((prev) => ({
+            ...prev,
+            scrapVideos: prev.scrapVideos.map((item) =>
+                item.video.id === videoId ? { ...item, analysis } : item
+            ),
+        }));
+    }, []);
+
+    useAIPolling(data.trendingVideos, handleTrendingAIUpdate);
+    useAIPolling(data.scrapVideos, handleScrapAIUpdate);
 
     useEffect(() => {
         let mounted = true;
@@ -54,7 +77,6 @@ export function useMainPageData() {
                     setIsLoading((prev) => ({...prev, scraps: false}));
                 });
         } else {
-            // 비로그인: 보호 섹션 로딩 종료 표시
             setIsLoading((prev) => ({...prev, favoriteChannels: false, scraps: false}));
             setData((prev) => ({...prev, favoriteChannelVideo: null, scrapVideos: []}));
         }

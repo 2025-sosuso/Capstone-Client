@@ -1,16 +1,29 @@
 'use client';
 
-import {useEffect, useState} from "react";
+import {useEffect, useState, useCallback} from "react";
 import VideoPreviewList from "@components/common/video-preview/VideoPreviewList";
-import type {VideoSummaryItem} from "@/types/video-preview.types";
+import type {VideoSummaryItem, AnalysisSummaryOnly} from "@/types/video-preview.types";
 import {fetchTrendingVideos} from "@/services/video.service";
 import LoadingSection from "@components/common/LoadingSection";
+import {useAIPolling} from "@/hooks/useAIPolling";
 
 export default function Trending() {
     const [videoList, setVideoList] = useState<VideoSummaryItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
     const maxResults = 10;
+
+    // AI 분석 업데이트 콜백
+    const handleAIUpdate = useCallback((videoId: string, analysis: AnalysisSummaryOnly) => {
+        setVideoList((prev) =>
+            prev.map((item) =>
+                item.video.id === videoId ? { ...item, analysis } : item
+            )
+        );
+    }, []);
+
+    // AI 폴링 시작
+    useAIPolling(videoList, handleAIUpdate);
 
     useEffect(() => {
         const fetch = async () => {

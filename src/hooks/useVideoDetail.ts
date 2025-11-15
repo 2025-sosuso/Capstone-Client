@@ -8,9 +8,12 @@ import type {
 } from "@/types/video-detail.types";
 import {fetchVideoBasic, fetchVideoAnalysis, fetchVideoComments, fetchVideoAI} from "@/services/video.service";
 import {fetchFilteredComments} from "@/services/search.service";
+import {isAIAnalysisComplete} from "@/utils/ai-analysis";
 
 const MAX_RETRIES = 24;
 const RETRY_INTERVAL = 6000;
+const AI_POLLING_INTERVAL = 5000;
+const AI_MAX_RETRIES = 10;
 
 export function useVideoDetail(videoId: string): UseVideoDetailReturn {
     const [basicInfo, setBasicInfo] = useState<VideoBasicInfo | null>(null);
@@ -31,9 +34,11 @@ export function useVideoDetail(videoId: string): UseVideoDetailReturn {
 
     const [isProcessing, setIsProcessing] = useState(false);
     const [retryCount, setRetryCount] = useState(0);
+    const [aiPollingCount, setAiPollingCount] = useState(0);
     const [error, setError] = useState(false);
     const playerRef = useRef<YouTubePlayerRef | null>(null);
 
+    // 기본 정보 로딩
     useEffect(() => {
         let mounted = true;
         let timeoutId: number;
@@ -84,6 +89,7 @@ export function useVideoDetail(videoId: string): UseVideoDetailReturn {
         };
     }, [videoId]);
 
+    // 병렬 데이터 로딩
     useEffect(() => {
         if (!basicInfo) return;
         let mounted = true;
@@ -109,14 +115,55 @@ export function useVideoDetail(videoId: string): UseVideoDetailReturn {
                 basic: false,
                 analysis: !analysis,
                 comments: !commentsList || commentsList.length === 0,
-                ai: !ai,
+                ai: !isAIAnalysisComplete(ai),
             });
+
+            if (!isAIAnalysisComplete(ai)) {
+                setAiPollingCount(0);
+            }
         });
 
         return () => {
             mounted = false;
         };
     }, [videoId, basicInfo]);
+
+    useEffect(() => {
+        if (!isLoading.ai) return;
+        if (aiPollingCount >= AI_MAX_RETRIES) {
+            console.log('[AI 폴링] 최대 재시도 횟수 도달');
+            return;
+        }
+
+        let mounted = true;
+        const timeoutId = window.setTimeout(async () => {
+            try {
+                console.log(`[AI 폴링] ${aiPollingCount + 1}차 시도 중...`);
+                const ai = await fetchVideoAI(videoId);
+
+                if (!mounted) return;
+
+                if (isAIAnalysisComplete(ai)) {
+                    console.log('[AI 폴링] 분석 완료!', ai);
+                    setAIAnalysis(ai);
+                    setIsLoading(prev => ({...prev, ai: false}));
+                } else {
+                    console.log('[AI 폴링] 아직 분석 중...');
+                    setAiPollingCount(prev => prev + 1);
+                }
+            } catch (err) {
+                console.error('[AI 폴링] 에러:', err);
+                if (mounted) {
+                    setAiPollingCount(prev => prev + 1);
+                }
+            }
+        }, AI_POLLING_INTERVAL);
+
+        return () => {
+            mounted = false;
+            clearTimeout(timeoutId);
+        };
+    }, [videoId, isLoading.ai, aiPollingCount]);
 
     const handleSeek = useCallback<VideoDetailActions['handleSeek']>((timeString) => {
         const parts = timeString.split(":").map(Number);

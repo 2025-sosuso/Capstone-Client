@@ -44,7 +44,7 @@ export interface Comment {
     text: string;
     likeCount: number;
     sentiment: 'positive' | 'negative' | 'other';
-    detailEmotion?: string[];
+    detailSentiments?: string[];
     publishedAt: string;
     hasReplies?: boolean;
     replies?: Reply[];
