@@ -1,7 +1,6 @@
 'use client';
 
 import VideoPreview from "@components/common/video-preview/VideoPreview";
-import LoadingSection from "@components/common/LoadingSection";
 import {searchVideos} from "@/services/search.service";
 import type {VideoSummaryItem} from "@/types/video-preview.types";
 import {useInfiniteScroll} from "@/hooks/useInfiniteScroll";

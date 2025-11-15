@@ -3,7 +3,6 @@ import ChannelPreview from "@components/search/ChannelPreview";
 import VideoPreview from "@components/common/video-preview/VideoPreview";
 import ShortsPreview from "@components/common/video-preview/ShortsPreview";
 import SearchSectionHeader from "@components/search/SearchSectionHeader";
-import LoadingSection from "@components/common/LoadingSection";
 import type {ChannelSearchResult} from "@/types/channel.types";
 import type {VideoSummaryItem} from "@/types/video-preview.types";
 

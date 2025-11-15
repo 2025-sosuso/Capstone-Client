@@ -1,7 +1,6 @@
 'use client';
 
 import ShortsPreview from "@components/common/video-preview/ShortsPreview";
-import LoadingSection from "@components/common/LoadingSection";
 import {searchShorts} from "@/services/search.service";
 import {useInfiniteScroll} from "@/hooks/useInfiniteScroll";
 import type {VideoSummaryItem} from "@/types";
@@ -20,7 +19,7 @@ export default function ShortsTab({shorts, loading, initialNextPageToken, initia
         initialHasMore,
         searchFunction: searchShorts,
     });
-    
+
     if (!data || data.length === 0) {
         return (
             <div className="text-center py-10">
