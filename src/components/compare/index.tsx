@@ -38,7 +38,7 @@ export default function Compare() {
         };
 
         loadAllVideos();
-    }, [idsParam]);
+    }, [ids]);
 
     if (isLoading) {
         return (

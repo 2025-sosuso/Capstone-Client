@@ -23,7 +23,7 @@ export default function CommentSlider({ comments, intervalMs = 7000, isLoading =
         }, intervalMs);
 
         return () => clearInterval(timer);
-    }, [comments.length, intervalMs]);
+    }, [comments, intervalMs]);
 
     if (isLoading) {
         return <EmptyState message="Top 5 댓글 분석 중입니다" variant="loading" />;
