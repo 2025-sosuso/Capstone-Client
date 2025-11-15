@@ -51,7 +51,7 @@ export default function VideoPreview({rank, data}: Props) {
 
             <div className="flex-1 min-w-0">
                 <VideoInfo video={video} channel={channel}/>
-                <AnalysisPanel analysis={analysis} className="w-full"/>
+                <AnalysisPanel analysis={analysis} className="w-full mt-2"/>
             </div>
         </div>
     );

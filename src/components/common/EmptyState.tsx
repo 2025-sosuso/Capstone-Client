@@ -11,7 +11,7 @@ export default function EmptyState({
                                    }: Props) {
     const styles = {
         empty: "bg-gray-50 text-gray-400",
-        loading: "bg-blue-50 text-blue-500 animate-pulse",
+        loading: "bg-gray-100 text-gray-500 animate-pulse",
         error: "bg-red-50 text-red-500"
     };
 

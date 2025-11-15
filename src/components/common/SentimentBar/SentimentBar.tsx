@@ -11,6 +11,7 @@ interface SentimentBarProps {
     ratio?: SentimentRatio;
     size?: 'sm' | 'md';
     onClick?: (sentiment: SentimentType) => void;
+    isLoading?: boolean;
 }
 
 const COLORS = {
@@ -36,7 +37,7 @@ const COLORS = {
 
 const clampPercent = (value: number) => Math.max(0, Math.min(100, value));
 
-export default function SentimentBar({ratio, size = 'md', onClick}: SentimentBarProps) {
+export default function SentimentBar({ratio, size = 'md', onClick, isLoading = false}: SentimentBarProps) {
     const [hoveredKey, setHoveredKey] = useState<SentimentType | null>(null);
 
     const handleClick = useCallback((sentiment: SentimentType) => {
@@ -49,8 +50,12 @@ export default function SentimentBar({ratio, size = 'md', onClick}: SentimentBar
         ratio &&
         Object.values(ratio).some((v) => typeof v === 'number' && v > 0);
 
+    if (isLoading) {
+        return <EmptyState message="감정 분석 중입니다" variant="loading" />;
+    }
+
     if (!hasValidData) {
-        return <EmptyState message="감정 분석 데이터가 없습니다."/>;
+        return <EmptyState message="감정 분석 데이터가 없습니다." />;
     }
 
     return (

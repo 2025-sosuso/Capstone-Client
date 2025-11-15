@@ -7,6 +7,7 @@ interface TagListProps {
     onTagClick?: (tag: string) => void;
     selectedTag?: string | null;
     highlightSelected?: boolean;
+    isLoading?: boolean;
 }
 
 export default function TagList({
@@ -15,8 +16,13 @@ export default function TagList({
                                     onTagClick,
                                     selectedTag,
                                     highlightSelected = false,
+                                    isLoading = false,
                                 }: TagListProps) {
     const hasTags = Array.isArray(tags) && tags.length > 0;
+
+    if (isLoading) {
+        return <EmptyState message="키워드 분석 중입니다" variant="loading" />;
+    }
 
     if (!hasTags) {
         return <EmptyState message="키워드 데이터가 없습니다." />;

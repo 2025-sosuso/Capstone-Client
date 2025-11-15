@@ -5,6 +5,7 @@ import {useSearchParams} from "next/navigation";
 import type {VideoResult} from "@/types";
 import {fetchVideoDetail} from "@/services/video.service";
 import CompareItem from "@components/compare/CompareItem";
+import LoadingSection from "@components/common/LoadingSection";
 
 export default function Compare() {
     const searchParams = useSearchParams();
@@ -42,10 +43,7 @@ export default function Compare() {
     if (isLoading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-500 mx-auto mb-4"></div>
-                    <p className="text-gray-600">영상 데이터를 불러오는 중...</p>
-                </div>
+                    <LoadingSection message='영상 데이터를 비교 중입니다.'/>
             </div>
         );
     }

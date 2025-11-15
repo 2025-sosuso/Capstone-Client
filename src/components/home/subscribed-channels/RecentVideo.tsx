@@ -23,7 +23,7 @@ interface Props {
 const RecentVideo = ({ data }: Props) => {
     const router = useRouter();
 
-    if (!data || !data.video || !data.channel || !data.analysis) {
+    if (!data || !data.video || !data.channel) {
         return (
             <div className="flex flex-col items-center justify-center text-center w-full gap-4 bg-white/90 p-6 rounded-2xl">
                 <p className="text-lg text-gray-600">최근 영상 데이터를 불러올 수 없습니다.</p>
@@ -33,6 +33,14 @@ const RecentVideo = ({ data }: Props) => {
     }
 
     const { video, channel, analysis } = data;
+
+    // ✅ summary가 없으면 로딩 중
+    const isLoading = !analysis || !analysis.summary;
+
+    const summary = analysis?.summary ?? null;
+    const sentimentDistribution = analysis?.sentimentDistribution ?? {positive: 0, negative: 0, other: 0};
+    const keywords = analysis?.keywords ?? [];
+    const topComments = analysis?.topComments ?? [];
 
     return (
         <div className="flex flex-col md:flex-row w-full gap-6 items-center md:items-start bg-white/90 p-4 rounded-2xl">
@@ -55,16 +63,16 @@ const RecentVideo = ({ data }: Props) => {
 
             <div className="flex flex-col gap-2 flex-1 w-full">
                 <AnalysisItem icon={<SparklesIcon className="size-5 stroke-2" />} title="AI 댓글 요약">
-                    <AISummary summary={analysis.summary} size="sm" />
+                    <AISummary summary={summary} size="sm" isLoading={isLoading} />
                 </AnalysisItem>
                 <AnalysisItem icon={<FaceSmileIcon className="size-5 stroke-2" />} title="감정 분석">
-                    <SentimentBar ratio={analysis.sentimentDistribution} size="sm" />
+                    <SentimentBar ratio={sentimentDistribution} size="sm" isLoading={isLoading} />
                 </AnalysisItem>
                 <AnalysisItem icon={<HashtagIcon className="size-5 stroke-2" />} title="키워드 분석">
-                    <TagList tags={analysis.keywords} size="sm" />
+                    <TagList tags={keywords} size="sm" isLoading={isLoading} />
                 </AnalysisItem>
                 <AnalysisItem icon={<HeartIcon className="size-5 stroke-2" />} title="좋아요 Top 5">
-                    <CommentSlider comments={analysis.topComments || []} />
+                    <CommentSlider comments={topComments} isLoading={isLoading} />
                 </AnalysisItem>
             </div>
         </div>
