@@ -38,8 +38,33 @@ export function useMainPageData() {
         }));
     }, []);
 
+    const handleRecentVideoAIUpdate = useCallback((videoId: string, analysis: AnalysisSummaryOnly) => {
+        setData((prev) => {
+            if (!prev.favoriteChannelVideo?.latestVideo) return prev;
+            if (prev.favoriteChannelVideo.latestVideo.video.id !== videoId) return prev;
+
+            return {
+                ...prev,
+                favoriteChannelVideo: {
+                    ...prev.favoriteChannelVideo,
+                    latestVideo: {
+                        ...prev.favoriteChannelVideo.latestVideo,
+                        analysis,
+                    },
+                },
+            };
+        });
+    }, []);
+
+    // AI 폴링 시작
     useAIPolling(data.trendingVideos, handleTrendingAIUpdate);
     useAIPolling(data.scrapVideos, handleScrapAIUpdate);
+
+    // ✅ RecentVideo 폴링 추가!
+    useAIPolling(
+        data.favoriteChannelVideo?.latestVideo ? [data.favoriteChannelVideo.latestVideo] : [],
+        handleRecentVideoAIUpdate
+    );
 
     useEffect(() => {
         let mounted = true;

@@ -9,11 +9,21 @@ import type {
 import {fetchVideoBasic, fetchVideoAnalysis, fetchVideoComments, fetchVideoAI} from "@/services/video.service";
 import {fetchFilteredComments} from "@/services/search.service";
 import {isAIAnalysisComplete} from "@/utils/ai-analysis";
+import {POLLING_CONFIG} from "@/config/polling";
 
-const MAX_RETRIES = 24;
-const RETRY_INTERVAL = 6000;
-const AI_POLLING_INTERVAL = 5000;
-const AI_MAX_RETRIES = 10;
+const MAX_RETRIES = POLLING_CONFIG.processing.maxRetries;
+const RETRY_INTERVAL = POLLING_CONFIG.processing.interval;
+const AI_POLLING_INTERVAL = POLLING_CONFIG.detail.interval;
+const AI_MAX_RETRIES = POLLING_CONFIG.detail.maxRetries;
+
+// 폴링 실패 시 기본값 (분석 완료했지만 결과 없음)
+const EMPTY_AI_ANALYSIS: VideoAIAnalysis = {
+    summary: null,
+    isWarning: false,
+    languageDistribution: [],
+    sentimentDistribution: { positive: 0, negative: 0, other: 0 },
+    keywords: []
+};
 
 export function useVideoDetail(videoId: string): UseVideoDetailReturn {
     const [basicInfo, setBasicInfo] = useState<VideoBasicInfo | null>(null);
@@ -128,33 +138,36 @@ export function useVideoDetail(videoId: string): UseVideoDetailReturn {
         };
     }, [videoId, basicInfo]);
 
+    // AI 폴링
     useEffect(() => {
         if (!isLoading.ai) return;
         if (aiPollingCount >= AI_MAX_RETRIES) {
-            console.log('[AI 폴링] 최대 재시도 횟수 도달');
+            console.warn(`⏱️ [AI 폴링 종료] ${videoId} - 최대 ${AI_MAX_RETRIES}회 도달`);
+            setAIAnalysis(EMPTY_AI_ANALYSIS);
+            setIsLoading(prev => ({...prev, ai: false}));
             return;
         }
 
         let mounted = true;
+        const nextRetry = aiPollingCount + 1;
         const timeoutId = window.setTimeout(async () => {
             try {
-                console.log(`[AI 폴링] ${aiPollingCount + 1}차 시도 중...`);
+                console.log(`🔄 [AI 폴링] ${videoId} - ${nextRetry}/${AI_MAX_RETRIES}회 시도 중...`);
                 const ai = await fetchVideoAI(videoId);
 
                 if (!mounted) return;
 
                 if (isAIAnalysisComplete(ai)) {
-                    console.log('[AI 폴링] 분석 완료!', ai);
+                    console.log(`✅ [AI 폴링 성공] ${videoId} - ${nextRetry}회 시도만에 완료`);
                     setAIAnalysis(ai);
                     setIsLoading(prev => ({...prev, ai: false}));
                 } else {
-                    console.log('[AI 폴링] 아직 분석 중...');
-                    setAiPollingCount(prev => prev + 1);
+                    setAiPollingCount(nextRetry);
                 }
             } catch (err) {
-                console.error('[AI 폴링] 에러:', err);
+                console.error(`❌ [AI 폴링 에러] ${videoId} - ${nextRetry}회:`, err);
                 if (mounted) {
-                    setAiPollingCount(prev => prev + 1);
+                    setAiPollingCount(nextRetry);
                 }
             }
         }, AI_POLLING_INTERVAL);

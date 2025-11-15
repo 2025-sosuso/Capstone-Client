@@ -4,6 +4,7 @@ import AISummary from "@components/common/AISummary";
 import SentimentBar from "@components/common/SentimentBar/SentimentBar";
 import TagList from "@components/common/Tag/TagList";
 import {AnalysisSummaryOnly} from "@/types/video-preview.types";
+import {isAIAnalysisComplete} from "@/utils/ai-analysis";
 
 interface Props {
     analysis: AnalysisSummaryOnly | null | undefined;
@@ -11,7 +12,7 @@ interface Props {
 }
 
 export default function AnalysisPanel({analysis, className}: Props) {
-    const isLoading = !analysis || !analysis.summary;
+    const isLoading = !isAIAnalysisComplete(analysis ?? null);
 
     const summary = analysis?.summary ?? null;
     const sentimentDistribution = analysis?.sentimentDistribution ?? {positive: 0, negative: 0, other: 0};

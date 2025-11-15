@@ -15,6 +15,7 @@ import SentimentBar from "@components/common/SentimentBar/SentimentBar";
 import TagList from "@components/common/Tag/TagList";
 import CommentSlider from "@components/common/Comment/CommentSlider";
 import { useRouter } from "next/navigation";
+import {isAIAnalysisComplete} from "@/utils/ai-analysis";
 
 interface Props {
     data: VideoSummaryResponse["data"] | null;
@@ -34,8 +35,7 @@ const RecentVideo = ({ data }: Props) => {
 
     const { video, channel, analysis } = data;
 
-    // ✅ summary가 없으면 로딩 중
-    const isLoading = !analysis || !analysis.summary;
+    const isLoading = !isAIAnalysisComplete(analysis ?? null);
 
     const summary = analysis?.summary ?? null;
     const sentimentDistribution = analysis?.sentimentDistribution ?? {positive: 0, negative: 0, other: 0};

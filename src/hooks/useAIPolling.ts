@@ -2,13 +2,20 @@ import { useState, useEffect, useMemo } from 'react';
 import { VideoSummaryItem, AnalysisSummaryOnly } from '@/types/video-preview.types';
 import { isAIAnalysisComplete } from '@/utils/ai-analysis';
 import { fetchVideoAISummary } from '@/services/video.service';
+import { POLLING_CONFIG } from '@/config/polling';
 
-const AI_POLLING_INTERVAL = 5000;
-const AI_MAX_RETRIES = 4;
+const { interval: AI_POLLING_INTERVAL, maxRetries: AI_MAX_RETRIES, maxConcurrent: MAX_CONCURRENT_POLLING } = POLLING_CONFIG.list;
 
 interface PollingState {
     [videoId: string]: number;
 }
+
+// 폴링 실패 시 기본값 (분석 완료했지만 결과 없음)
+const EMPTY_ANALYSIS: AnalysisSummaryOnly = {
+    summary: null,
+    sentimentDistribution: { positive: 0, negative: 0, other: 0 },
+    keywords: []
+};
 
 export function useAIPolling(
     videos: VideoSummaryItem[],
@@ -16,14 +23,14 @@ export function useAIPolling(
 ) {
     const [pollingState, setPollingState] = useState<PollingState>({});
 
-    const needsPolling = useMemo(() =>
-            videos.filter(
-                (video) =>
-                    !isAIAnalysisComplete(video.analysis) &&
-                    (pollingState[video.video.id] ?? 0) < AI_MAX_RETRIES
-            ),
-        [videos, pollingState]
-    );
+    const needsPolling = useMemo(() => {
+        const filtered = videos.filter(
+            (video) =>
+                !isAIAnalysisComplete(video.analysis) &&
+                (pollingState[video.video.id] ?? 0) < AI_MAX_RETRIES
+        );
+        return filtered.slice(0, MAX_CONCURRENT_POLLING);
+    }, [videos, pollingState]);
 
     useEffect(() => {
         if (needsPolling.length === 0) return;
@@ -33,27 +40,43 @@ export function useAIPolling(
             console.log(`[AI 폴링] ${needsPolling.length}개 영상 확인 중...`);
 
             const promises = needsPolling.map(async (video) => {
+                const currentRetry = pollingState[video.video.id] ?? 0;
+                const nextRetry = currentRetry + 1;
+                const isLastRetry = nextRetry >= AI_MAX_RETRIES;
+
                 try {
                     const ai = await fetchVideoAISummary(video.video.id);
 
                     if (!mounted) return;
 
                     if (isAIAnalysisComplete(ai)) {
-                        console.log(`[AI 폴링] ${video.video.id} 완료!`);
+                        console.log(`✅ [AI 폴링 성공] ${video.video.id} - ${nextRetry}회 시도만에 완료`);
                         onUpdate(video.video.id, ai);
                     } else {
-                        console.log(`[AI 폴링] ${video.video.id} 아직 분석 중...`);
+                        if (isLastRetry) {
+                            console.warn(`⏱️ [AI 폴링 종료] ${video.video.id} - 최대 ${AI_MAX_RETRIES}회 도달, 데이터 없음`);
+                            onUpdate(video.video.id, EMPTY_ANALYSIS);
+                        } else {
+                            console.log(`🔄 [AI 폴링 중] ${video.video.id} - ${nextRetry}/${AI_MAX_RETRIES}회`);
+                        }
+
                         setPollingState((prev) => ({
                             ...prev,
-                            [video.video.id]: (prev[video.video.id] ?? 0) + 1,
+                            [video.video.id]: nextRetry,
                         }));
                     }
                 } catch (err) {
-                    console.error(`[AI 폴링] ${video.video.id} 에러:`, err);
+                    console.error(`❌ [AI 폴링 에러] ${video.video.id} - ${nextRetry}회:`, err);
+
                     if (mounted) {
+                        if (isLastRetry) {
+                            console.warn(`⏱️ [AI 폴링 종료] ${video.video.id} - 에러로 인한 종료`);
+                            onUpdate(video.video.id, EMPTY_ANALYSIS);
+                        }
+
                         setPollingState((prev) => ({
                             ...prev,
-                            [video.video.id]: (prev[video.video.id] ?? 0) + 1,
+                            [video.video.id]: nextRetry,
                         }));
                     }
                 }
@@ -66,9 +89,8 @@ export function useAIPolling(
             mounted = false;
             clearTimeout(timeoutId);
         };
-    }, [needsPolling, onUpdate]);
+    }, [needsPolling, onUpdate, pollingState]);
 
-    // videos 변경 시 폴링 상태 초기화
     useEffect(() => {
         setPollingState({});
     }, [videos.length]);
