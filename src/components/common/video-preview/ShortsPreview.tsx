@@ -1,12 +1,12 @@
 'use client';
 
 import {useRouter} from "next/navigation";
-import Thumbnail from "@components/common/Thumbnail/Thumbnail";
 import type {VideoSummaryItem} from "@/types/video-preview.types";
 import AnalysisPanel from "@components/common/video-preview/AnalysisPanel";
 import VideoInfo from "@components/common/video-preview/VideoInfo";
 import SelectButton from "@components/common/SelectButton";
 import {useCompare} from "@/contexts/CompareContext";
+import ShortsThumbnail from "@components/common/Thumbnail/ShortsThumbnail";
 
 type Props = {
     rank?: number;
@@ -32,28 +32,27 @@ export default function VideoPreview({rank, data}: Props) {
 
     return (
         <div
-            className={`flex flex-col lg:flex-row gap-6 w-full ${compareMode ? 'cursor-pointer' : ''}`}
+            className={`flex flex-col sm:flex-row gap-4 w-full items-center sm:items-start ${compareMode ? 'cursor-pointer' : ''}`}
             onClick={handleClick}
         >
-            <div className="flex flex-col sm:flex-row gap-4 flex-1 min-w-0">
-                {rank !== undefined && (
-                    <span className="text-xl font-bold w-6">{rank}</span>
+            {rank !== undefined && (
+                <span className="text-xl font-bold w-6 flex-shrink-0">{rank}</span>
+            )}
+
+            <div className="w-[160px] flex-shrink-0 overflow-hidden rounded-2xl relative">
+                <ShortsThumbnail src={video.thumbnailUrl ?? ""}/>
+
+                {compareMode && (
+                    <div className="absolute top-3 right-3">
+                        <SelectButton selected={selected}/>
+                    </div>
                 )}
-
-                <div className="w-full sm:w-[280px] flex-shrink-0 overflow-hidden rounded-2xl relative">
-                    <Thumbnail src={video.thumbnailUrl ?? ""}/>
-
-                    {compareMode && (
-                        <div className="absolute top-3 right-3">
-                            <SelectButton selected={selected} />
-                        </div>
-                    )}
-                </div>
-
-                <VideoInfo video={video} channel={channel}/>
             </div>
 
-            <AnalysisPanel analysis={analysis} className="w-full lg:w-[40%]"/>
+            <div className="flex-1 min-w-0">
+                <VideoInfo video={video} channel={channel}/>
+                <AnalysisPanel analysis={analysis} className="w-full"/>
+            </div>
         </div>
     );
 }

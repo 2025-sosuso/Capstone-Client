@@ -22,13 +22,9 @@ interface Props {
 export default function AllTab({query, channels, videos, shorts, loading}: Props) {
     const router = useRouter();
 
-    if (loading.channels && loading.videos && loading.shorts) {
-        return <LoadingSection message="검색 중입니다..."/>;
-    }
-
     return (
         <div className="flex flex-col gap-8">
-            {!loading.channels && channels && channels.length > 0 && (
+            {channels && channels.length > 0 && (
                 <section>
                     <SearchSectionHeader
                         title="채널"
@@ -42,7 +38,7 @@ export default function AllTab({query, channels, videos, shorts, loading}: Props
                 </section>
             )}
 
-            {!loading.videos && videos.length > 0 && (
+            {videos.length > 0 ? (
                 <section>
                     <SearchSectionHeader
                         title="동영상"
@@ -54,9 +50,11 @@ export default function AllTab({query, channels, videos, shorts, loading}: Props
                         ))}
                     </div>
                 </section>
-            )}
+            ) : loading.videos ? (
+                <div className="text-center py-6 text-gray-400">동영상 검색 중...</div>
+            ) : null}
 
-            {!loading.shorts && shorts.length > 0 && (
+            {shorts.length > 0 ? (
                 <section>
                     <SearchSectionHeader
                         title="Shorts"
@@ -68,7 +66,16 @@ export default function AllTab({query, channels, videos, shorts, loading}: Props
                         ))}
                     </div>
                 </section>
-            )}
+            ) : loading.shorts ? (
+                <div className="text-center py-6 text-gray-400">Shorts 검색 중...</div>
+            ) : null}
+
+            {!loading.videos && !loading.shorts && !loading.channels &&
+                videos.length === 0 && shorts.length === 0 && (!channels || channels.length === 0) && (
+                    <div className="text-center py-20">
+                        <p className="text-gray-500 text-lg">검색 결과가 없습니다.</p>
+                    </div>
+                )}
         </div>
     );
 }
