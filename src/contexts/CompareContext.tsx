@@ -1,7 +1,7 @@
 'use client';
 
-import {createContext, useContext, useState, useMemo, useCallback} from 'react';
-import {useRouter} from 'next/navigation';
+import {createContext, useContext, useState, useMemo, useCallback, useEffect} from 'react';
+import {useRouter, usePathname} from 'next/navigation';
 import type {VideoSummaryItem} from '@/types/video-preview.types';
 
 interface CompareContextType {
@@ -18,8 +18,17 @@ const CompareContext = createContext<CompareContextType | null>(null);
 
 export const CompareProvider = ({children}: { children: React.ReactNode }) => {
     const router = useRouter();
+    const pathname = usePathname();
     const [compareMode, setCompareMode] = useState(false);
     const [selectedVideos, setSelectedVideos] = useState<VideoSummaryItem[]>([]);
+
+    // 검색 페이지 벗어나면 비교 모드 자동 종료
+    useEffect(() => {
+        if (!pathname.startsWith('/search')) {
+            setCompareMode(false);
+            setSelectedVideos([]);
+        }
+    }, [pathname]);
 
     const toggleCompareMode = useCallback(() => {
         setCompareMode((prev) => {
