@@ -73,6 +73,7 @@ export function useMainPageData() {
         fetchTrendingVideos()
             .then((result) => {
                 if (!mounted) return;
+                console.log('[Trending Videos]', result);
                 setData((prev) => ({...prev, trendingVideos: result}));
             })
             .finally(() => {
@@ -85,6 +86,7 @@ export function useMainPageData() {
             fetchFavoriteChannelVideo()
                 .then((result) => {
                     if (!mounted) return;
+                    console.log('[Favorite Channel Videos]', result);
                     setData((prev) => ({...prev, favoriteChannelVideo: result}));
                 })
                 .finally(() => {
@@ -95,6 +97,7 @@ export function useMainPageData() {
             fetchScrapVideos()
                 .then((result) => {
                     if (!mounted) return;
+                    console.log('[Scrap Videos]', result);
                     setData((prev) => ({...prev, scrapVideos: result}));
                 })
                 .finally(() => {

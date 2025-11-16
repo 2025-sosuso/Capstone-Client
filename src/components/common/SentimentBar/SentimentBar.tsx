@@ -1,9 +1,10 @@
 'use client';
 
-import {useState, useCallback} from 'react';
+import {useState, useCallback, useMemo} from 'react';
 import SentimentItem from './SentimentItem';
 import {SentimentRatio} from '@/types/video.types';
 import EmptyState from "@components/common/EmptyState";
+import {normalizePercents} from '@/utils/percent';
 
 type SentimentType = 'positive' | 'negative' | 'other';
 
@@ -35,8 +36,6 @@ const COLORS = {
     },
 } as const;
 
-const clampPercent = (value: number) => Math.max(0, Math.min(100, value));
-
 export default function SentimentBar({ratio, size = 'md', onClick, isLoading = false}: SentimentBarProps) {
     const [hoveredKey, setHoveredKey] = useState<SentimentType | null>(null);
 
@@ -50,20 +49,24 @@ export default function SentimentBar({ratio, size = 'md', onClick, isLoading = f
         ratio &&
         Object.values(ratio).some((v) => typeof v === 'number' && v > 0);
 
+    const normalizedPercents = useMemo(() => {
+        if (!ratio) return null;
+        return normalizePercents(ratio);
+    }, [ratio]);
+
     if (isLoading) {
         return <EmptyState message="감정 분석 중입니다" variant="loading" />;
     }
 
-    if (!hasValidData) {
+    if (!hasValidData || !normalizedPercents) {
         return <EmptyState message="감정 분석 데이터가 없습니다." />;
     }
 
     return (
         <div className="flex w-full gap-2 items-center">
             <div className="flex items-center w-full overflow-hidden rounded-full">
-                {Object.entries(ratio).map(([key, value]) => {
+                {Object.entries(normalizedPercents).map(([key, percent]) => {
                     const sentimentKey = key as SentimentType;
-                    const percent = clampPercent(value);
                     const isHovered = hoveredKey === sentimentKey;
                     const colorSet = COLORS[sentimentKey];
 

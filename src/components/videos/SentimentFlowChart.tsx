@@ -1,5 +1,6 @@
 "use client";
 
+import {useMemo} from 'react';
 import {Line} from 'react-chartjs-2';
 import {
     Chart as ChartJS,
@@ -14,6 +15,7 @@ import {
     Plugin,
 } from 'chart.js';
 import {SentimentFlowData} from "@/types";
+import {normalizePercents} from '@/utils/percent';
 
 ChartJS.register(
     CategoryScale,
@@ -48,7 +50,6 @@ const CHART_CONFIG = {
     maxY: 100,
 } as const;
 
-// 차트 중앙에 텍스트를 그리는 플러그인
 const centerTextPlugin: Plugin<'line'> = {
     id: 'centerText',
     afterDraw: (chart) => {
@@ -75,14 +76,25 @@ interface SentimentFlowChartProps {
 export default function SentimentFlowChart({data}: SentimentFlowChartProps) {
     const hasValidData = data && data.length > 0;
 
-    const convertToPercentage = (values: number[]) => values.map(v => v * 100);
+    const normalizedData = useMemo(() => {
+        if (!hasValidData) return null;
 
-    const chartData = hasValidData ? {
-        labels: data.map(item => item.date),
+        return data.map(item => ({
+            date: item.date,
+            ...normalizePercents({
+                positive: item.positive,
+                negative: item.negative,
+                other: item.other,
+            })
+        }));
+    }, [data, hasValidData]);
+
+    const chartData = normalizedData ? {
+        labels: normalizedData.map(item => item.date),
         datasets: [
             {
                 label: '긍정',
-                data: convertToPercentage(data.map(item => item.positive)),
+                data: normalizedData.map(item => item.positive),
                 backgroundColor: CHART_COLORS.positive.background,
                 borderColor: CHART_COLORS.positive.border,
                 borderWidth: CHART_CONFIG.borderWidth,
@@ -91,7 +103,7 @@ export default function SentimentFlowChart({data}: SentimentFlowChartProps) {
             },
             {
                 label: '부정',
-                data: convertToPercentage(data.map(item => item.negative)),
+                data: normalizedData.map(item => item.negative),
                 backgroundColor: CHART_COLORS.negative.background,
                 borderColor: CHART_COLORS.negative.border,
                 borderWidth: CHART_CONFIG.borderWidth,
@@ -100,7 +112,7 @@ export default function SentimentFlowChart({data}: SentimentFlowChartProps) {
             },
             {
                 label: '기타',
-                data: convertToPercentage(data.map(item => item.other)),
+                data: normalizedData.map(item => item.other),
                 backgroundColor: CHART_COLORS.other.background,
                 borderColor: CHART_COLORS.other.border,
                 borderWidth: CHART_CONFIG.borderWidth,
@@ -164,7 +176,7 @@ export default function SentimentFlowChart({data}: SentimentFlowChartProps) {
                 callbacks: {
                     label: (context) => {
                         const label = context.dataset.label || '';
-                        const value = context.parsed.y.toFixed(1);
+                        const value = context.parsed.y;
                         return `${label}: ${value}%`;
                     },
                 },

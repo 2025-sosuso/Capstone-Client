@@ -12,9 +12,9 @@ import {ReplyList, ReplyToggleButton} from "@components/common/Comment/Reply";
 type Props = Comment;
 
 const SENTIMENT_LABEL = {
-    positive: {text: "긍정", color: "bg-blue-100 text-blue-600"},
-    negative: {text: "부정", color: "bg-red-100 text-red-600"},
-    other: {text: "기타", color: "bg-gray-200 text-gray-600"},
+    POSITIVE: {text: "긍정", color: "bg-blue-100 text-blue-600"},
+    NEGATIVE: {text: "부정", color: "bg-red-100 text-red-600"},
+    OTHER: {text: "기타", color: "bg-gray-200 text-gray-600"},
 } as const;
 
 const DETAIL_SENTIMENTS_MAP: Record<string, { text: string; color: string }> = {
@@ -33,7 +33,7 @@ export default function CommentItem({
                                         text,
                                         likeCount,
                                         publishedAt,
-                                        sentiment = "other",
+                                        sentiment = "OTHER",
                                         hasReplies = false,
                                         replies: initialReplies,
                                         detailSentiments = [],
@@ -46,7 +46,7 @@ export default function CommentItem({
     const commentRef = useRef<HTMLDivElement>(null);
     const {selectedText, position, clearSelection} = useTextSelection(commentRef);
 
-    const badge = SENTIMENT_LABEL[sentiment] ?? SENTIMENT_LABEL.other;
+    const badge = SENTIMENT_LABEL[sentiment] ?? SENTIMENT_LABEL.OTHER;
     const displayEmotions = detailSentiments.slice(0, 3);
 
     const handleToggleReplies = async () => {

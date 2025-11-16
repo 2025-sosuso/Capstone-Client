@@ -1,6 +1,6 @@
 'use client';
 
-import {useState, useEffect} from 'react'; // ← useEffect 추가
+import {useState, useEffect} from 'react';
 import RecentVideo from './RecentVideo';
 import ChannelAvatarList from './ChannelAvatarList';
 import {VideoSummaryItem} from '@/types/video-preview.types';
@@ -31,14 +31,6 @@ export default function SubscribedChannels({data, favoriteChannelList, isLoading
     useEffect(() => {
         setSelectedVideo(data);
     }, [data]);
-
-    console.log('[SubscribedChannels]', {
-        isLoggedIn,
-        isLoading,
-        favoriteChannelListLength: favoriteChannelList.length,
-        channelListLength: channelList.length,
-        data,
-    });
 
     const handleChannelSelect = async (channelId: string) => {
         try {

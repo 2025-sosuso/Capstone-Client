@@ -43,7 +43,7 @@ export interface Comment {
     author: string;
     text: string;
     likeCount: number;
-    sentiment: 'positive' | 'negative' | 'other';
+    sentiment: 'POSITIVE' | 'NEGATIVE' | 'OTHER';
     detailSentiments?: string[];
     publishedAt: string;
     hasReplies?: boolean;
