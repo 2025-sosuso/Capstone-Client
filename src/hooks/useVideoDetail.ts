@@ -13,8 +13,10 @@ import {POLLING_CONFIG} from "@/config/polling";
 
 const MAX_RETRIES = POLLING_CONFIG.processing.maxRetries;
 const RETRY_INTERVAL = POLLING_CONFIG.processing.interval;
+const INITIAL_RETRY_DELAY = POLLING_CONFIG.processing.initialDelay;
 const AI_POLLING_INTERVAL = POLLING_CONFIG.detail.interval;
 const AI_MAX_RETRIES = POLLING_CONFIG.detail.maxRetries;
+const AI_INITIAL_DELAY = POLLING_CONFIG.detail.initialDelay;
 
 // 폴링 실패 시 기본값 (분석 완료했지만 결과 없음)
 const EMPTY_AI_ANALYSIS: VideoAIAnalysis = {
@@ -73,7 +75,10 @@ export function useVideoDetail(videoId: string): UseVideoDetailReturn {
                         setIsProcessing(true);
                         currentRetry++;
                         setRetryCount(currentRetry);
-                        timeoutId = window.setTimeout(fetchBasicWithRetry, RETRY_INTERVAL);
+
+                        const delay = currentRetry === 1 ? INITIAL_RETRY_DELAY : RETRY_INTERVAL;
+                        console.log(`[기본 정보] ${currentRetry}회 재시도 예정 (${delay}ms 후)`);
+                        timeoutId = window.setTimeout(fetchBasicWithRetry, delay);
                     } else {
                         console.error('[기본 정보] 최대 재시도 횟수 초과');
                         setError(true);
@@ -150,9 +155,12 @@ export function useVideoDetail(videoId: string): UseVideoDetailReturn {
 
         let mounted = true;
         const nextRetry = aiPollingCount + 1;
+
+        const delay = aiPollingCount === 0 ? AI_INITIAL_DELAY : AI_POLLING_INTERVAL;
+
         const timeoutId = window.setTimeout(async () => {
             try {
-                console.log(`🔄 [AI 폴링] ${videoId} - ${nextRetry}/${AI_MAX_RETRIES}회 시도 중...`);
+                console.log(`🔄 [AI 폴링] ${videoId} - ${nextRetry}/${AI_MAX_RETRIES}회 시도 중... (${delay}ms 대기 후)`);
                 const ai = await fetchVideoAI(videoId);
 
                 if (!mounted) return;
@@ -170,7 +178,7 @@ export function useVideoDetail(videoId: string): UseVideoDetailReturn {
                     setAiPollingCount(nextRetry);
                 }
             }
-        }, AI_POLLING_INTERVAL);
+        }, delay);
 
         return () => {
             mounted = false;
