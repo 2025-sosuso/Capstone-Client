@@ -56,11 +56,9 @@ export function useMainPageData() {
         });
     }, []);
 
-    // AI 폴링 시작
     useAIPolling(data.trendingVideos, handleTrendingAIUpdate);
     useAIPolling(data.scrapVideos, handleScrapAIUpdate);
 
-    // ✅ RecentVideo 폴링 추가!
     useAIPolling(
         data.favoriteChannelVideo?.latestVideo ? [data.favoriteChannelVideo.latestVideo] : [],
         handleRecentVideoAIUpdate
