@@ -36,7 +36,7 @@ export const fetchVideoAI = async (apiVideoId: string): Promise<VideoAIAnalysis>
 };
 
 // 프리뷰용 AI 분석 조회 (새로 추가)
-export const fetchVideoAISummary = async (apiVideoId: string): Promise<AnalysisSummaryOnly> => {
+export const fetchVideoAIPreview = async (apiVideoId: string): Promise<AnalysisSummaryOnly> => {
     const res = await api.get<VideoAIResponse>(`/videos/${apiVideoId}/ai`);
     return res.data.data;
 };

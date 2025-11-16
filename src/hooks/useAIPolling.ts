@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { VideoSummaryItem, AnalysisSummaryOnly } from '@/types/video-preview.types';
 import { isAIAnalysisComplete } from '@/utils/ai-analysis';
-import { fetchVideoAISummary } from '@/services/video.service';
+import { fetchVideoAIPreview } from '@/services/video.service';
 import { POLLING_CONFIG } from '@/config/polling';
 
 const { interval: AI_POLLING_INTERVAL, maxRetries: AI_MAX_RETRIES, maxConcurrent: MAX_CONCURRENT_POLLING } = POLLING_CONFIG.list;
@@ -45,7 +45,7 @@ export function useAIPolling(
                 const isLastRetry = nextRetry >= AI_MAX_RETRIES;
 
                 try {
-                    const ai = await fetchVideoAISummary(video.video.id);
+                    const ai = await fetchVideoAIPreview(video.video.id);
 
                     if (!mounted) return;
 
