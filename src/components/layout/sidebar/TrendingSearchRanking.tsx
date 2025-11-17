@@ -75,7 +75,7 @@ const TrendingSearchRanking = () => {
 
         const interval = setInterval(() => {
             fetchData();
-        }, 5000); // 테스트 중엔 임시로 5초 지정
+        }, 600000);
 
         return () => {
             clearInterval(interval);
