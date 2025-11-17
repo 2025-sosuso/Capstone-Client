@@ -54,7 +54,7 @@ export default function Trending() {
             <div className="w-full max-w-screen-xl flex flex-col gap-10">
                 <div className="flex items-center gap-2">
                     <span className="text-3xl">🔥</span>
-                    <h1 className="text-2xl font-semibold text-gray-900">인기 급상승</h1>
+                    <h1 className="text-2xl font-semibold text-gray-900">지금 핫한</h1>
                 </div>
 
                 <VideoPreviewList data={videoList}/>

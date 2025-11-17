@@ -1,6 +1,12 @@
 import api from "@/lib/axios";
 import type {Comment} from "@/types/video.types";
-import type {VideoSearchResponse, ShortsSearchResponse} from "@/types/search.types";
+import type {
+    VideoSearchResponse,
+    ShortsSearchResponse,
+    SearchStatus,
+    TrendingSearch,
+    TrendingSearchResponse
+} from "@/types/search.types";
 import type {ChannelSearchResult} from "@/types/channel.types";
 
 /**
@@ -54,4 +60,20 @@ export const fetchFilteredComments = async ({
     const params = q ? {q} : sentiment ? {sentiment} : keyword ? {keyword} : {};
     const res = await api.get(`/videos/${videoId}/comments`, {params});
     return res.data.data.results;
+};
+
+
+export const getTrendingSearch = async (): Promise<TrendingSearch> => {
+    const res = await api.get<TrendingSearchResponse>("/trending-search");
+
+    const data = res.data.data[0];
+
+    return {
+        updateAt: data.updateAt,
+        items: data.items.map(item => ({
+            rank: item.rank,
+            keyword: item.keyword,
+            status: item.status as SearchStatus
+        }))
+    };
 };
