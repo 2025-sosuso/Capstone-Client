@@ -1,52 +1,33 @@
 'use client'
 
-import { ChevronDownIcon, MinusIcon } from "@heroicons/react/24/outline";
-import { TriangleUpIcon, TriangleDownIcon } from "@/components/icons";
+import {ChevronDownIcon, MinusIcon} from "@heroicons/react/24/outline";
+import {TriangleUpIcon, TriangleDownIcon} from "@/components/icons";
 import React from "react";
-import { formatTime } from "@/utils/data-format";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
-
-type SearchStatus = "up" | "down" | "same";
-
-interface PopularSearch {
-    rank: number;
-    keyword: string;
-    status: SearchStatus;
-}
+import {formatTime} from "@/utils/data-format";
+import {useAutoAnimate} from "@formkit/auto-animate/react";
+import {TrendingSearchItem, SearchStatus} from "@/types";
+import {getTrendingSearch} from "@/services/search.service";
 
 const PREVIEW_COUNT = 3;
 const TOTAL_COUNT = 10;
 
-const mockList: PopularSearch[] = [
-    { rank: 1, keyword: "승헌쓰", status: "up" },
-    { rank: 2, keyword: "아이유", status: "same" },
-    { rank: 3, keyword: "MBC 뉴스", status: "down" },
-    { rank: 4, keyword: "야구 우승팀", status: "same" },
-    { rank: 5, keyword: "영화 추천", status: "up" },
-    { rank: 6, keyword: "타입스크립트", status: "down" },
-    { rank: 7, keyword: "프론트엔드", status: "same" },
-    { rank: 8, keyword: "Vercel 배포 가이드", status: "up" },
-    { rank: 9, keyword: "shadcn/ui 컴포넌트", status: "same" },
-    { rank: 10, keyword: "웹 성능 최적화 방법", status: "down" }
-];
-
-const StatusIcon = ({ status }: { status: SearchStatus }) => {
+const StatusIcon = ({status}: { status: SearchStatus }) => {
     switch (status) {
         case "up":
-            return <TriangleUpIcon className="text-red-500" size={16} />;
+            return <TriangleUpIcon className="text-red-500" size={16}/>;
         case "down":
-            return <TriangleDownIcon className="text-blue-500" size={16} />;
+            return <TriangleDownIcon className="text-blue-500" size={16}/>;
         case "same":
-            return <MinusIcon className="w-4 h-4 text-gray-500 stroke-2" />;
+            return <MinusIcon className="w-4 h-4 text-gray-500 stroke-2"/>;
     }
 };
 
-const PopularSearchItem = ({
-                               rank,
-                               keyword,
-                               status,
-                               isRefreshing
-                           }: PopularSearch & { isRefreshing: boolean }) => {
+const TrendingSearchItemComponent = ({
+                                         rank,
+                                         keyword,
+                                         status,
+                                         isRefreshing
+                                     }: TrendingSearchItem & { isRefreshing: boolean }) => {
     return (
         <div
             className={`flex items-center gap-2 text-sm py-1 transition-all duration-300
@@ -62,23 +43,20 @@ const PopularSearchItem = ({
     );
 };
 
-const PopularSearchList = () => {
+const TrendingSearchRanking = () => {
     const [isExpanded, setIsExpanded] = React.useState(false);
-    const [data, setData] = React.useState<PopularSearch[]>(mockList);
+    const [data, setData] = React.useState<TrendingSearchItem[]>([]);
+    const [updateAt, setUpdateAt] = React.useState<string>('');
     const [isRefreshing, setIsRefreshing] = React.useState(false);
-    const [lastUpdate, setLastUpdate] = React.useState(new Date().toISOString());
     const [parent] = useAutoAnimate();
 
     const fetchData = React.useCallback(async () => {
         try {
+            const result = await getTrendingSearch();
+            setData(result.items);
+            setUpdateAt(result.updateAt);
 
-            // TODO: 실제 API 연동 필요
-            setData(mockList);
-
-            const now = new Date().toISOString();
-            setLastUpdate(now);
-
-            console.log('데이터 갱신 완료');
+            console.log('데이터 조회 완료', result);
 
             setIsRefreshing(true);
             setTimeout(() => {
@@ -86,7 +64,7 @@ const PopularSearchList = () => {
             }, 600);
 
         } catch (error) {
-            console.error('데이터 갱신 실패:', error);
+            console.error('데이터 조회 실패:', error);
         }
     }, []);
 
@@ -95,7 +73,7 @@ const PopularSearchList = () => {
 
         const interval = setInterval(() => {
             fetchData();
-        }, 30000); // 30초 (test)
+        }, 5000); // 테스트 중엔 임시로 5초 지정
 
         return () => {
             clearInterval(interval);
@@ -105,7 +83,7 @@ const PopularSearchList = () => {
     return (
         <div className="px-4 py-3 bg-gray-100 rounded-xl select-none">
             <div className="flex justify-between items-center">
-                <h3 className="text-md">☄️ 인기 검색어</h3>
+                <h3 className="text-md">☄️ 핫한 검색어</h3>
                 <ChevronDownIcon
                     onClick={() => setIsExpanded((v) => !v)}
                     className={`size-4 stroke-2 text-gray-400 cursor-pointer 
@@ -117,7 +95,7 @@ const PopularSearchList = () => {
 
             <div ref={parent} className="mt-2">
                 {data.slice(0, PREVIEW_COUNT).map((i) => (
-                    <PopularSearchItem
+                    <TrendingSearchItemComponent
                         key={i.keyword}
                         {...i}
                         isRefreshing={isRefreshing}
@@ -127,15 +105,17 @@ const PopularSearchList = () => {
                 {isExpanded && (
                     <div>
                         {data.slice(PREVIEW_COUNT, TOTAL_COUNT).map((i) => (
-                            <PopularSearchItem
+                            <TrendingSearchItemComponent
                                 key={i.keyword}
                                 {...i}
                                 isRefreshing={isRefreshing}
                             />
                         ))}
-                        <span className="text-xs text-gray-400 block mt-2">
-                            {formatTime(lastUpdate)} 업데이트
-                        </span>
+                        {updateAt && (
+                            <span className="text-xs text-gray-400 block mt-2">
+                                {formatTime(updateAt)} 업데이트
+                            </span>
+                        )}
                     </div>
                 )}
             </div>
@@ -143,4 +123,4 @@ const PopularSearchList = () => {
     );
 };
 
-export default PopularSearchList;
+export default TrendingSearchRanking;

@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import LogoutButton from "./LogoutButton";
 import MenuItem from "./MenuItem";
 import { MenuItems } from "./side-bar-config";
-import PopularSearchList from "./PopularSearchList";
+import TrendingSearchRanking from "./TrendingSearchRanking";
 import LoginButton from "@components/layout/sidebar/LoginButton";
 import UserProfile from "@components/layout/sidebar/UserProfile";
 
@@ -36,7 +36,7 @@ const SideBar = ({ isOpen, isNarrow }: SideBarProps) => {
                         ))}
                     </nav>
 
-                    <PopularSearchList />
+                    <TrendingSearchRanking />
                 </div>
 
                 {isLoggedIn && <LogoutButton isOpen={isOpen} />}
