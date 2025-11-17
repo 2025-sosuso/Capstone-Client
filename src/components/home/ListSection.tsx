@@ -14,7 +14,7 @@ interface ListSectionProps {
 
 const SECTION_CONFIG = {
     trending: {
-        title: "🔥 인기 급상승",
+        title: "🔥 지금 핫한",
         href: "/trending"
     },
     scraps: {
