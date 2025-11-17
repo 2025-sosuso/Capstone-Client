@@ -2,7 +2,7 @@
 
 import {ChevronDownIcon, MinusIcon} from "@heroicons/react/24/outline";
 import {TriangleUpIcon, TriangleDownIcon} from "@/components/icons";
-import React from "react";
+import {useState, useEffect, useCallback} from "react";
 import {formatTime} from "@/utils/data-format";
 import {useAutoAnimate} from "@formkit/auto-animate/react";
 import {TrendingSearchItem, SearchStatus} from "@/types";
@@ -44,13 +44,14 @@ const TrendingSearchItemComponent = ({
 };
 
 const TrendingSearchRanking = () => {
-    const [isExpanded, setIsExpanded] = React.useState(false);
-    const [data, setData] = React.useState<TrendingSearchItem[]>([]);
-    const [updateAt, setUpdateAt] = React.useState<string>('');
-    const [isRefreshing, setIsRefreshing] = React.useState(false);
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [data, setData] = useState<TrendingSearchItem[]>([]);
+    const [updateAt, setUpdateAt] = useState<string>('');
+    const [isRefreshing, setIsRefreshing] = useState(false);
+    const [error, setError] = useState<boolean>(false);
     const [parent] = useAutoAnimate();
 
-    const fetchData = React.useCallback(async () => {
+    const fetchData = useCallback(async () => {
         try {
             const result = await getTrendingSearch();
             setData(result.items);
@@ -65,10 +66,11 @@ const TrendingSearchRanking = () => {
 
         } catch (error) {
             console.error('데이터 조회 실패:', error);
+            setError(true);
         }
     }, []);
 
-    React.useEffect(() => {
+    useEffect(() => {
         fetchData();
 
         const interval = setInterval(() => {
@@ -94,7 +96,13 @@ const TrendingSearchRanking = () => {
             </div>
 
             <div ref={parent} className="mt-2">
-                {data.slice(0, PREVIEW_COUNT).map((i) => (
+                {error && (
+                    <div className="text-sm text-gray-500 py-2">
+                        데이터 조회 실패
+                    </div>
+                )}
+
+                {!error && data.slice(0, PREVIEW_COUNT).map((i) => (
                     <TrendingSearchItemComponent
                         key={i.keyword}
                         {...i}
@@ -102,7 +110,7 @@ const TrendingSearchRanking = () => {
                     />
                 ))}
 
-                {isExpanded && (
+                {isExpanded && !error && (
                     <div>
                         {data.slice(PREVIEW_COUNT, TOTAL_COUNT).map((i) => (
                             <TrendingSearchItemComponent
