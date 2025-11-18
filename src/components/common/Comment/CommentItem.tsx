@@ -47,7 +47,7 @@ export default function CommentItem({
     const {selectedText, position, clearSelection} = useTextSelection(commentRef);
 
     const badge = SENTIMENT_LABEL[sentiment] ?? SENTIMENT_LABEL.OTHER;
-    const displayEmotions = detailSentiments.slice(0, 3);
+    const displaySentiments = detailSentiments.slice(0, 3);
 
     const handleToggleReplies = async () => {
         if (isRepliesOpen) {
@@ -92,7 +92,7 @@ export default function CommentItem({
                                 className={`text-xs px-2 py-[2px] rounded-full font-medium whitespace-nowrap ${badge.color}`}>
                                 {badge.text}
                             </span>
-                            {displayEmotions.map((emotion, index) => {
+                            {displaySentiments.map((emotion, index) => {
                                 const emotionStyle = DETAIL_SENTIMENTS_MAP[emotion];
                                 if (!emotionStyle) return null;
                                 return (
