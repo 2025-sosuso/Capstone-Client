@@ -62,14 +62,13 @@ export const fetchFilteredComments = async ({
     return res.data.data.results;
 };
 
-
 export const getTrendingSearch = async (): Promise<TrendingSearch> => {
     const res = await api.get<TrendingSearchResponse>("/trending-search");
 
-    const data = res.data.data[0];
+    const data = res.data.data;
 
     return {
-        updateAt: data.updateAt,
+        updatedAt: data.updatedAt,
         items: data.items.map(item => ({
             rank: item.rank,
             keyword: item.keyword,

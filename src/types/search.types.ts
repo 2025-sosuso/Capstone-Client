@@ -24,8 +24,8 @@ export interface TrendingSearchItem {
 }
 
 export interface TrendingSearch {
-    updateAt: string;
+    updatedAt: string;
     items: TrendingSearchItem[];
 }
 
-export type TrendingSearchResponse = BaseApiResponse<TrendingSearch[]>;
+export type TrendingSearchResponse = BaseApiResponse<TrendingSearch>;

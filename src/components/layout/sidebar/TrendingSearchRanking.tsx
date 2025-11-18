@@ -46,7 +46,7 @@ const TrendingSearchItemComponent = ({
 const TrendingSearchRanking = () => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [data, setData] = useState<TrendingSearchItem[]>([]);
-    const [updateAt, setUpdateAt] = useState<string>('');
+    const [updatedAt, setupdatedAt] = useState<string>('');
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [error, setError] = useState<boolean>(false);
     const [parent] = useAutoAnimate();
@@ -55,7 +55,7 @@ const TrendingSearchRanking = () => {
         try {
             const result = await getTrendingSearch();
             setData(result.items);
-            setUpdateAt(result.updateAt);
+            setupdatedAt(result.updatedAt);
 
             console.log('데이터 조회 완료', result);
 
@@ -75,7 +75,7 @@ const TrendingSearchRanking = () => {
 
         const interval = setInterval(() => {
             fetchData();
-        }, 5000); // 테스트 중엔 임시로 5초 지정
+        }, 600000);
 
         return () => {
             clearInterval(interval);
@@ -119,9 +119,9 @@ const TrendingSearchRanking = () => {
                                 isRefreshing={isRefreshing}
                             />
                         ))}
-                        {updateAt && (
+                        {updatedAt && (
                             <span className="text-xs text-gray-400 block mt-2">
-                                {formatTime(updateAt)} 업데이트
+                                {formatTime(updatedAt)} 업데이트
                             </span>
                         )}
                     </div>
