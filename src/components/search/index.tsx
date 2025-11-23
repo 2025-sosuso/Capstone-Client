@@ -1,6 +1,7 @@
 'use client';
 
-import {useSearchParams} from "next/navigation";
+import {useSearchParams, useRouter} from "next/navigation";
+import {useEffect} from "react";
 import SearchTabs from "@components/search/tabs/SearchTabs";
 import AllTab from "@components/search/tabs/AllTab";
 import VideoTab from "@components/search/tabs/VideoTab";
@@ -8,13 +9,24 @@ import ShortsTab from "@components/search/tabs/ShortsTab";
 import ChannelTab from "@components/search/tabs/ChannelTab";
 import CompareActions from "@components/search/CompareActions";
 import {useSearchQuery} from "@/hooks/useSearchQuery";
+import {extractYoutubeVideoId} from "@/utils/youtube";
 
 type TabType = 'all' | 'video' | 'shorts' | 'channel';
 
 export default function SearchContent() {
+    const router = useRouter();
     const searchParams = useSearchParams();
     const query = searchParams.get("q");
     const activeTab = (searchParams.get("tab") as TabType) || 'all';
+
+    useEffect(() => {
+        if (!query) return;
+
+        const videoId = extractYoutubeVideoId(query);
+        if (videoId) {
+            router.replace(`/videos/${videoId}`);
+        }
+    }, [query, router]);
 
     const {
         channels,
