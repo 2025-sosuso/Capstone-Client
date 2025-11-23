@@ -2,8 +2,8 @@ import {BaseApiResponse} from "./common.types";
 import {Channel, Comment, SentimentRatio, VideoDetail} from "./video.types";
 
 export type VideoSummaryItem = {
-    video: Pick<VideoDetail, 'id' | 'title' | 'description' | 'publishedAt' | 'thumbnailUrl' | 'viewCount' | 'likeCount' | 'commentCount' | 'scrapId'>;
-    channel: Pick<Channel, 'id' | 'title' | 'thumbnailUrl' | 'subscriberCount' | 'favoriteChannelId'>;
+    video: Pick<VideoDetail, 'id' | 'title' | 'description' | 'publishedAt' | 'thumbnailUrl' | 'viewCount' | 'likeCount' | 'commentCount'>;
+    channel: Pick<Channel, 'id' | 'title' | 'thumbnailUrl' | 'subscriberCount'>;
     analysis: SummaryAnalysis | null;
 };
 

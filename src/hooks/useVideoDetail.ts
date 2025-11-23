@@ -1,12 +1,12 @@
 import {useState, useEffect, useCallback, useRef} from "react";
-import type {Comment, VideoBasicInfo, VideoAnalysisInfo, VideoAIAnalysis} from "@/types";
+import type {Comment, VideoBasicInfo, VideoAnalysisInfo, VideoAIAnalysis, VideoUserState} from "@/types";
 import type {YouTubePlayerRef} from "@components/videos/video-info/YoutubePlayer";
 import type {
     VideoDetailLoadingState,
     UseVideoDetailReturn,
     VideoDetailActions
 } from "@/types/video-detail.types";
-import {fetchVideoBasic, fetchVideoAnalysis, fetchVideoComments, fetchVideoAI} from "@/services/video.service";
+import {fetchVideoBasic, fetchVideoAnalysis, fetchVideoComments, fetchVideoAI, fetchVideoUserState} from "@/services/video.service";
 import {fetchFilteredComments} from "@/services/search.service";
 import {isAIAnalysisComplete} from "@/utils/ai-analysis";
 import {POLLING_CONFIG} from "@/config/polling";
@@ -18,7 +18,6 @@ const AI_POLLING_INTERVAL = POLLING_CONFIG.detail.interval;
 const AI_MAX_RETRIES = POLLING_CONFIG.detail.maxRetries;
 const AI_INITIAL_DELAY = POLLING_CONFIG.detail.initialDelay;
 
-// 폴링 실패 시 기본값 (분석 완료했지만 결과 없음)
 const EMPTY_AI_ANALYSIS: VideoAIAnalysis = {
     summary: null,
     isWarning: false,
@@ -29,6 +28,7 @@ const EMPTY_AI_ANALYSIS: VideoAIAnalysis = {
 
 export function useVideoDetail(videoId: string): UseVideoDetailReturn {
     const [basicInfo, setBasicInfo] = useState<VideoBasicInfo | null>(null);
+    const [userState, setUserState] = useState<VideoUserState | null>(null);
     const [analysisInfo, setAnalysisInfo] = useState<VideoAnalysisInfo | null>(null);
     const [comments, setComments] = useState<Comment[]>([]);
     const [aiAnalysis, setAIAnalysis] = useState<VideoAIAnalysis | null>(null);
@@ -50,7 +50,6 @@ export function useVideoDetail(videoId: string): UseVideoDetailReturn {
     const [error, setError] = useState(false);
     const playerRef = useRef<YouTubePlayerRef | null>(null);
 
-    // 기본 정보 로딩
     useEffect(() => {
         let mounted = true;
         let timeoutId: number;
@@ -64,6 +63,15 @@ export function useVideoDetail(videoId: string): UseVideoDetailReturn {
                 setBasicInfo(result);
                 setIsProcessing(false);
                 setRetryCount(0);
+
+                try {
+                    const userStateResult = await fetchVideoUserState(videoId);
+                    if (mounted) {
+                        setUserState(userStateResult);
+                    }
+                } catch {
+                    console.log('[사용자 상태] 조회 실패 (비로그인 상태일 수 있음)');
+                }
 
             } catch (err: unknown) {
                 if (!mounted) return;
@@ -104,7 +112,6 @@ export function useVideoDetail(videoId: string): UseVideoDetailReturn {
         };
     }, [videoId]);
 
-    // 병렬 데이터 로딩
     useEffect(() => {
         if (!basicInfo) return;
         let mounted = true;
@@ -143,7 +150,6 @@ export function useVideoDetail(videoId: string): UseVideoDetailReturn {
         };
     }, [videoId, basicInfo]);
 
-    // AI 폴링
     useEffect(() => {
         if (!isLoading.ai) return;
         if (aiPollingCount >= AI_MAX_RETRIES) {
@@ -226,6 +232,7 @@ export function useVideoDetail(videoId: string): UseVideoDetailReturn {
     return {
         data: {
             basicInfo,
+            userState,
             analysisInfo,
             comments,
             aiAnalysis,

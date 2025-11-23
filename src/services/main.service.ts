@@ -9,7 +9,7 @@ async function fetchNoStore(input: RequestInfo, init?: RequestInit) {
     return fetch(input, {credentials: 'include', cache: 'no-store', ...init});
 }
 
-/** 공통: 4xx를 “정상 흐름”으로 처리할지 여부 */
+/** 공통: 4xx를 "정상 흐름"으로 처리할지 여부 */
 function isBenign4xx(status: number) {
     return status === 400 || status === 401 || status === 403 || status === 404;
 }
@@ -63,8 +63,8 @@ export async function fetchFavoriteChannelVideo(): Promise<FavoriteChannelData |
 
         const latestVideo: VideoSummaryItem | null = videoSummary
             ? {
-                video: {...videoSummary.video, scrapId: null},
-                channel: {...videoSummary.channel, favoriteChannelId: null},
+                video: videoSummary.video,
+                channel: videoSummary.channel,
                 analysis: videoSummary.analysis,
             }
             : null;
@@ -99,8 +99,8 @@ export async function fetchScrapVideos(): Promise<VideoSummaryItem[]> {
         const list = json?.data ?? [];
 
         return list.map((item) => ({
-            video: {...item.video, scrapId: null},
-            channel: {...item.channel, favoriteChannelId: null},
+            video: item.video,
+            channel: item.channel,
             analysis: item.analysis,
         }));
     } catch (e) {
@@ -127,8 +127,8 @@ export async function fetchTrendingVideos(): Promise<VideoSummaryItem[]> {
         const list = json?.data ?? [];
 
         return list.map((item) => ({
-            video: {...item.video, scrapId: null},
-            channel: {...item.channel, favoriteChannelId: null},
+            video: item.video,
+            channel: item.channel,
             analysis: item.analysis,
         }));
     } catch (e) {

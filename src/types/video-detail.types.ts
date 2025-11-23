@@ -1,9 +1,10 @@
-import { VideoBasicInfo, VideoAnalysisInfo, VideoAIAnalysis, Comment } from './video.types';
+import { VideoBasicInfo, VideoAnalysisInfo, VideoAIAnalysis, Comment, VideoUserState } from './video.types';
 import { YouTubePlayerRef } from '@components/videos/video-info/YoutubePlayer';
 import { MutableRefObject } from 'react';
 
 export interface VideoDetailData {
     basicInfo: VideoBasicInfo | null;
+    userState: VideoUserState | null;
     analysisInfo: VideoAnalysisInfo | null;
     comments: Comment[];
     aiAnalysis: VideoAIAnalysis | null;
