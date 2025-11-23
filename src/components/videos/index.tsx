@@ -90,6 +90,7 @@ export default function Detail({videoId}: { videoId: string }) {
 
             <VideoInfo
                 data={data.basicInfo}
+                userState={data.userState}
                 onPlayerReady={(ref) => (playerRef.current = ref)}
             />
 

@@ -11,7 +11,7 @@ import {
     VideoBasicInfo,
     VideoAnalysisInfo,
     VideoAIAnalysis,
-    CommentRepliesResponse
+    CommentRepliesResponse, VideoUserStateResponse, VideoUserState
 } from "@/types/video.types";
 import {VideoSummaryItem, AnalysisSummaryOnly} from "@/types/video-preview.types";
 
@@ -19,6 +19,11 @@ export const fetchVideoBasic = async (apiVideoId: string): Promise<VideoBasicInf
     const res = await api.get<VideoBasicResponse>(`/videos/${apiVideoId}/basic`);
     return res.data.data;
 };
+
+export const fetchVideoUserState = async (apiVideoId: string): Promise<VideoUserState> => {
+    const res = await api.get<VideoUserStateResponse>(`/videos/${apiVideoId}/user-state`);
+    return res.data.data;
+}
 
 export const fetchVideoAnalysis = async (apiVideoId: string): Promise<VideoAnalysisInfo> => {
     const res = await api.get<VideoAnalysisResponse>(`/videos/${apiVideoId}/analysis`);

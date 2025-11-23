@@ -16,7 +16,6 @@ export interface VideoDetail {
     viewCount: number;
     likeCount: number;
     commentCount: number;
-    scrapId?: number | null;
 }
 
 export interface Channel {
@@ -24,7 +23,6 @@ export interface Channel {
     title: string;
     thumbnailUrl: string;
     subscriberCount: number;
-    favoriteChannelId?: number | null;
 }
 
 export interface VideoAnalysis {
@@ -91,6 +89,11 @@ export interface VideoBasicInfo {
     channel: Channel;
 }
 
+export interface VideoUserState {
+    scrapId: number | null;
+    favoriteChannelId: number | null;
+}
+
 export interface VideoAnalysisInfo {
     commentHistogram: HourlyCommentCount[];
     popularTimestamps: TimestampMention[];
@@ -106,11 +109,6 @@ export interface VideoAIAnalysis {
     keywords: string[];
 }
 
-export type VideoBasicResponse = BaseApiResponse<VideoBasicInfo>;
-export type VideoAnalysisResponse = BaseApiResponse<VideoAnalysisInfo>;
-export type VideoCommentsResponse = BaseApiResponse<Comment[]>;
-export type VideoAIResponse = BaseApiResponse<VideoAIAnalysis>;
-
 export interface CommentRepliesResponse {
     timeStamp: string;
     message: string;
@@ -119,3 +117,9 @@ export interface CommentRepliesResponse {
         replies: Reply[];
     };
 }
+
+export type VideoBasicResponse = BaseApiResponse<VideoBasicInfo>;
+export type VideoAnalysisResponse = BaseApiResponse<VideoAnalysisInfo>;
+export type VideoCommentsResponse = BaseApiResponse<Comment[]>;
+export type VideoAIResponse = BaseApiResponse<VideoAIAnalysis>;
+export type VideoUserStateResponse = BaseApiResponse<VideoUserState>;

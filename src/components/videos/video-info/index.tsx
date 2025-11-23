@@ -4,7 +4,7 @@ import {useEffect, useRef, useState, useCallback} from "react";
 import {ChevronDownIcon} from "@heroicons/react/24/solid";
 import YouTubePlayer, {YouTubePlayerRef} from "./YoutubePlayer";
 import {formatDate, formatNumber} from "@/utils/data-format";
-import type {VideoBasicInfo} from "@/types";
+import type {VideoBasicInfo, VideoUserState} from "@/types";
 import {useAuth} from "@/contexts/AuthContext";
 import {createScrap, deleteScrap} from "@/services/video.service";
 import {useFavoriteChannel} from "@/hooks/useFavoriteChannel";
@@ -12,14 +12,15 @@ import {BookmarkIcon, HeartIcon} from '@/components/icons';
 
 interface Props {
     data: VideoBasicInfo;
+    userState: VideoUserState | null;
     onPlayerReady?: (ref: YouTubePlayerRef) => void;
 }
 
-export default function VideoInfoSection({data, onPlayerReady}: Props) {
+export default function VideoInfoSection({data, userState, onPlayerReady}: Props) {
     const {video, channel} = data;
     const {isLoggedIn, handleLogin} = useAuth();
 
-    const [scrapId, setScrapId] = useState<number | null>(video.scrapId ?? null);
+    const [scrapId, setScrapId] = useState<number | null>(userState?.scrapId ?? null);
     const [isExpanded, setIsExpanded] = useState(false);
     const [videoHeight, setVideoHeight] = useState(0);
 
@@ -29,8 +30,12 @@ export default function VideoInfoSection({data, onPlayerReady}: Props) {
         channelId: channel.id,
         channelTitle: channel.title,
         channelThumbnail: channel.thumbnailUrl,
-        initialFavoriteId: channel.favoriteChannelId ?? null,
+        initialFavoriteId: userState?.favoriteChannelId ?? null,
     });
+
+    useEffect(() => {
+        setScrapId(userState?.scrapId ?? null);
+    }, [userState?.scrapId]);
 
     useEffect(() => {
         if (!leftRef.current) return;
