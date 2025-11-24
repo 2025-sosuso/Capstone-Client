@@ -2,18 +2,19 @@ import api from "@/lib/axios";
 import {BaseApiResponse} from "@/types/common.types";
 import {
     Comment,
+    CommentRepliesResponse,
     Reply,
-    VideoResult,
-    VideoBasicResponse,
-    VideoAnalysisResponse,
-    VideoCommentsResponse,
-    VideoAIResponse,
-    VideoBasicInfo,
-    VideoAnalysisInfo,
     VideoAIAnalysis,
-    CommentRepliesResponse, VideoUserStateResponse, VideoUserState
+    VideoAIResponse,
+    VideoAnalysisInfo,
+    VideoAnalysisResponse,
+    VideoBasicInfo,
+    VideoBasicResponse,
+    VideoCommentsResponse,
+    VideoUserState,
+    VideoUserStateResponse
 } from "@/types/video.types";
-import {VideoSummaryItem, AnalysisSummaryOnly} from "@/types/video-preview.types";
+import {AnalysisSummaryOnly, VideoSummaryItem} from "@/types/video-preview.types";
 
 export const fetchVideoBasic = async (apiVideoId: string): Promise<VideoBasicInfo> => {
     const res = await api.get<VideoBasicResponse>(`/videos/${apiVideoId}/basic`);
@@ -49,11 +50,6 @@ export const fetchVideoAIPreview = async (apiVideoId: string): Promise<AnalysisS
 export const fetchCommentReplies = async (apiCommentId: string): Promise<Reply[]> => {
     const res = await api.get<CommentRepliesResponse>(`/comments/${apiCommentId}/replies`);
     return res.data.data.replies ?? [];
-};
-
-export const fetchVideoDetail = async (apiVideoId: string): Promise<VideoResult> => {
-    const res = await api.get<BaseApiResponse<VideoResult>>(`/videos/${apiVideoId}`);
-    return res.data.data;
 };
 
 export const createScrap = async (apiVideoId: string): Promise<number> => {
