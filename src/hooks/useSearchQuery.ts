@@ -43,7 +43,7 @@ export function useSearchQuery(query: string | null, activeTab: TabType) {
         setState((prev) => ({
             ...prev,
             videos: prev.videos.map((item) =>
-                item.video.id === videoId ? { ...item, analysis } : item
+                item.video.id === videoId ? {...item, analysis} : item
             ),
         }));
     }, []);
@@ -52,7 +52,7 @@ export function useSearchQuery(query: string | null, activeTab: TabType) {
         setState((prev) => ({
             ...prev,
             shorts: prev.shorts.map((item) =>
-                item.video.id === videoId ? { ...item, analysis } : item
+                item.video.id === videoId ? {...item, analysis} : item
             ),
         }));
     }, []);
@@ -63,55 +63,35 @@ export function useSearchQuery(query: string | null, activeTab: TabType) {
     useEffect(() => {
         if (!query) return;
 
-        const fetchData = async () => {
-            setState({
-                channels: null,
-                videos: [],
-                shorts: [],
-                loading: {channels: true, videos: true, shorts: true}, // 백그라운드 로딩
-                videoPagination: {nextPageToken: null, hasMore: false},
-                shortsPagination: {nextPageToken: null, hasMore: false},
-            });
+        // 상태 초기화
+        setState({
+            channels: null,
+            videos: [],
+            shorts: [],
+            loading: {channels: true, videos: true, shorts: true},
+            videoPagination: {nextPageToken: null, hasMore: false},
+            shortsPagination: {nextPageToken: null, hasMore: false},
+        });
 
-            if (activeTab === 'all') {
-                console.log('🔍 [All Tab] 검색 시작:', query);
-
-                const [channelResult, videoResult, shortsResult] = await Promise.allSettled([
-                    searchChannels(query),
-                    searchVideos(query),
-                    searchShorts(query),
-                ]);
-
-                setState((prev) => {
-                    const newState = {...prev, loading: {channels: false, videos: false, shorts: false}};
-
-                    if (channelResult.status === 'fulfilled') {
-                        newState.channels = channelResult.value;
-                    }
-
-                    if (videoResult.status === 'fulfilled') {
-                        newState.videos = videoResult.value.results;
-                        newState.videoPagination = {
-                            nextPageToken: videoResult.value.nextPageToken,
-                            hasMore: videoResult.value.hasMore,
-                        };
-                    }
-
-                    if (shortsResult.status === 'fulfilled') {
-                        newState.shorts = shortsResult.value.results;
-                        newState.shortsPagination = {
-                            nextPageToken: shortsResult.value.nextPageToken,
-                            hasMore: shortsResult.value.hasMore,
-                        };
-                    }
-
-                    return newState;
+        // 개별 fetch 함수들
+        const fetchChannels = () => {
+            searchChannels(query)
+                .then((result) => {
+                    setState((prev) => ({
+                        ...prev,
+                        channels: result,
+                        loading: {...prev.loading, channels: false},
+                    }));
+                })
+                .catch((error) => {
+                    console.error("❌ [Channel] 실패:", error);
+                    setState((prev) => ({...prev, loading: {...prev.loading, channels: false}}));
                 });
-            } else if (activeTab === 'video') {
-                console.log('🔍 [Video Tab] 검색 시작:', query);
+        };
 
-                try {
-                    const result = await searchVideos(query);
+        const fetchVideos = () => {
+            searchVideos(query)
+                .then((result) => {
                     setState((prev) => ({
                         ...prev,
                         videos: result.results,
@@ -121,15 +101,16 @@ export function useSearchQuery(query: string | null, activeTab: TabType) {
                         },
                         loading: {...prev.loading, videos: false},
                     }));
-                } catch (error) {
-                    console.error("❌ [Video Tab] 실패:", error);
+                })
+                .catch((error) => {
+                    console.error("❌ [Video] 실패:", error);
                     setState((prev) => ({...prev, loading: {...prev.loading, videos: false}}));
-                }
-            } else if (activeTab === 'shorts') {
-                console.log('🔍 [Shorts Tab] 검색 시작:', query);
+                });
+        };
 
-                try {
-                    const result = await searchShorts(query);
+        const fetchShorts = () => {
+            searchShorts(query)
+                .then((result) => {
                     setState((prev) => ({
                         ...prev,
                         shorts: result.results,
@@ -139,28 +120,26 @@ export function useSearchQuery(query: string | null, activeTab: TabType) {
                         },
                         loading: {...prev.loading, shorts: false},
                     }));
-                } catch (error) {
-                    console.error("❌ [Shorts Tab] 실패:", error);
+                })
+                .catch((error) => {
+                    console.error("❌ [Shorts] 실패:", error);
                     setState((prev) => ({...prev, loading: {...prev.loading, shorts: false}}));
-                }
-            } else if (activeTab === 'channel') {
-                console.log('🔍 [Channel Tab] 검색 시작:', query);
-
-                try {
-                    const result = await searchChannels(query);
-                    setState((prev) => ({
-                        ...prev,
-                        channels: result,
-                        loading: {...prev.loading, channels: false},
-                    }));
-                } catch (error) {
-                    console.error("❌ [Channel Tab] 실패:", error);
-                    setState((prev) => ({...prev, loading: {...prev.loading, channels: false}}));
-                }
-            }
+                });
         };
 
-        fetchData();
+        // 탭별 fetch 실행
+        if (activeTab === 'all') {
+            fetchChannels();
+            fetchVideos();
+            fetchShorts();
+        } else if (activeTab === 'video') {
+            fetchVideos();
+        } else if (activeTab === 'shorts') {
+            fetchShorts();
+        } else if (activeTab === 'channel') {
+            fetchChannels();
+        }
+
     }, [query, activeTab, router]);
 
     return {
