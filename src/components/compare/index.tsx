@@ -1,49 +1,23 @@
 'use client'
 
-import {useEffect, useState} from "react";
+import {useMemo} from "react";
 import {useSearchParams} from "next/navigation";
-import type {VideoResult} from "@/types";
-import {fetchVideoDetail} from "@/services/video.service";
+import {useCompareVideos} from "@/hooks/useCompareVideos";
 import CompareItem from "@components/compare/CompareItem";
 import LoadingSection from "@components/common/LoadingSection";
 
 export default function Compare() {
     const searchParams = useSearchParams();
     const idsParam = searchParams.get("ids") || "";
-    const ids = idsParam.split(",").filter(Boolean);
 
-    const [compareData, setCompareData] = useState<(VideoResult | null)[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const ids = useMemo(() => idsParam.split(",").filter(Boolean), [idsParam]);
 
-    useEffect(() => {
-        if (ids.length === 0) {
-            setIsLoading(false);
-            return;
-        }
-
-        const loadAllVideos = async () => {
-            try {
-                const results = await Promise.all(
-                    ids.map(id => fetchVideoDetail(id).catch((err) => {
-                        console.error(`${id} 로딩 실패:`, err);
-                        return null;
-                    }))
-                );
-                setCompareData(results);
-            } catch (error) {
-                console.error("데이터 로딩 실패:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        loadAllVideos();
-    }, [ids]);
+    const {data, isLoading} = useCompareVideos(ids);
 
     if (isLoading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
-                    <LoadingSection message='영상 데이터를 비교 중입니다.'/>
+                <LoadingSection message="영상 데이터를 비교 중입니다."/>
             </div>
         );
     }
@@ -63,8 +37,8 @@ export default function Compare() {
         <div className="w-full px-4 py-8 max-w-7xl mx-auto">
             <h1 className="text-2xl font-bold mb-8">📊 영상 비교하기</h1>
             <div className="flex gap-6 overflow-x-auto">
-                {compareData.map((data, idx) => (
-                    <CompareItem data={data} key={ids[idx]}/>
+                {data.map((video, idx) => (
+                    <CompareItem data={video} key={ids[idx]}/>
                 ))}
             </div>
         </div>
