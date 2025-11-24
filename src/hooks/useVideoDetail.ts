@@ -18,14 +18,6 @@ const AI_POLLING_INTERVAL = POLLING_CONFIG.detail.interval;
 const AI_MAX_RETRIES = POLLING_CONFIG.detail.maxRetries;
 const AI_INITIAL_DELAY = POLLING_CONFIG.detail.initialDelay;
 
-const EMPTY_AI_ANALYSIS: VideoAIAnalysis = {
-    summary: null,
-    isWarning: false,
-    languageDistribution: [],
-    sentimentDistribution: { positive: 0, negative: 0, other: 0 },
-    keywords: []
-};
-
 export function useVideoDetail(videoId: string): UseVideoDetailReturn {
     const [basicInfo, setBasicInfo] = useState<VideoBasicInfo | null>(null);
     const [userState, setUserState] = useState<VideoUserState | null>(null);
@@ -154,7 +146,6 @@ export function useVideoDetail(videoId: string): UseVideoDetailReturn {
         if (!isLoading.ai) return;
         if (aiPollingCount >= AI_MAX_RETRIES) {
             console.warn(`⏱️ [AI 폴링 종료] ${videoId} - 최대 ${AI_MAX_RETRIES}회 도달`);
-            setAIAnalysis(EMPTY_AI_ANALYSIS);
             setIsLoading(prev => ({...prev, ai: false}));
             return;
         }
@@ -173,6 +164,10 @@ export function useVideoDetail(videoId: string): UseVideoDetailReturn {
 
                 if (isAIAnalysisComplete(ai)) {
                     console.log(`✅ [AI 폴링 성공] ${videoId} - ${nextRetry}회 시도만에 완료`);
+                    setAIAnalysis(ai);
+                    setIsLoading(prev => ({...prev, ai: false}));
+                } else if (nextRetry >= AI_MAX_RETRIES) {
+                    console.warn(`⏱️ [AI 폴링 종료] ${videoId} - 최대 횟수 도달`);
                     setAIAnalysis(ai);
                     setIsLoading(prev => ({...prev, ai: false}));
                 } else {
