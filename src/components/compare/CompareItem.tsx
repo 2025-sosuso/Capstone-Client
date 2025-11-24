@@ -8,6 +8,7 @@ import LanguageChart from "@components/videos/LanguageChart";
 import CommentTimeChart from "@components/videos/CommentTimeChart";
 import TagList from "@components/common/Tag/TagList";
 import SectionLayout from "@components/videos/SectionLayout";
+import {isAIAnalysisComplete} from "@/utils/ai-analysis";
 
 interface Props {
     data: VideoResult | null;
@@ -22,37 +23,39 @@ export default function CompareItem({data}: Props) {
         );
     }
 
+    const aiLoading = !isAIAnalysisComplete(data.analysis);
+
     return (
         <div className="flex-1 min-w-0 flex flex-col gap-5">
             <div className="bg-white rounded-lg overflow-hidden">
-                <Thumbnail src={data.video.thumbnailUrl} />
+                <Thumbnail src={data.video.thumbnailUrl}/>
                 <div className="p-4">
-                    <VideoInfo video={data.video} channel={data.channel} />
+                    <VideoInfo video={data.video} channel={data.channel}/>
                 </div>
             </div>
 
             <SectionLayout header="AI 전체 댓글 요약">
-                <AISummary summary={data.analysis.summary} size={'sm'}/>
+                <AISummary summary={data.analysis.summary} size="sm" isLoading={aiLoading}/>
             </SectionLayout>
 
             <SectionLayout header="댓글 감정 비율">
-                <SentimentBar ratio={data.analysis.sentimentDistribution} size={'sm'}/>
+                <SentimentBar ratio={data.analysis.sentimentDistribution} size="sm" isLoading={aiLoading}/>
             </SectionLayout>
 
             <SectionLayout header="좋아요 Top 5">
-                <CommentList comments={data.analysis.topComments} />
+                <CommentList comments={data.analysis.topComments}/>
             </SectionLayout>
 
             <SectionLayout header="언어 비율">
-                <LanguageChart data={data.analysis.languageDistribution} />
+                <LanguageChart data={data.analysis.languageDistribution}/>
             </SectionLayout>
 
             <SectionLayout header="댓글 작성 시간대">
-                <CommentTimeChart data={data.analysis.commentHistogram} />
+                <CommentTimeChart data={data.analysis.commentHistogram}/>
             </SectionLayout>
 
             <SectionLayout header="주요 키워드">
-                <TagList tags={data.analysis.keywords} />
+                <TagList tags={data.analysis.keywords} size="sm" isLoading={aiLoading}/>
             </SectionLayout>
         </div>
     );
