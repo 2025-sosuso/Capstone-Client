@@ -134,6 +134,7 @@ export default function CommentTimeChart({data}: Props) {
     return (
         <div className="w-full min-w-[16rem] h-[250px]">
             <Line
+                key={hasValidData ? 'with-data' : 'no-data'}
                 data={chartData}
                 options={options}
                 plugins={!hasValidData ? [centerTextPlugin] : []}

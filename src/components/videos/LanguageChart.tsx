@@ -122,6 +122,7 @@ export default function LanguageChart({data}: LanguageChartProps) {
     return (
         <div className="w-full max-w-sm min-w-[16rem] h-[300px] mx-auto p-3">
             <Doughnut
+                key={hasValidData ? 'with-data' : 'no-data'}
                 data={chartData}
                 options={options}
                 plugins={!hasValidData ? [centerTextPlugin] : []}

@@ -187,6 +187,7 @@ export default function SentimentFlowChart({data}: SentimentFlowChartProps) {
     return (
         <div className="w-full" style={{height: `${CHART_CONFIG.height}px`}}>
             <Line
+                key={hasValidData ? 'with-data' : 'no-data'}
                 data={chartData}
                 options={options}
                 plugins={!hasValidData ? [centerTextPlugin] : []}
