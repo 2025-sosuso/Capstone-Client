@@ -8,7 +8,7 @@ type Props = {
     isNarrow: boolean;
 };
 
-function SearchInput({ isNarrow }: Props) {
+function SearchInput({isNarrow}: Props) {
     const [search, setSearch] = useState('');
     const [isComposing, setIsComposing] = useState(false);
     const router = useRouter();
@@ -21,7 +21,15 @@ function SearchInput({ isNarrow }: Props) {
 
     const handleSearch = () => {
         if (!search.trim()) return;
-        router.push(`/search?q=${encodeURIComponent(search)}`);
+
+        const currentQuery = searchParams.get('q') || '';
+        const newUrl = `/search?q=${encodeURIComponent(search)}`;
+
+        if (currentQuery === search.trim()) {
+            window.location.href = newUrl;
+        } else {
+            router.push(newUrl);
+        }
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -66,7 +74,7 @@ function SearchInput({ isNarrow }: Props) {
     );
 }
 
-function SearchInputFallback({ isNarrow }: Props) {
+function SearchInputFallback({isNarrow}: Props) {
     return (
         <div
             className={`${
@@ -102,10 +110,10 @@ function SearchInputFallback({ isNarrow }: Props) {
     );
 }
 
-export default function HeaderSearch({ isNarrow }: Props) {
+export default function HeaderSearch({isNarrow}: Props) {
     return (
-        <Suspense fallback={<SearchInputFallback isNarrow={isNarrow} />}>
-            <SearchInput isNarrow={isNarrow} />
+        <Suspense fallback={<SearchInputFallback isNarrow={isNarrow}/>}>
+            <SearchInput isNarrow={isNarrow}/>
         </Suspense>
     );
 }
