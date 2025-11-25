@@ -25,7 +25,13 @@ export default function SearchTabs() {
             params.set('tab', tab);
         }
 
-        router.push(`/search?${params.toString()}`);
+        const url = `/search?${params.toString()}`;
+
+        if (tab === activeTab) {
+            window.location.href = url;
+        } else {
+            router.push(url);
+        }
     };
 
     return (
@@ -37,13 +43,9 @@ export default function SearchTabs() {
                     <button
                         key={value}
                         onClick={() => handleTabChange(value)}
-                        className={`
-                            px-4 py-3 text-lg font-medium border-b-2 transition-colors
-                            ${isActive
-                            ? 'border-black text-black'
-                            : 'border-transparent text-gray-500 hover:text-gray-700'
-                        }
-                        `}
+                        className={`px-4 py-3 text-lg font-medium border-b-2 transition-colors cursor-pointer ${
+                            isActive ? 'border-black text-black' : 'border-transparent text-gray-500 hover:text-gray-700'
+                        }`}
                     >
                         {label}
                     </button>
