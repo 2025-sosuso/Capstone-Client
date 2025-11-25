@@ -64,18 +64,19 @@ export default function CommentItem({
 
     return (
         <div className="w-full" ref={commentRef}>
-            <div className="relative">
+            <div className={`relative ${hasReplies ? 'group' : ''}`}>
                 {showStacks && (
                     <>
                         <div
-                            className={`absolute inset-0 ${CARD_COLORS.stack2} rounded-xl -translate-y-1.5 -z-10 mb-1 mx-1`}/>
-                        <div className={`absolute inset-0 ${CARD_COLORS.stack1} rounded-xl -translate-y-0.5 -z-10`}/>
+                            className={`absolute inset-0 ${CARD_COLORS.main} ${CARD_COLORS.groupHover} rounded-xl -translate-y-1.5 -z-10 mb-1 mx-1 transition-colors`}/>
+                        <div
+                            className={`absolute inset-0 ${CARD_COLORS.blank} rounded-xl -translate-y-0.5 -z-10 transition-colors`}/>
                     </>
                 )}
 
                 <div
                     className={`p-4 sm:px-5 sm:py-4 rounded-xl ${CARD_COLORS.main} ${
-                        hasReplies ? `cursor-pointer ${CARD_COLORS.hover} transition-colors` : ''
+                        hasReplies ? `cursor-pointer ${CARD_COLORS.groupHover} transition-colors` : ''
                     } ${showStacks ? 'mt-1' : ''}`}
                     onClick={handleToggleReplies}
                 >
@@ -118,27 +119,31 @@ export default function CommentItem({
                 </div>
             </div>
 
-            {hasReplies && isLoadingReplies && (
-                <div className="ml-3 sm:ml-5 mt-2 flex items-center gap-2 text-sm text-gray-600">
-                    <div className="w-4 h-4 border-2 border-gray-600 border-t-transparent rounded-full animate-spin"/>
-                    답글 로딩 중...
-                </div>
-            )}
+            {hasReplies && (
+                <>
+                    {isLoadingReplies && (
+                        <div className="ml-3 sm:ml-5 mt-2 flex items-center gap-2 text-sm text-gray-600">
+                            <div
+                                className="w-4 h-4 border-2 border-gray-600 border-t-transparent rounded-full animate-spin"/>
+                            답글 로딩 중...
+                        </div>
+                    )}
 
-            {hasReplies && loadError && (
-                <div className="ml-3 sm:ml-5 mt-2">
-                    <p className="text-xs text-gray-500">
-                        답글을 불러오는데 실패했습니다. 다시 시도해주세요.
-                    </p>
-                </div>
-            )}
+                    {loadError && (
+                        <div className="ml-3 sm:ml-5 mt-2">
+                            <p className="text-xs text-gray-500">
+                                답글을 불러오는데 실패했습니다. 다시 시도해주세요.
+                            </p>
+                        </div>
+                    )}
 
-            {hasReplies && isRepliesOpen && !isLoadingReplies && (
-                <div className="ml-3 sm:ml-5 mt-2 space-y-2">
-                    <ReplyList replies={replies}/>
-                </div>
+                    {isRepliesOpen && !isLoadingReplies && (
+                        <div className="ml-3 sm:ml-5 mt-2 space-y-2">
+                            <ReplyList replies={replies}/>
+                        </div>
+                    )}
+                </>
             )}
-
             {selectedText && position && (
                 <KeywordTooltip
                     keyword={selectedText}

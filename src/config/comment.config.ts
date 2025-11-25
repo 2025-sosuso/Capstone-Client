@@ -1,8 +1,8 @@
 export const CARD_COLORS = {
     main: "bg-gray-100",
     hover: "hover:bg-gray-200/80",
-    stack1: "bg-white",
-    stack2: "bg-gray-100",
+    groupHover: "group-hover:bg-gray-200/80",
+    blank: "bg-white",
 } as const;
 
 export const SENTIMENT_LABEL = {
