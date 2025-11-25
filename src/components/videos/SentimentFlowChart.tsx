@@ -14,6 +14,7 @@ import {
     Tooltip,
 } from 'chart.js';
 import {SentimentFlowData} from "@/types";
+import {SENTIMENT_FLOW_CHART_COLORS, SENTIMENT_FLOW_CHART_CONFIG} from "@/config/chart.config";
 
 ChartJS.register(
     CategoryScale,
@@ -24,29 +25,6 @@ ChartJS.register(
     Tooltip,
     Legend
 );
-
-const CHART_COLORS = {
-    positive: {
-        background: 'rgba(239, 246, 255, 1)',
-        border: 'rgba(59, 130, 246, 0.6)',
-    },
-    negative: {
-        background: 'rgba(254, 242, 242, 1)',
-        border: 'rgba(239, 68, 68, 0.6)',
-    },
-    other: {
-        background: 'rgba(249, 250, 251, 1)',
-        border: 'rgba(107, 114, 128, 0.6)',
-    },
-} as const;
-
-const CHART_CONFIG = {
-    borderWidth: 1.3,
-    tension: 0.4,
-    height: 300,
-    minY: 0,
-    maxY: 100,
-} as const;
 
 const centerTextPlugin: Plugin<'line'> = {
     id: 'centerText',
@@ -80,29 +58,29 @@ export default function SentimentFlowChart({data}: SentimentFlowChartProps) {
             {
                 label: '긍정',
                 data: data.map(item => item.positive),
-                backgroundColor: CHART_COLORS.positive.background,
-                borderColor: CHART_COLORS.positive.border,
-                borderWidth: CHART_CONFIG.borderWidth,
+                backgroundColor: SENTIMENT_FLOW_CHART_COLORS.positive.background,
+                borderColor: SENTIMENT_FLOW_CHART_COLORS.positive.border,
+                borderWidth: SENTIMENT_FLOW_CHART_CONFIG.borderWidth,
                 fill: true,
-                tension: CHART_CONFIG.tension,
+                tension: SENTIMENT_FLOW_CHART_CONFIG.tension,
             },
             {
                 label: '부정',
                 data: data.map(item => item.negative),
-                backgroundColor: CHART_COLORS.negative.background,
-                borderColor: CHART_COLORS.negative.border,
-                borderWidth: CHART_CONFIG.borderWidth,
+                backgroundColor: SENTIMENT_FLOW_CHART_COLORS.negative.background,
+                borderColor: SENTIMENT_FLOW_CHART_COLORS.negative.border,
+                borderWidth: SENTIMENT_FLOW_CHART_CONFIG.borderWidth,
                 fill: true,
-                tension: CHART_CONFIG.tension,
+                tension: SENTIMENT_FLOW_CHART_CONFIG.tension,
             },
             {
                 label: '기타',
                 data: data.map(item => item.other),
-                backgroundColor: CHART_COLORS.other.background,
-                borderColor: CHART_COLORS.other.border,
-                borderWidth: CHART_CONFIG.borderWidth,
+                backgroundColor: SENTIMENT_FLOW_CHART_COLORS.other.background,
+                borderColor: SENTIMENT_FLOW_CHART_COLORS.other.border,
+                borderWidth: SENTIMENT_FLOW_CHART_CONFIG.borderWidth,
                 fill: true,
-                tension: CHART_CONFIG.tension,
+                tension: SENTIMENT_FLOW_CHART_CONFIG.tension,
             },
         ],
     } : {
@@ -113,9 +91,9 @@ export default function SentimentFlowChart({data}: SentimentFlowChartProps) {
                 data: [0],
                 backgroundColor: 'rgba(229, 231, 235, 0.5)',
                 borderColor: 'rgba(229, 231, 235, 0.5)',
-                borderWidth: CHART_CONFIG.borderWidth,
+                borderWidth: SENTIMENT_FLOW_CHART_CONFIG.borderWidth,
                 fill: true,
-                tension: CHART_CONFIG.tension,
+                tension: SENTIMENT_FLOW_CHART_CONFIG.tension,
             },
         ],
     };
@@ -129,15 +107,13 @@ export default function SentimentFlowChart({data}: SentimentFlowChartProps) {
         },
         scales: {
             x: {
-                stacked: true,
                 grid: {
                     display: false,
                 },
             },
             y: {
-                stacked: true,
-                min: CHART_CONFIG.minY,
-                max: CHART_CONFIG.maxY,
+                min: SENTIMENT_FLOW_CHART_CONFIG.minY,
+                max: SENTIMENT_FLOW_CHART_CONFIG.maxY,
                 ticks: {
                     stepSize: 20,
                     callback: (value) => `${value}%`,
@@ -170,7 +146,7 @@ export default function SentimentFlowChart({data}: SentimentFlowChartProps) {
     };
 
     return (
-        <div className="w-full" style={{height: `${CHART_CONFIG.height}px`}}>
+        <div className="w-full" style={{height: `${SENTIMENT_FLOW_CHART_CONFIG.height}px`}}>
             <Line
                 key={hasValidData ? 'with-data' : 'no-data'}
                 data={chartData}

@@ -4,6 +4,7 @@ import {useState, useCallback} from 'react';
 import SentimentItem from './SentimentItem';
 import {SentimentRatio} from '@/types/video.types';
 import EmptyState from "@components/common/EmptyState";
+import {SENTIMENT_BAR_COLORS} from "@/config/chart.config";
 
 type SentimentType = 'positive' | 'negative' | 'other';
 
@@ -13,27 +14,6 @@ interface SentimentBarProps {
     onClick?: (sentiment: SentimentType) => void;
     isLoading?: boolean;
 }
-
-const COLORS = {
-    positive: {
-        text: 'text-blue-500',
-        bg: 'bg-blue-50',
-        hoverBg: 'hover:bg-blue-100/90',
-        label: '긍정',
-    },
-    negative: {
-        text: 'text-red-500',
-        bg: 'bg-red-50',
-        hoverBg: 'hover:bg-red-100/70',
-        label: '부정',
-    },
-    other: {
-        text: 'text-gray-500',
-        bg: 'bg-gray-50',
-        hoverBg: 'hover:bg-gray-200/70',
-        label: '기타',
-    },
-} as const;
 
 export default function SentimentBar({ratio, size = 'md', onClick, isLoading = false}: SentimentBarProps) {
     const [hoveredKey, setHoveredKey] = useState<SentimentType | null>(null);
@@ -49,11 +29,11 @@ export default function SentimentBar({ratio, size = 'md', onClick, isLoading = f
         Object.values(ratio).some((v) => typeof v === 'number' && v > 0);
 
     if (isLoading) {
-        return <EmptyState message="감정 분석 중입니다" variant="loading" />;
+        return <EmptyState message="감정 분석 중입니다" variant="loading"/>;
     }
 
     if (!hasValidData) {
-        return <EmptyState message="감정 분석 데이터가 없습니다." />;
+        return <EmptyState message="감정 분석 데이터가 없습니다."/>;
     }
 
     return (
@@ -62,7 +42,7 @@ export default function SentimentBar({ratio, size = 'md', onClick, isLoading = f
                 {Object.entries(ratio).map(([key, percent]) => {
                     const sentimentKey = key as SentimentType;
                     const isHovered = hoveredKey === sentimentKey;
-                    const colorSet = COLORS[sentimentKey];
+                    const colorSet = SENTIMENT_BAR_COLORS[sentimentKey];
 
                     if (!colorSet) return null;
 
