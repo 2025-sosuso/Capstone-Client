@@ -1,21 +1,19 @@
 "use client";
 
-import {useMemo} from 'react';
 import {Line} from 'react-chartjs-2';
 import {
-    Chart as ChartJS,
     CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Filler,
-    Tooltip,
-    Legend,
+    Chart as ChartJS,
     ChartOptions,
+    Filler,
+    Legend,
+    LinearScale,
+    LineElement,
     Plugin,
+    PointElement,
+    Tooltip,
 } from 'chart.js';
 import {SentimentFlowData} from "@/types";
-import {normalizePercents} from '@/utils/percent';
 
 ChartJS.register(
     CategoryScale,
@@ -76,25 +74,12 @@ interface SentimentFlowChartProps {
 export default function SentimentFlowChart({data}: SentimentFlowChartProps) {
     const hasValidData = data && data.length > 0;
 
-    const normalizedData = useMemo(() => {
-        if (!hasValidData) return null;
-
-        return data.map(item => ({
-            date: item.date,
-            ...normalizePercents({
-                positive: item.positive,
-                negative: item.negative,
-                other: item.other,
-            })
-        }));
-    }, [data, hasValidData]);
-
-    const chartData = normalizedData ? {
-        labels: normalizedData.map(item => item.date),
+    const chartData = hasValidData ? {
+        labels: data.map(item => item.date),
         datasets: [
             {
                 label: '긍정',
-                data: normalizedData.map(item => item.positive),
+                data: data.map(item => item.positive),
                 backgroundColor: CHART_COLORS.positive.background,
                 borderColor: CHART_COLORS.positive.border,
                 borderWidth: CHART_CONFIG.borderWidth,
@@ -103,7 +88,7 @@ export default function SentimentFlowChart({data}: SentimentFlowChartProps) {
             },
             {
                 label: '부정',
-                data: normalizedData.map(item => item.negative),
+                data: data.map(item => item.negative),
                 backgroundColor: CHART_COLORS.negative.background,
                 borderColor: CHART_COLORS.negative.border,
                 borderWidth: CHART_CONFIG.borderWidth,
@@ -112,7 +97,7 @@ export default function SentimentFlowChart({data}: SentimentFlowChartProps) {
             },
             {
                 label: '기타',
-                data: normalizedData.map(item => item.other),
+                data: data.map(item => item.other),
                 backgroundColor: CHART_COLORS.other.background,
                 borderColor: CHART_COLORS.other.border,
                 borderWidth: CHART_CONFIG.borderWidth,
