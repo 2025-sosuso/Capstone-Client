@@ -7,25 +7,10 @@ import {Comment} from "@/types/video.types";
 import {fetchCommentReplies} from "@/services/video.service";
 import {useTextSelection} from "@/hooks/useTextSelection";
 import KeywordTooltip from "./KeywordTooltip";
-import {ReplyList, ReplyToggleButton} from "@components/common/Comment/Reply";
+import {ReplyList} from "@components/common/Comment/Reply";
+import {CARD_COLORS, SENTIMENT_LABEL, DETAIL_SENTIMENTS_MAP} from "@/config/comment.config";
 
 type Props = Comment;
-
-const SENTIMENT_LABEL = {
-    POSITIVE: {text: "긍정", color: "bg-blue-100 text-blue-600"},
-    NEGATIVE: {text: "부정", color: "bg-red-100 text-red-600"},
-    OTHER: {text: "기타", color: "bg-gray-200 text-gray-600"},
-} as const;
-
-const DETAIL_SENTIMENTS_MAP: Record<string, { text: string; color: string }> = {
-    JOY: {text: "기쁨", color: "bg-yellow-50 text-yellow-600 border border-yellow-300"},
-    LOVE: {text: "사랑", color: "bg-rose-50 text-rose-600 border border-rose-300"},
-    GRATITUDE: {text: "감사", color: "bg-emerald-50 text-emerald-600 border border-emerald-300"},
-    ANGER: {text: "분노", color: "bg-red-50 text-red-600 border border-red-300"},
-    SADNESS: {text: "슬픔", color: "bg-indigo-50 text-indigo-600 border border-indigo-300"},
-    FEAR: {text: "두려움", color: "bg-purple-50 text-purple-600 border border-purple-300"},
-    NEUTRAL: {text: "중립", color: "bg-gray-50 text-gray-500 border border-gray-300"},
-};
 
 export default function CommentItem({
                                         id,
@@ -48,8 +33,11 @@ export default function CommentItem({
 
     const badge = SENTIMENT_LABEL[sentiment] ?? SENTIMENT_LABEL.OTHER;
     const displaySentiments = detailSentiments.slice(0, 3);
+    const showStacks = hasReplies && !isRepliesOpen;
 
     const handleToggleReplies = async () => {
+        if (!hasReplies) return;
+
         if (isRepliesOpen) {
             setIsRepliesOpen(false);
             return;
@@ -76,63 +64,77 @@ export default function CommentItem({
 
     return (
         <div className="w-full" ref={commentRef}>
+            <div className="relative">
+                {showStacks && (
+                    <>
+                        <div
+                            className={`absolute inset-0 ${CARD_COLORS.stack2} rounded-xl -translate-y-1.5 -z-10 mb-1 mx-1`}/>
+                        <div className={`absolute inset-0 ${CARD_COLORS.stack1} rounded-xl -translate-y-0.5 -z-10`}/>
+                    </>
+                )}
 
-            <div className="p-4 sm:px-5 sm:py-4 rounded-xl bg-gray-100">
-                <div className="flex flex-col gap-2.5">
+                <div
+                    className={`p-4 sm:px-5 sm:py-4 rounded-xl ${CARD_COLORS.main} ${
+                        hasReplies ? `cursor-pointer ${CARD_COLORS.hover} transition-colors` : ''
+                    } ${showStacks ? 'mt-1' : ''}`}
+                    onClick={handleToggleReplies}
+                >
+                    <div className="flex flex-col gap-2.5">
+                        <div className="flex justify-between items-start gap-3">
+                            <div className="flex items-center gap-2 flex-wrap">
+                                <p className="text-sm font-semibold text-gray-800 max-w-[200px] truncate">
+                                    {author}
+                                </p>
+                                <p className="text-sm text-gray-400 whitespace-nowrap">
+                                    {formatDate(publishedAt, true)}
+                                </p>
+                                <span
+                                    className={`text-xs px-2 py-[2px] rounded-full font-medium whitespace-nowrap ${badge.color}`}>
+                                    {badge.text}
+                                </span>
+                                {displaySentiments.map((emotion, index) => {
+                                    const emotionStyle = DETAIL_SENTIMENTS_MAP[emotion];
+                                    if (!emotionStyle) return null;
+                                    return (
+                                        <span
+                                            key={`${emotion}-${index}`}
+                                            className={`text-xs px-2 py-[2px] rounded-full font-medium whitespace-nowrap ${emotionStyle.color}`}
+                                        >
+                                            {emotionStyle.text}
+                                        </span>
+                                    );
+                                })}
+                            </div>
+                            <div className="flex gap-1 items-center flex-shrink-0">
+                                <HandThumbUpIcon className="w-4 h-4 text-gray-400"/>
+                                <p className="text-sm text-gray-500 whitespace-nowrap">
+                                    {formatNumber(likeCount)}
+                                </p>
+                            </div>
+                        </div>
 
-                    <div className="flex justify-between items-start gap-3">
-                        <div className="flex items-center gap-2 flex-wrap">
-                            <p className="text-sm font-semibold text-gray-800 max-w-[200px] truncate">
-                                {author}
-                            </p>
-                            <p className="text-sm text-gray-400 whitespace-nowrap">
-                                {formatDate(publishedAt, true)}
-                            </p>
-                            <span
-                                className={`text-xs px-2 py-[2px] rounded-full font-medium whitespace-nowrap ${badge.color}`}>
-                                {badge.text}
-                            </span>
-                            {displaySentiments.map((emotion, index) => {
-                                const emotionStyle = DETAIL_SENTIMENTS_MAP[emotion];
-                                if (!emotionStyle) return null;
-                                return (
-                                    <span
-                                        key={`${emotion}-${index}`}
-                                        className={`text-xs px-2 py-[2px] rounded-full font-medium whitespace-nowrap ${emotionStyle.color}`}
-                                    >
-                                        {emotionStyle.text}
-                                    </span>
-                                );
-                            })}
-                        </div>
-                        <div className="flex gap-1 items-center flex-shrink-0">
-                            <HandThumbUpIcon className="w-4 h-4 text-gray-400"/>
-                            <p className="text-sm text-gray-500 whitespace-nowrap">
-                                {formatNumber(likeCount)}
-                            </p>
-                        </div>
+                        <p className="text-sm text-gray-800 whitespace-pre-wrap break-words">{text}</p>
                     </div>
-
-                    <p className="text-sm text-gray-800 whitespace-pre-wrap break-words">{text}</p>
-
-                    {hasReplies && (
-                        <ReplyToggleButton
-                            isOpen={isRepliesOpen}
-                            isLoading={isLoadingReplies}
-                            onClick={handleToggleReplies}
-                        />
-                    )}
-
-                    {loadError && (
-                        <p className="text-xs text-gray-500 mt-1">
-                            답글을 불러오는데 실패했습니다. 다시 시도해주세요.
-                        </p>
-                    )}
                 </div>
             </div>
 
+            {hasReplies && isLoadingReplies && (
+                <div className="ml-3 sm:ml-5 mt-2 flex items-center gap-2 text-sm text-gray-600">
+                    <div className="w-4 h-4 border-2 border-gray-600 border-t-transparent rounded-full animate-spin"/>
+                    답글 로딩 중...
+                </div>
+            )}
+
+            {hasReplies && loadError && (
+                <div className="ml-3 sm:ml-5 mt-2">
+                    <p className="text-xs text-gray-500">
+                        답글을 불러오는데 실패했습니다. 다시 시도해주세요.
+                    </p>
+                </div>
+            )}
+
             {hasReplies && isRepliesOpen && !isLoadingReplies && (
-                <div className="ml-3.5 sm:ml-7 mt-2 space-y-2">
+                <div className="ml-3 sm:ml-5 mt-2 space-y-2">
                     <ReplyList replies={replies}/>
                 </div>
             )}
