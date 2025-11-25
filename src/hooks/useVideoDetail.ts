@@ -191,6 +191,11 @@ export function useVideoDetail(videoId: string): UseVideoDetailReturn {
         const parts = timeString.split(":").map(Number);
         const seconds = parts.reduce((acc, val, idx) => acc + val * Math.pow(60, parts.length - idx - 1), 0);
         playerRef.current?.seekToTime(seconds);
+
+        const videoElement = document.querySelector('iframe[src*="youtube"]');
+        if (videoElement) {
+            videoElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
     }, []);
 
     const handleFilterComments = useCallback<VideoDetailActions['handleFilterComments']>(async (filter) => {
