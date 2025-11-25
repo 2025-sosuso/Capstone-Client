@@ -1,6 +1,6 @@
 'use client';
 
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import RecentVideo from './RecentVideo';
 import ChannelAvatarList from './ChannelAvatarList';
 import {VideoSummaryItem} from '@/types/video-preview.types';
@@ -20,9 +20,11 @@ interface Props {
 
 export default function SubscribedChannels({data, favoriteChannelList, isLoading}: Props) {
     const {isLoggedIn} = useAuth();
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const [selectedVideo, setSelectedVideo] = useState<VideoSummaryItem | null>(data);
     const [channelList, setChannelList] = useState<ChannelSearchResult[]>(favoriteChannelList);
+    const [edit, setEdit] = useState(false);
 
     useEffect(() => {
         setChannelList(favoriteChannelList);
@@ -31,6 +33,22 @@ export default function SubscribedChannels({data, favoriteChannelList, isLoading
     useEffect(() => {
         setSelectedVideo(data);
     }, [data]);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+                setEdit(false);
+            }
+        };
+
+        if (edit) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [edit]);
 
     const handleChannelSelect = async (channelId: string) => {
         try {
@@ -57,7 +75,7 @@ export default function SubscribedChannels({data, favoriteChannelList, isLoading
     };
 
     return (
-        <div className="flex flex-col w-full p-4 pt-5 gap-4 rounded-3xl bg-gray-100">
+        <div ref={containerRef} className="flex flex-col w-full p-4 pt-5 gap-4 rounded-3xl bg-gray-100">
             <h1 className="text-2xl font-semibold text-gray-900">🌟 관심 채널의 최근 영상</h1>
             {!isLoggedIn ? (
                 <LoginCallout text="지금 로그인하고, 관심 채널의 영상 분석을 빠르게 확인해보세요!"/>
@@ -74,6 +92,8 @@ export default function SubscribedChannels({data, favoriteChannelList, isLoading
                 <>
                     <ChannelAvatarList
                         channels={channelList}
+                        edit={edit}
+                        setEdit={setEdit}
                         onSelectChannel={handleChannelSelect}
                         onUpdateChannels={handleUpdateChannels}
                     />

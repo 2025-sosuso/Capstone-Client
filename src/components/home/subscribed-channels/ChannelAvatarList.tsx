@@ -3,19 +3,18 @@
 import {AdjustmentsVerticalIcon} from '@heroicons/react/24/outline';
 import ChannelAvatar from './ChannelAvatar';
 import {ChannelSearchResult} from '@/types/channel.types';
-import {useState} from 'react';
 import {removeFavoriteChannel} from '@/services/channel.service';
 
 interface Props {
     channels: ChannelSearchResult[];
+    edit: boolean;
+    setEdit: (value: boolean) => void;
     onSelectChannel?: (apiChannelId: string) => void;
     onUpdateChannels?: () => void;
 }
 
-export default function ChannelAvatarList({channels, onSelectChannel, onUpdateChannels}: Props) {
-    const [edit, setEdit] = useState(false);
-
-    const toggleEdit = () => setEdit((prev) => !prev);
+export default function ChannelAvatarList({channels, edit, setEdit, onSelectChannel, onUpdateChannels}: Props) {
+    const toggleEdit = () => setEdit(!edit);
 
     const handleRemove = async (favoriteChannelId?: number | null) => {
         if (!favoriteChannelId) return;
