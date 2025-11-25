@@ -33,9 +33,10 @@ export default function VideoPreview({rank, data}: Props) {
     return (
         <div
             className={`flex flex-col lg:flex-row gap-6 w-full ${compareMode ? 'cursor-pointer' : ''}`}
-            onClick={handleClick}
         >
-            <div className="flex flex-col sm:flex-row gap-4 flex-1 min-w-0">
+            <div className="flex flex-col sm:flex-row gap-4 flex-1 min-w-0 cursor-pointer"
+                 onClick={handleClick}
+            >
                 {rank !== undefined && (
                     <span className="text-xl font-bold w-6">{rank}</span>
                 )}
@@ -45,7 +46,7 @@ export default function VideoPreview({rank, data}: Props) {
 
                     {compareMode && (
                         <div className="absolute top-3 right-3">
-                            <SelectButton selected={selected} />
+                            <SelectButton selected={selected}/>
                         </div>
                     )}
                 </div>

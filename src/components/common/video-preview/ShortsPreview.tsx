@@ -31,15 +31,15 @@ export default function VideoPreview({rank, data}: Props) {
     };
 
     return (
-        <div
-            className={`flex flex-col sm:flex-row gap-4 w-full items-center sm:items-start ${compareMode ? 'cursor-pointer' : ''}`}
-            onClick={handleClick}
-        >
+        <div className={`flex flex-col sm:flex-row gap-4 w-full items-center sm:items-start ${compareMode ? 'cursor-pointer' : ''}`}>
             {rank !== undefined && (
                 <span className="text-xl font-bold w-6 flex-shrink-0">{rank}</span>
             )}
 
-            <div className="w-[160px] flex-shrink-0 overflow-hidden rounded-2xl relative">
+            <div
+                className="w-[160px] flex-shrink-0 overflow-hidden rounded-2xl relative cursor-pointer"
+                onClick={handleClick}
+            >
                 <ShortsThumbnail src={video.thumbnailUrl ?? ""}/>
 
                 {compareMode && (
