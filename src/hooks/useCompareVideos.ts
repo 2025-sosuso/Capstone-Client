@@ -53,6 +53,7 @@ export function useCompareVideos(ids: string[]) {
                                 },
                                 popularTimestamps: analysis?.popularTimestamps ?? [],
                                 commentHistogram: analysis?.commentHistogram ?? [],
+                                sentimentFlow: analysis?.sentimentFlow ?? [],
                                 keywords: ai?.keywords ?? [],
                             },
                             comments: [],
