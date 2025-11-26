@@ -1,13 +1,12 @@
 "use client";
 
-import {useEffect, useRef, useState, useCallback} from "react";
+import {useEffect, useRef, useState} from "react";
 import {ChevronDownIcon} from "@heroicons/react/24/solid";
 import YouTubePlayer, {YouTubePlayerRef} from "./YoutubePlayer";
 import {formatDate, formatNumber} from "@/utils/data-format";
 import type {VideoBasicInfo, VideoUserState} from "@/types";
-import {useAuth} from "@/contexts/AuthContext";
-import {createScrap, deleteScrap} from "@/services/video.service";
 import {useFavoriteChannel} from "@/hooks/useFavoriteChannel";
+import {useScrap} from "@/hooks/useScrap";
 import {BookmarkIcon, HeartIcon} from '@/components/icons';
 
 interface Props {
@@ -18,13 +17,17 @@ interface Props {
 
 export default function VideoInfoSection({data, userState, onPlayerReady}: Props) {
     const {video, channel} = data;
-    const {isLoggedIn, handleLogin} = useAuth();
 
-    const [scrapId, setScrapId] = useState<number | null>(userState?.scrapId ?? null);
     const [isExpanded, setIsExpanded] = useState(false);
     const [videoHeight, setVideoHeight] = useState(0);
-
     const leftRef = useRef<HTMLDivElement>(null);
+    const descriptionRef = useRef<HTMLParagraphElement>(null);
+    const [descriptionHeight, setDescriptionHeight] = useState(0);
+
+    const {scrapId, handleScrapToggle} = useScrap({
+        videoId: video.id,
+        initialScrapId: userState?.scrapId ?? null,
+    });
 
     const {favoriteChannelId, handleFavoriteToggle} = useFavoriteChannel({
         channelId: channel.id,
@@ -34,43 +37,23 @@ export default function VideoInfoSection({data, userState, onPlayerReady}: Props
     });
 
     useEffect(() => {
-        setScrapId(userState?.scrapId ?? null);
-    }, [userState?.scrapId]);
-
-    useEffect(() => {
         if (!leftRef.current) return;
+
         const observer = new ResizeObserver(([entry]) => {
             setVideoHeight(entry.contentRect.height);
         });
         observer.observe(leftRef.current);
+
         return () => observer.disconnect();
     }, []);
 
-    const requireLogin = useCallback(() => {
-        if (!isLoggedIn) {
-            if (confirm("로그인이 필요한 작업입니다. 로그인하시겠습니까?")) {
-                handleLogin();
-            }
-            return true;
+    useEffect(() => {
+        if (descriptionRef.current) {
+            setDescriptionHeight(descriptionRef.current.scrollHeight);
         }
-        return false;
-    }, [isLoggedIn, handleLogin]);
+    }, [video.description]);
 
-    const handleScrapToggle = useCallback(async () => {
-        if (requireLogin()) return;
-
-        try {
-            if (scrapId) {
-                await deleteScrap(scrapId);
-                setScrapId(null);
-            } else {
-                const newScrapId = await createScrap(video.id);
-                setScrapId(newScrapId);
-            }
-        } catch (err) {
-            console.error("스크랩 요청 실패:", err);
-        }
-    }, [scrapId, video.id, requireLogin]);
+    const hasDescription = video.description?.trim();
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 w-full h-fit mx-auto items-start">
@@ -115,21 +98,35 @@ export default function VideoInfoSection({data, userState, onPlayerReady}: Props
                 </div>
 
                 <div
-                    className="relative px-4 py-3 bg-gray-100 hover:bg-gray-200/80 transition-all duration-300 rounded-2xl cursor-pointer"
-                    onClick={() => setIsExpanded((prev) => !prev)}
+                    className={`flex-1 px-4 py-3 bg-gray-100 rounded-2xl ${
+                        hasDescription ? "hover:bg-gray-200/80 cursor-pointer" : ""
+                    } transition-all duration-300`}
+                    onClick={() => hasDescription && setIsExpanded((prev) => !prev)}
                 >
-                    <ChevronDownIcon
-                        className={`size-6 absolute right-3 top-3 text-gray-500 transition-transform duration-300 ${
-                            isExpanded ? "rotate-180" : "rotate-0"
-                        }`}
-                    />
-                    <p
-                        className={`text-sm text-gray-600 whitespace-pre-line font-light transition-all duration-300 ${
-                            isExpanded ? "" : "line-clamp-5"
-                        }`}
-                    >
-                        {video.description}
-                    </p>
+                    {hasDescription ? (
+                        <div className="flex gap-2">
+                            <div
+                                className="flex-1 overflow-hidden transition-all duration-300 ease-in-out"
+                                style={{
+                                    maxHeight: isExpanded ? `${descriptionHeight}px` : "3.75rem",
+                                }}
+                            >
+                                <p
+                                    ref={descriptionRef}
+                                    className="text-sm text-gray-600 whitespace-pre-line font-light"
+                                >
+                                    {video.description}
+                                </p>
+                            </div>
+                            <ChevronDownIcon
+                                className={`size-5 shrink-0 text-gray-500 transition-transform duration-300 ${
+                                    isExpanded ? "rotate-180" : "rotate-0"
+                                }`}
+                            />
+                        </div>
+                    ) : (
+                        <p className="text-sm text-gray-400 font-light">영상 설명이 없습니다.</p>
+                    )}
                 </div>
             </div>
         </div>

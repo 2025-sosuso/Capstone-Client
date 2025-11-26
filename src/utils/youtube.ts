@@ -8,6 +8,7 @@
  * - https://m.youtube.com/watch?v=VIDEO_ID
  * - https://www.youtube.com/embed/VIDEO_ID
  * - https://www.youtube.com/v/VIDEO_ID
+ * - https://www.youtube.com/shorts/VIDEO_ID
  *
  * @param url 유튜브 URL 또는 일반 문자열
  * @returns videoId (11자리) 또는 null
@@ -17,7 +18,7 @@ export function extractYoutubeVideoId(url: string): string | null {
         return null;
     }
 
-    const VIDEO_ID_PATTERN = /(?:youtube\.com\/(?:watch\?v=|embed\/|v\/)|youtu\.be\/|m\.youtube\.com\/watch\?v=)([\w-]{11})/;
+    const VIDEO_ID_PATTERN = /(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/)|youtu\.be\/|m\.youtube\.com\/watch\?v=)([\w-]{11})/;
 
     const match = url.match(VIDEO_ID_PATTERN);
 

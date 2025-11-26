@@ -43,9 +43,8 @@ export default function SearchContent() {
 
     return (
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between mb-6">
+            <div className="mb-6">
                 <h2 className="text-2xl font-bold">&apos;{query}&apos; 검색 결과</h2>
-                {showCompareMode && <CompareActions />}
             </div>
 
             <SearchTabs/>
@@ -81,6 +80,8 @@ export default function SearchContent() {
             {activeTab === 'channel' && (
                 <ChannelTab channels={channels} loading={loading.channels}/>
             )}
+
+            {showCompareMode && <CompareActions/>}
         </div>
     );
 }

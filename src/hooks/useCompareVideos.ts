@@ -53,6 +53,7 @@ export function useCompareVideos(ids: string[]) {
                                 },
                                 popularTimestamps: analysis?.popularTimestamps ?? [],
                                 commentHistogram: analysis?.commentHistogram ?? [],
+                                sentimentFlow: analysis?.sentimentFlow ?? [],
                                 keywords: ai?.keywords ?? [],
                             },
                             comments: [],
@@ -75,7 +76,7 @@ export function useCompareVideos(ids: string[]) {
         return () => {
             mounted = false;
         };
-    }, [idsKey, ids.length]);
+    }, [idsKey, ids]);
 
     const needsPolling = useMemo(() => {
         return data

@@ -11,21 +11,9 @@ import {
 import {Doughnut} from 'react-chartjs-2';
 import {useEffect, useMemo, useState} from 'react';
 import {LanguageRatio} from "@/types/video.types";
+import {LANGUAGE_CHART_COLORS} from "@/config/chart.config";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-
-const COLORS = [
-    'rgba(248, 113, 113, 0.7)',  // red-400
-    'rgba(251, 146, 60, 0.7)',   // orange-400
-    'rgba(74, 222, 128, 0.7)',   // green-400
-    'rgba(96, 165, 250, 0.7)',   // blue-400
-    'rgba(167, 139, 250, 0.7)',  // violet-400
-    'rgba(148, 163, 184, 0.7)',  // slate-400
-    'rgba(251, 191, 36, 0.7)',   // amber-400
-    'rgba(34, 211, 238, 0.7)',   // cyan-400
-    'rgba(56, 189, 248, 0.7)',   // sky-400
-    'rgba(244, 114, 182, 0.7)',  // pink-400
-] as const;
 
 // 차트 중앙에 텍스트를 그리는 플러그인
 const centerTextPlugin: Plugin<'doughnut'> = {
@@ -86,7 +74,7 @@ export default function LanguageChart({data}: LanguageChartProps) {
                 {
                     label: '언어 비율',
                     data: data?.map((d) => d.ratio),
-                    backgroundColor: data?.map((_, i) => COLORS[i % COLORS.length]),
+                    backgroundColor: data?.map((_, i) =>  LANGUAGE_CHART_COLORS[i %  LANGUAGE_CHART_COLORS.length]),
                     borderWidth: 1,
                 },
             ],
@@ -122,6 +110,7 @@ export default function LanguageChart({data}: LanguageChartProps) {
     return (
         <div className="w-full max-w-sm min-w-[16rem] h-[300px] mx-auto p-3">
             <Doughnut
+                key={hasValidData ? 'with-data' : 'no-data'}
                 data={chartData}
                 options={options}
                 plugins={!hasValidData ? [centerTextPlugin] : []}

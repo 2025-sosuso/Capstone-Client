@@ -17,7 +17,7 @@ const UserProfile = ({ role = "other", onClick }: UserProfileProps) => {
             onClick={onClick}
             className={`flex items-center gap-2 p-3 text-left transition-all duration-300 rounded-full
                 ${role === "sidebar" ? "hover:bg-gray-100 rounded-lg" : "pl-4 pr-5 py-2 bg-gray-300/50"}
-                hover:bg-white cursor-pointer`}
+                hover:bg-white`}
         >
             {user?.userProfileImage ? (
                 <Image

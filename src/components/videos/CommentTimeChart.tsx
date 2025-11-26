@@ -17,6 +17,7 @@ import {Line} from 'react-chartjs-2';
 import {useMemo} from 'react';
 import {calculateYAxis} from '@/utils/calculateYAxis';
 import {HourlyCommentCount} from '@/types/video.types';
+import {COMMENT_TIME_CHART_COLORS} from "@/config/chart.config";
 
 ChartJS.register(
     CategoryScale,
@@ -28,11 +29,6 @@ ChartJS.register(
     Legend,
     Filler
 );
-
-const CHART_COLORS = {
-    border: 'rgba(248, 113, 113, 0.8)',
-    background: 'rgba(248, 113, 113, 0.4)',
-} as const;
 
 const centerTextPlugin: Plugin<'line'> = {
     id: 'centerText',
@@ -86,8 +82,8 @@ export default function CommentTimeChart({data}: Props) {
                 {
                     label: '댓글 수',
                     data: data.map((d) => d.count),
-                    borderColor: CHART_COLORS.border,
-                    backgroundColor: CHART_COLORS.background,
+                    borderColor: COMMENT_TIME_CHART_COLORS.border,
+                    backgroundColor: COMMENT_TIME_CHART_COLORS.background,
                     fill: true,
                     tension: 0.4,
                 },
@@ -134,6 +130,7 @@ export default function CommentTimeChart({data}: Props) {
     return (
         <div className="w-full min-w-[16rem] h-[250px]">
             <Line
+                key={hasValidData ? 'with-data' : 'no-data'}
                 data={chartData}
                 options={options}
                 plugins={!hasValidData ? [centerTextPlugin] : []}

@@ -26,6 +26,7 @@ export interface Channel {
 }
 
 export interface VideoAnalysis {
+    sentimentFlow: SentimentFlowData[] | undefined;
     summary: string;
     isWarning: boolean;
     topComments: Comment[];

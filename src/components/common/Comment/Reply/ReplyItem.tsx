@@ -11,7 +11,7 @@ export default function ReplyItem({
                                       publishedAt,
                                   }: Props) {
     return (
-        <div className="w-full p-3 sm:p-4 rounded-lg bg-gray-50">
+        <div className="w-full p-3 sm:p-4 rounded-lg bg-gray-100">
             <div className="flex flex-col gap-2">
                 <div className="flex justify-between items-start gap-3">
                     <div className="flex items-center gap-2 flex-wrap">
