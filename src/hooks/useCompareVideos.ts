@@ -76,7 +76,7 @@ export function useCompareVideos(ids: string[]) {
         return () => {
             mounted = false;
         };
-    }, [idsKey, ids.length]);
+    }, [idsKey, ids]);
 
     const needsPolling = useMemo(() => {
         return data
