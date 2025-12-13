@@ -1,5 +1,5 @@
 import "@styles/globals.css";
-import Layout from "@components/layout";
+import PageLayout from "@components/PageLayout";
 import {Provider} from "@/app/provider";
 
 export default function RootLayout({
@@ -11,7 +11,7 @@ export default function RootLayout({
         <html lang="en">
         <body>
         <Provider>
-            <Layout>{children}</Layout>
+            <PageLayout>{children}</PageLayout>
         </Provider>
         </body>
         </html>

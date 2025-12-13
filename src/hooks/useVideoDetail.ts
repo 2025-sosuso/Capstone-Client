@@ -1,6 +1,6 @@
 import {useState, useEffect, useCallback, useRef} from "react";
 import type {Comment, VideoBasicInfo, VideoAnalysisInfo, VideoAIAnalysis, VideoUserState} from "@/types";
-import type {YouTubePlayerRef} from "@components/videos/video-info/YoutubePlayer";
+import type {YouTubePlayerRef} from "@components/Videos/VideoInfo/YoutubePlayer";
 import type {VideoDetailLoadingState, UseVideoDetailReturn, VideoDetailActions} from "@/types/video-detail.types";
 import {fetchVideoBasic, fetchVideoAnalysis, fetchVideoComments, fetchVideoAI, fetchVideoUserState} from "@/services/video.service";
 import {fetchFilteredComments} from "@/services/search.service";
@@ -35,6 +35,40 @@ export function useVideoDetail(videoId: string): UseVideoDetailReturn {
     const [error, setError] = useState(false);
 
     const playerRef = useRef<YouTubePlayerRef | null>(null);
+
+    const handleSeek = useCallback<VideoDetailActions['handleSeek']>((timeString) => {
+        const parts = timeString.split(":").map(Number);
+        const seconds = parts.reduce((acc, val, idx) => acc + val * Math.pow(60, parts.length - idx - 1), 0);
+        playerRef.current?.seekToTime(seconds);
+
+        const videoElement = document.querySelector('iframe[src*="youtube"]');
+        if (videoElement) {
+            videoElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }, []);
+
+    const handleFilterComments = useCallback<VideoDetailActions['handleFilterComments']>(async (filter) => {
+        try {
+            const results = await fetchFilteredComments({videoId, ...filter});
+            setFilteredComments(results);
+        } catch (err) {
+            console.error("댓글 필터링 실패:", err);
+        }
+    }, [videoId]);
+
+    const handleKeywordFilter = useCallback<VideoDetailActions['handleKeywordFilter']>(async (keyword) => {
+        try {
+            setSelectedKeyword(keyword);
+            const results = await fetchFilteredComments({videoId, keyword});
+            setKeywordComments(results);
+        } catch (err) {
+            console.error("키워드 댓글 필터링 실패:", err);
+        }
+    }, [videoId]);
+
+    const handleSearch = useCallback<VideoDetailActions['handleSearch']>(async (q) => {
+        await handleFilterComments({q});
+    }, [handleFilterComments]);
 
     // 1. 기본 정보 로드 (404 재시도 포함)
     useEffect(() => {
@@ -169,42 +203,7 @@ export function useVideoDetail(videoId: string): UseVideoDetailReturn {
             setSelectedKeyword(firstKeyword);
             void handleKeywordFilter(firstKeyword);
         }
-    }, [isLoading.ai, aiAnalysis]);
-
-    // 액션 핸들러
-    const handleSeek = useCallback<VideoDetailActions['handleSeek']>((timeString) => {
-        const parts = timeString.split(":").map(Number);
-        const seconds = parts.reduce((acc, val, idx) => acc + val * Math.pow(60, parts.length - idx - 1), 0);
-        playerRef.current?.seekToTime(seconds);
-
-        const videoElement = document.querySelector('iframe[src*="youtube"]');
-        if (videoElement) {
-            videoElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-    }, []);
-
-    const handleFilterComments = useCallback<VideoDetailActions['handleFilterComments']>(async (filter) => {
-        try {
-            const results = await fetchFilteredComments({videoId, ...filter});
-            setFilteredComments(results);
-        } catch (err) {
-            console.error("댓글 필터링 실패:", err);
-        }
-    }, [videoId]);
-
-    const handleKeywordFilter = useCallback<VideoDetailActions['handleKeywordFilter']>(async (keyword) => {
-        try {
-            setSelectedKeyword(keyword);
-            const results = await fetchFilteredComments({videoId, keyword});
-            setKeywordComments(results);
-        } catch (err) {
-            console.error("키워드 댓글 필터링 실패:", err);
-        }
-    }, [videoId]);
-
-    const handleSearch = useCallback<VideoDetailActions['handleSearch']>(async (q) => {
-        await handleFilterComments({q});
-    }, [handleFilterComments]);
+    }, [isLoading.ai, aiAnalysis, handleKeywordFilter]);
 
     return {
         data: {basicInfo, userState, analysisInfo, comments, aiAnalysis},

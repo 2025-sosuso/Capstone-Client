@@ -5,7 +5,7 @@ import {UserInfoResponse} from '@/types/user.types';
 import {useRouter} from 'next/navigation';
 import {fetchAuthUser, logoutUser} from '@/services/auth.service';
 import {buildRedirectUri, getApiBaseUrl} from '@/lib/url';
-import Toast from '@/components/common/Toast';
+import Toast from '@components/Common/Toast';
 
 interface AuthContextType {
     isLoggedIn: boolean;

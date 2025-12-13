@@ -1,6 +1,6 @@
-import Detail from "src/components/videos";
+import Index from "@components/Videos";
 
 export default async function Page({ params }: { params: Promise<{ videoId: string }> }) {
     const { videoId } = await params;
-    return <Detail videoId={videoId} />;
+    return <Index videoId={videoId} />;
 }
