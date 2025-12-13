@@ -15,8 +15,7 @@ export default function ChannelAvatar({
                                           onClick,
                                       }: ChannelAvatarProps) {
     const validTitle = title?.trim() || '알 수 없음';
-    const isValidThumbnail =
-        typeof thumbnailUrl === 'string' && thumbnailUrl.trim().startsWith('http');
+    const isValidThumbnail = thumbnailUrl.trim().startsWith('http');
 
     return (
         <div
