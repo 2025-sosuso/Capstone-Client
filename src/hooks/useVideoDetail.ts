@@ -36,6 +36,40 @@ export function useVideoDetail(videoId: string): UseVideoDetailReturn {
 
     const playerRef = useRef<YouTubePlayerRef | null>(null);
 
+    const handleSeek = useCallback<VideoDetailActions['handleSeek']>((timeString) => {
+        const parts = timeString.split(":").map(Number);
+        const seconds = parts.reduce((acc, val, idx) => acc + val * Math.pow(60, parts.length - idx - 1), 0);
+        playerRef.current?.seekToTime(seconds);
+
+        const videoElement = document.querySelector('iframe[src*="youtube"]');
+        if (videoElement) {
+            videoElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }, []);
+
+    const handleFilterComments = useCallback<VideoDetailActions['handleFilterComments']>(async (filter) => {
+        try {
+            const results = await fetchFilteredComments({videoId, ...filter});
+            setFilteredComments(results);
+        } catch (err) {
+            console.error("댓글 필터링 실패:", err);
+        }
+    }, [videoId]);
+
+    const handleKeywordFilter = useCallback<VideoDetailActions['handleKeywordFilter']>(async (keyword) => {
+        try {
+            setSelectedKeyword(keyword);
+            const results = await fetchFilteredComments({videoId, keyword});
+            setKeywordComments(results);
+        } catch (err) {
+            console.error("키워드 댓글 필터링 실패:", err);
+        }
+    }, [videoId]);
+
+    const handleSearch = useCallback<VideoDetailActions['handleSearch']>(async (q) => {
+        await handleFilterComments({q});
+    }, [handleFilterComments]);
+
     // 1. 기본 정보 로드 (404 재시도 포함)
     useEffect(() => {
         let mounted = true;
@@ -169,42 +203,7 @@ export function useVideoDetail(videoId: string): UseVideoDetailReturn {
             setSelectedKeyword(firstKeyword);
             void handleKeywordFilter(firstKeyword);
         }
-    }, [isLoading.ai, aiAnalysis]);
-
-    // 액션 핸들러
-    const handleSeek = useCallback<VideoDetailActions['handleSeek']>((timeString) => {
-        const parts = timeString.split(":").map(Number);
-        const seconds = parts.reduce((acc, val, idx) => acc + val * Math.pow(60, parts.length - idx - 1), 0);
-        playerRef.current?.seekToTime(seconds);
-
-        const videoElement = document.querySelector('iframe[src*="youtube"]');
-        if (videoElement) {
-            videoElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-    }, []);
-
-    const handleFilterComments = useCallback<VideoDetailActions['handleFilterComments']>(async (filter) => {
-        try {
-            const results = await fetchFilteredComments({videoId, ...filter});
-            setFilteredComments(results);
-        } catch (err) {
-            console.error("댓글 필터링 실패:", err);
-        }
-    }, [videoId]);
-
-    const handleKeywordFilter = useCallback<VideoDetailActions['handleKeywordFilter']>(async (keyword) => {
-        try {
-            setSelectedKeyword(keyword);
-            const results = await fetchFilteredComments({videoId, keyword});
-            setKeywordComments(results);
-        } catch (err) {
-            console.error("키워드 댓글 필터링 실패:", err);
-        }
-    }, [videoId]);
-
-    const handleSearch = useCallback<VideoDetailActions['handleSearch']>(async (q) => {
-        await handleFilterComments({q});
-    }, [handleFilterComments]);
+    }, [isLoading.ai, aiAnalysis, handleKeywordFilter]);
 
     return {
         data: {basicInfo, userState, analysisInfo, comments, aiAnalysis},
