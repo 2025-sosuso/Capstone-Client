@@ -1,7 +1,7 @@
 'use client';
 
 import {useMainPageData} from '@/hooks/useMainPageData';
-import Home from '@/components/home';
+import Home from '@components/Home/Home';
 
 export default function Page() {
     const {data, isLoading} = useMainPageData();

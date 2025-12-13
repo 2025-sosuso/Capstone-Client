@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
-import LoadingSection from "@components/common/LoadingSection";
-import SearchContent from "@components/search";
+import LoadingSection from "@components/Common/LoadingSection";
+import SearchContent from "@components/Search/Search";
 
 export default function SearchPage() {
     return (
