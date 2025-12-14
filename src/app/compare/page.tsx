@@ -1,6 +1,6 @@
-import Compare from "@components/Compare/Compare";
+import Compare from "@/app/compare/_components/Compare";
 import {Suspense} from "react";
-import LoadingSection from "@components/Common/LoadingSection";
+import LoadingSection from "@components/ui/LoadingSection";
 
 export default function Page() {
     return (

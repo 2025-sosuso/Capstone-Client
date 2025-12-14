@@ -1,4 +1,4 @@
-import Scraps from "@components/Scraps/Scraps";
+import Scraps from "@/app/scraps/_components/Scraps";
 
 export default function Page() {
     return (

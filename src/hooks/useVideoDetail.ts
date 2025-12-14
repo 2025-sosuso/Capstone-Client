@@ -1,6 +1,6 @@
 import {useState, useEffect, useCallback, useRef} from "react";
 import type {Comment, VideoBasicInfo, VideoAnalysisInfo, VideoAIAnalysis, VideoUserState} from "@/types";
-import type {YouTubePlayerRef} from "@components/Videos/VideoInfo/YoutubePlayer";
+import type {YouTubePlayerRef} from "@/app/videos/[videoId]/_components/VideoInfo/YoutubePlayer";
 import type {VideoDetailLoadingState, UseVideoDetailReturn, VideoDetailActions} from "@/types/video-detail.types";
 import {fetchVideoBasic, fetchVideoAnalysis, fetchVideoComments, fetchVideoAI, fetchVideoUserState} from "@/services/video.service";
 import {fetchFilteredComments} from "@/services/search.service";

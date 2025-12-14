@@ -1,4 +1,4 @@
-import Trending from "@components/Trending/Trending";
+import Trending from "@/app/trending/_components/Trending";
 
 export default function TrendingPage() {
     return (

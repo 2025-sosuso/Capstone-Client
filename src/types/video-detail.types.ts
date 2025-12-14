@@ -1,5 +1,5 @@
 import { VideoBasicInfo, VideoAnalysisInfo, VideoAIAnalysis, Comment, VideoUserState } from './video.types';
-import { YouTubePlayerRef } from '@components/Videos/VideoInfo/YoutubePlayer';
+import { YouTubePlayerRef } from '@/app/videos/[videoId]/_components/VideoInfo/YoutubePlayer';
 import { MutableRefObject } from 'react';
 
 export interface VideoDetailData {
