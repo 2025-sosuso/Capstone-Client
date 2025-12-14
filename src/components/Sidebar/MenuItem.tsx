@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MenuItemType } from "./side-bar-config";
+import { MenuItemType } from "./sidebar.config";
 
 const MenuItem = ({ name, emoji, href }: MenuItemType) => (
     <Link href={href} className="block">

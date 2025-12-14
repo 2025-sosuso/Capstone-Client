@@ -3,9 +3,9 @@
 import { useAuth } from "@/contexts/AuthContext";
 import LogoutButton from "./LogoutButton";
 import MenuItem from "./MenuItem";
-import { MenuItems } from "./side-bar-config";
+import { MenuItems } from "./sidebar.config";
 import TrendingSearchRanking from "./TrendingSearchRanking";
-import LoginButton from "@components/Sidebar/LoginButton";
+import LoginButton from "@components/ui/Button/LoginButton";
 import UserProfile from "@components/Sidebar/UserProfile";
 
 interface SideBarProps {
