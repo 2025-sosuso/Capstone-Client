@@ -15,7 +15,7 @@ const Logo = ({isMini=false}: {isMini?: boolean}) => {
 
     return (
         <Link
-            href='/public'
+            href='/'
             onClick={handleClick}
             className="flex items-center cursor-pointer shrink-0"
         >
