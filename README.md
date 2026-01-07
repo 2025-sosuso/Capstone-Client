@@ -104,23 +104,27 @@ yarn dev
 
 ```
 src/
-├── app/                          # 페이지 라우팅 (App Router)
-│   ├── page.tsx                  # 메인 페이지
-│   ├── videos/[videoId]/page.tsx # 영상 상세 분석 페이지
-│   ├── compare/page.tsx          # 영상 비교 페이지
-│   ├── search/page.tsx           # 검색 페이지
-│   ├── scraps/page.tsx           # 스크랩 목록 페이지
-│   ├── trending/page.tsx         # 인기 급상승 페이지
-│   └── login/page.tsx            # 로그인 페이지
-├── components/                   # React 컴포넌트
-│   ├── common/                   # 공통 컴포넌트
-│   ├── layout/                   # 레이아웃 컴포넌트
-│   └── videos/                   # 영상 관련 컴포넌트
-├── hooks/                        # Custom React Hooks
-├── services/                     # API 서비스 로직
-├── contexts/                     # Context API 관련
-└── types/                        # TypeScript 타입 정의
+├── app/                    # App Router 기반 페이지
+│   ├── (home)/             # 홈
+│   ├── videos/[videoId]/   # 영상 상세
+│   ├── compare/            # 비교
+│   ├── search/             # 검색
+│   ├── scraps/             # 스크랩
+│   ├── trending/           # 트렌딩
+│   ├── login/              # 로그인
+│   ├── layout.tsx          # 전역 레이아웃
+│   └── provider.tsx        # 전역 Provider
+├── components/             # 공용 UI 컴포넌트
+├── hooks/                  # Custom Hooks
+├── services/               # API 서비스 레이어
+├── contexts/               # 전역 상태 관리
+├── config/                 # 설정 값 (polling 등)
+├── lib/                    # Axios, URL 설정
+├── types/                  # TypeScript 타입
+├── utils/                  # 유틸리티 함수
+└── styles/                 # 글로벌 스타일
 ```
+> 페이지 전용 컴포넌트는 각 route 내부의 `_components` 폴더에서 관리합니다.
 
 <br>
 
